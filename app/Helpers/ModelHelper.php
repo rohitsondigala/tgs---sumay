@@ -1,0 +1,116 @@
+<?php
+
+use Illuminate\Contracts\Foundation\Application;
+
+
+/**
+ * @return Application|mixed
+ */
+function user(){
+    return app(App\Models\User::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function user_roles(){
+    return app(App\Models\UsersRoles::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function country(){
+    return app(App\Models\Country::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function state(){
+    return app(App\Models\State::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function city(){
+    return app(App\Models\City::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function streams(){
+    return app(App\Models\Streams::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function subjects(){
+    return app(App\Models\Subjects::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function log_activities(){
+    return app(App\Models\LogActivities::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function forgot_password(){
+    return app(App\Models\ForgotPasswordOtp::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function moderator_subjects(){
+    return app(App\Models\ModeratorSubject::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function student_details(){
+    return app(App\Models\StudentDetails::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function student_subjects(){
+    return app(App\Models\StudentSubjects::class);
+}
+/**
+ * @return Application|mixed
+ */
+function professor_details(){
+    return app(App\Models\ProfessorDetails::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function professor_subjects(){
+    return app(App\Models\ProfessorSubjects::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function user_otp(){
+    return app(App\Models\UsersOtp::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function moderator_daily_posts(){
+    return app(App\Models\ModeratorDailyPost::class);
+}
+

@@ -1,0 +1,36 @@
+.select2-selection__rendered {
+    line-height: 45px !important;
+}
+.select2-container .select2-selection--single {
+    height: 45px !important;
+    font-size: 1.06rem;
+    padding: 0 8px;
+}
+.select2-selection__arrow {
+    height: 45px !important;
+}
+.select2-container--default .select2-selection--single{
+    border: 1px solid #e5e9f2 !important;
+    width: 100%;
+}
+.switch-box{
+    font-size: 17px;
+    margin-right: 10px;
+    color: #000;
+}
+.top-information,.bottom-information{
+    margin: 0;
+}
+.app-brand{
+    background-color: #fff !important;
+    border-right: 1px solid #e5e9f2;
+}
+.app-brand a{
+    padding-left: 0.56rem !important;
+}
+.app-brand a img{
+    width: 60px !important;
+}
+.app-brand .brand-name{
+    color: #000 !important;
+}
