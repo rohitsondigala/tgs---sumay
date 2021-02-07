@@ -223,7 +223,21 @@ class ApiService
                 }
             }
             professor_details()->create($professorDetails);
-            user_otp()->create($userOtpArray);
+            if(user_otp()->where('user_uuid',$user_uuid)->count() > 0){
+                $userOtpDetail = user_otp()->where('user_uuid', $user_uuid)->first();
+                $currentDate = Carbon::parse($userOtpDetail->updated_at)->format('d-m-y');
+                $todayDate = Carbon::now()->format('d-m-y');
+                if ($currentDate != $todayDate) {
+                    user_otp()->where('user_uuid', $user_uuid)->update(['attempt' => 0]);
+                }
+                if ($userOtpDetail->attempt >= 3 && $currentDate == $todayDate) {
+                    return ['success' => false, 'message' => trans('api.maximum_attempt'), 'data' => array()];
+                }else{
+                    user_otp()->where('user_uuid', $user_uuid)->increment('attempt');
+                }
+            }else{
+                user_otp()->create($userOtpArray);
+            }
             $user = user_otp()->where('user_uuid', $user_uuid)->first();
             Mail::to($request->email)->send(new ProfessorRegistraionOtp($user));
             return ['success' => true, 'message' => trans('api.user_registration_otp_sent'), 'data' => array()];
