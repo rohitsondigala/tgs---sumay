@@ -90,7 +90,6 @@ class ApiService
             if (user_otp()->where('user_uuid', $user->uuid)->where('status', 1)->count() > 0) {
                 return ['success' => false, 'message' => trans('api.email_exists'), 'data' => array()];
             } else {
-                user_otp()->where('user_uuid', $user->uuid)->delete();
                 student_subjects()->where('user_uuid', $user->uuid)->delete();
                 student_details()->where('user_uuid', $user->uuid)->delete();
                 return $this->studentCreate($user, $request);
