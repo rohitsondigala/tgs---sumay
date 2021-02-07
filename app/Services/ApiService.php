@@ -129,7 +129,7 @@ class ApiService
                 }
             }
             student_details()->create($studentDetails);
-            if(user_otp()->where('user_uuid',$user)->count() > 0){
+            if(user_otp()->where('user_uuid',$user_uuid)->count() > 0){
                 $userOtpDetail = user_otp()->where('user_uuid', $user_uuid)->first();
                 $currentDate = Carbon::parse($userOtpDetail->updated_at)->format('d-m-y');
                 $todayDate = Carbon::now()->format('d-m-y');
