@@ -389,11 +389,13 @@ class ApiService
 
                     Mail::to($userOtpDetail->user->email)->send(new ForgotPasswordOtp($userOtpDetail));
                     user_otp()->where('user_uuid', $user_uuid)->increment('attempt');
+                    user()->where('uuid',$user_uuid)->update(['verify'=>0]);
                     return ['success' => true, 'message' => trans('auth.forgot_password'), 'data' => array()];
                 }
             } else {
                 $userOtpDetail = user_otp()->create($userOtpArray);
                 if ($userOtpDetail) {
+                    user()->where('uuid',$user_uuid)->update(['verify'=>0]);
                     Mail::to($userOtpDetail->user->email)->send(new ForgotPasswordOtp($userOtpDetail));
                     return ['success' => true, 'message' => trans('auth.forgot_password'), 'data' => array()];
                 } else {
@@ -468,9 +470,9 @@ class ApiService
         $password = $request->password;
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
-            $user_uuid = $userDetail->uuid;
-            if(user_otp()->where('user_uuid',$user_uuid)->count() <= 0) {
+            if(!$userDetail->verify) {
                 if (user()->where('email', $email)->update(['password' => bcrypt($password)])) {
+                    user()->where('email',$email)->update(['verify'=>1]);
                     return ['success' => true, 'message' => trans('api.password_updated'), 'data' => array()];
                 } else {
                     return ['success' => false, 'message' => trans('api.server_issue'), 'data' => array()];
