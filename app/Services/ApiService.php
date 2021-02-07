@@ -130,7 +130,13 @@ class ApiService
                 }
             }
             student_details()->create($studentDetails);
-            user_otp()->create($userOtpArray);
+            if(user_otp()->where('user_uuid',$user)->count() > 0){
+                if(user_otp()->where('user_uuid',$user)->where('attempt') >= 3){
+                    return ['success' => false, 'message' => trans('api.maximum_attempt'), 'data' => array()];
+                }
+            }else{
+                user_otp()->create($userOtpArray);
+            }
             $user = user_otp()->where('user_uuid', $user_uuid)->first();
             Mail::to($request->email)->send(new StudentRegistraionOtp($user));
             return ['success' => true, 'message' => trans('api.user_registration_otp_sent'), 'data' => array()];
