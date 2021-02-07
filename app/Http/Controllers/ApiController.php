@@ -58,7 +58,7 @@ class ApiController extends Controller
         $email = $request->email;
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
-            if ($userDetail->user_otp->status) {
+            if ($userDetail->verify) {
                 return response()->json(['success' => 'false', 'message' => 'Email already exists', 'data' => array()], 200);
             } else {
                 return response()->json(['success' => 'true', 'message' => 'Email not found', 'data' => array()], 200);
@@ -91,7 +91,7 @@ class ApiController extends Controller
         $mobile = $request->mobile;
         if (user()->where('mobile', $mobile)->count() > 0) {
             $userDetail = user()->where('mobile', $mobile)->first();
-            if ($userDetail->user_otp->status) {
+            if ($userDetail->verify) {
                 return response()->json(['success' => 'false', 'message' => 'Mobile already exists', 'data' => array()], 200);
             } else {
                 return response()->json(['success' => 'true', 'message' => 'Mobile not found', 'data' => array()], 200);
