@@ -138,6 +138,8 @@ class ApiService
                 }
                 if ($userOtpDetail->attempt >= 3 && $currentDate == $todayDate) {
                     return ['success' => false, 'message' => trans('api.maximum_attempt'), 'data' => array()];
+                }else{
+                    user_otp()->where('user_uuid', $user_uuid)->increment('attempt');
                 }
             }else{
                 user_otp()->create($userOtpArray);
