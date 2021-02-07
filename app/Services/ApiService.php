@@ -131,8 +131,16 @@ class ApiService
             }
             student_details()->create($studentDetails);
             if(user_otp()->where('user_uuid',$user)->count() > 0){
-                if(user_otp()->where('user_uuid',$user)->where('attempt') >= 3){
+                $userOtpDetail = user_otp()->where('user_uuid', $user_uuid)->first();
+                $currentDate = Carbon::parse($userOtpDetail->updated_at)->format('d-m-y');
+                $todayDate = Carbon::now()->format('d-m-y');
+                if ($currentDate != $todayDate) {
+                    user_otp()->where('user_uuid', $user_uuid)->update(['attempt' => 0]);
+                }
+                if ($userOtpDetail->attempt >= 3 && $currentDate == $todayDate) {
                     return ['success' => false, 'message' => trans('api.maximum_attempt'), 'data' => array()];
+                }else{
+                    user_otp()->where('user_uuid', $user->uuid)->delete();
                 }
             }else{
                 user_otp()->create($userOtpArray);
