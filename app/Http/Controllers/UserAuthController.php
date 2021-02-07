@@ -94,7 +94,11 @@ class UserAuthController extends Controller
 
     public function verifyOTP(){
         if(session()->get('user_uuid')){
-            return view('auth.verify-otp');
+            if(forgot_password()->where('user_uuid',session()->get('user_uuid'))->count() > 0){
+                return view('auth.verify-otp');
+            }else{
+                return redirect('/');
+            }
         }else{
             return redirect('/');
         }
@@ -111,7 +115,11 @@ class UserAuthController extends Controller
 
     public function changePassword(){
         if(session()->get('user_uuid')){
-            return view('auth.change-password');
+            if(forgot_password()->where('user_uuid',session()->get('user_uuid'))->where('status',0)->count() > 0) {
+                return view('auth.change-password');
+            }else{
+                return redirect('/');
+            }
         }else{
             return redirect('/');
         }
