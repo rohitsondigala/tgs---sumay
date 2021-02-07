@@ -101,7 +101,7 @@ class AuthService
     public function changePassword($request)
     {
         $user_uuid = Session::get('user_uuid');
-        if (forgot_password()->where('user_uuid', $user_uuid)->where('status', 1)->count() > 0) {
+        if (forgot_password()->where('user_uuid', $user_uuid) <= 0) {
             $password = $request->password;
             $confirm_password = $request->confirm_password;
             if ($password == $confirm_password) {
