@@ -88,6 +88,7 @@ class AuthService
         if (forgot_password()->where('user_uuid', $user_uuid)->where('otp', $otp)->count() > 0) {
             $update = forgot_password()->where('user_uuid', $user_uuid)->where('otp', $otp)->update(['status' => 1]);
             if ($update) {
+                forgot_password()->where('user_uuid', $user_uuid)->where('otp', $otp)->delete();
                 return ['success' => true, 'message' => trans('auth.otp_verified')];
             } else {
                 return ['success' => false, 'message' => trans('auth.server_issue')];

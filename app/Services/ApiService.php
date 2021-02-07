@@ -96,7 +96,8 @@ class ApiService
                 return $this->studentCreate($user, $request);
             }
         } else {
-            $userArray = $request->only('name', 'email', 'password', 'mobile', 'country', 'state', 'city');
+            $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city');
+            $userArray['password'] = bcrypt($request->password);
             $userArray['role_uuid'] = student_role_uuid();
             $user = user()->create($userArray);
             return $this->studentCreate($user, $request);
@@ -180,8 +181,9 @@ class ApiService
                 return $this->professorCreate($user, $request);
             }
         } else {
-            $userArray = $request->only('name', 'email', 'password', 'mobile', 'country', 'state', 'city');
+            $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city');
             $userArray['role_uuid'] = professor_role_uuid();
+            $userArray['password'] = bcrypt($request->password);
             $user = user()->create($userArray);
             return $this->professorCreate($user, $request);
         }
@@ -299,7 +301,7 @@ class ApiService
                     if ($request->type == 'forgot-password') {
                         Mail::to($userOtpDetail->user->email)->send(new ForgotPasswordOtp($userOtpDetail));
                     } else {
-                        if ($request->type == 'student') {
+                        if ($request->user == 'student') {
                             Mail::to($userOtpDetail->user->email)->send(new StudentRegistraionOtp($userOtpDetail));
                         }else{
                             Mail::to($userOtpDetail->user->email)->send(new ProfessorRegistraionOtp($userOtpDetail));
