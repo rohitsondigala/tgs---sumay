@@ -13,5 +13,6 @@ return [
     'email_not_found'=>'Email is not registered with us',
     'unauthorized'=>'Request is unauthorized',
     'password_updated' => 'Password updated successfully',
-    'otp_not_verified'=>'Otp is not verified'
+    'otp_not_verified'=>'Otp is not verified',
+    'no_record_to_resend' =>'You have not requested for resend OTP',
 ];

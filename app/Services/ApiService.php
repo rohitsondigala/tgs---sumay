@@ -311,6 +311,9 @@ class ApiService
         if (user()->where('email', $request->email)->count() > 0) {
             $user_uuid = user()->where('email', $email)->value('uuid');
             if ($user_uuid) {
+                if(user_otp()->where('user_uuid', $user_uuid)->count() <= 0){
+                    return ['success' => false, 'message' => trans('api.no_record_to_resend'), 'data' => array()];
+                }
                 if (user_otp()->where('user_uuid', $user_uuid)->where('status', 1)->count() > 0) {
                     return ['success' => false, 'message' => trans('api.already_verified'), 'data' => array()];
                 }
