@@ -57,6 +57,9 @@ return [
     'admin|moderator|created' => 'New moderator created successfully',
     'admin|moderator|edited' => 'Moderator edited successfully',
 
+    //students Event Texts
+    'admin|student|index' => 'Student List',
+    'admin|professor|index' => 'Professor List',
 
     'moderator|delete' => 'Item deleted successfully',
     'moderator|fail' => 'Fail to perform this action',

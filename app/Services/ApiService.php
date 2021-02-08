@@ -84,7 +84,7 @@ class ApiService
     {
         if (user()->where('email', $request->email)->count() > 0) {
             $user = user()->where('email', $request->email)->first();
-            if($user->verify){
+            if ($user->verify) {
                 return ['success' => false, 'message' => trans('api.email_exists'), 'data' => array()];
             }
             if (user_otp()->where('user_uuid', $user->uuid)->where('status', 1)->count() > 0) {
@@ -129,7 +129,7 @@ class ApiService
                 }
             }
             student_details()->create($studentDetails);
-            if(user_otp()->where('user_uuid',$user_uuid)->count() > 0){
+            if (user_otp()->where('user_uuid', $user_uuid)->count() > 0) {
                 $userOtpDetail = user_otp()->where('user_uuid', $user_uuid)->first();
                 $currentDate = Carbon::parse($userOtpDetail->updated_at)->format('d-m-y');
                 $todayDate = Carbon::now()->format('d-m-y');
@@ -138,10 +138,10 @@ class ApiService
                 }
                 if ($userOtpDetail->attempt >= 3 && $currentDate == $todayDate) {
                     return ['success' => false, 'message' => trans('api.maximum_attempt'), 'data' => array()];
-                }else{
+                } else {
                     user_otp()->where('user_uuid', $user_uuid)->increment('attempt');
                 }
-            }else{
+            } else {
                 user_otp()->create($userOtpArray);
             }
             $user = user_otp()->where('user_uuid', $user_uuid)->first();
@@ -182,7 +182,7 @@ class ApiService
     {
         if (user()->where('email', $request->email)->count() > 0) {
             $user = user()->where('email', $request->email)->first();
-            if($user->verify){
+            if ($user->verify) {
                 return ['success' => false, 'message' => trans('api.email_exists'), 'data' => array()];
             }
             if (user_otp()->where('user_uuid', $user->uuid)->where('status', 1)->count() > 0) {
@@ -204,7 +204,7 @@ class ApiService
 
     function professorCreate($user, $request)
     {
-        $professorDetails = $request->only('education_qualification','research_of_expertise','achievements','university_name', 'college_name', 'other_information', 'preferred_language');
+        $professorDetails = $request->only('education_qualification', 'research_of_expertise', 'achievements', 'university_name', 'college_name', 'other_information', 'preferred_language');
         $subjects = $request->only('subjects');
         if ($user) {
             $user_uuid = $user->uuid;
@@ -222,7 +222,7 @@ class ApiService
                 }
             }
             professor_details()->create($professorDetails);
-            if(user_otp()->where('user_uuid',$user_uuid)->count() > 0){
+            if (user_otp()->where('user_uuid', $user_uuid)->count() > 0) {
                 $userOtpDetail = user_otp()->where('user_uuid', $user_uuid)->first();
                 $currentDate = Carbon::parse($userOtpDetail->updated_at)->format('d-m-y');
                 $todayDate = Carbon::now()->format('d-m-y');
@@ -231,10 +231,10 @@ class ApiService
                 }
                 if ($userOtpDetail->attempt >= 3 && $currentDate == $todayDate) {
                     return ['success' => false, 'message' => trans('api.maximum_attempt'), 'data' => array()];
-                }else{
+                } else {
                     user_otp()->where('user_uuid', $user_uuid)->increment('attempt');
                 }
-            }else{
+            } else {
                 user_otp()->create($userOtpArray);
             }
             $user = user_otp()->where('user_uuid', $user_uuid)->first();
@@ -275,7 +275,7 @@ class ApiService
             if (user_otp()->where('user_uuid', $user_uuid)->where('otp', $otp)->count() > 0) {
                 $update = user_otp()->where('user_uuid', $user_uuid)->where('otp', $otp)->update(['status' => 1]);
                 if ($update) {
-                    user()->where('uuid',$user_uuid)->update(['verify'=>1]);
+                    user()->where('uuid', $user_uuid)->update(['verify' => 1]);
                     user_otp()->where('user_uuid', $user_uuid)->delete();
                     return ['success' => true, 'message' => trans('api.otp_verified'), 'data' => array()];
                 } else {
@@ -311,7 +311,7 @@ class ApiService
         if (user()->where('email', $request->email)->count() > 0) {
             $user_uuid = user()->where('email', $email)->value('uuid');
             if ($user_uuid) {
-                if(user_otp()->where('user_uuid', $user_uuid)->count() <= 0){
+                if (user_otp()->where('user_uuid', $user_uuid)->count() <= 0) {
                     return ['success' => false, 'message' => trans('api.no_record_to_resend'), 'data' => array()];
                 }
                 if (user_otp()->where('user_uuid', $user_uuid)->where('status', 1)->count() > 0) {
@@ -332,7 +332,7 @@ class ApiService
                     } else {
                         if ($request->user == 'student') {
                             Mail::to($userOtpDetail->user->email)->send(new StudentRegistraionOtp($userOtpDetail));
-                        }else{
+                        } else {
                             Mail::to($userOtpDetail->user->email)->send(new ProfessorRegistraionOtp($userOtpDetail));
                         }
                     }
@@ -389,13 +389,13 @@ class ApiService
 
                     Mail::to($userOtpDetail->user->email)->send(new ForgotPasswordOtp($userOtpDetail));
                     user_otp()->where('user_uuid', $user_uuid)->increment('attempt');
-                    user()->where('uuid',$user_uuid)->update(['verify'=>0]);
+                    user()->where('uuid', $user_uuid)->update(['verify' => 0]);
                     return ['success' => true, 'message' => trans('auth.forgot_password'), 'data' => array()];
                 }
             } else {
                 $userOtpDetail = user_otp()->create($userOtpArray);
                 if ($userOtpDetail) {
-                    user()->where('uuid',$user_uuid)->update(['verify'=>0]);
+                    user()->where('uuid', $user_uuid)->update(['verify' => 0]);
                     Mail::to($userOtpDetail->user->email)->send(new ForgotPasswordOtp($userOtpDetail));
                     return ['success' => true, 'message' => trans('auth.forgot_password'), 'data' => array()];
                 } else {
@@ -471,23 +471,60 @@ class ApiService
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
             $user_uuid = $userDetail->uuid;
-            if(user_otp()->where('user_uuid',$user_uuid)->where('status',0)->count() <= 0) {
-                if(!$userDetail->verify) {
+            if (user_otp()->where('user_uuid', $user_uuid)->where('status', 0)->count() <= 0) {
+                if (!$userDetail->verify) {
                     if (user()->where('email', $email)->update(['password' => bcrypt($password)])) {
-                        user()->where('email',$email)->update(['verify'=>1]);
+                        user()->where('email', $email)->update(['verify' => 1]);
                         return ['success' => true, 'message' => trans('api.password_updated'), 'data' => array()];
                     } else {
                         return ['success' => false, 'message' => trans('api.server_issue'), 'data' => array()];
                     }
-                }else{
+                } else {
                     return ['success' => false, 'message' => trans('api.otp_not_verified'), 'data' => array()];
                 }
-            }else{
+            } else {
                 return ['success' => false, 'message' => trans('api.otp_not_verified'), 'data' => array()];
             }
         } else {
             return ['success' => false, 'message' => trans('api.email_not_found'), 'data' => array()];
         }
+    }
+
+    function moderatorPostsValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function moderatorPosts($request)
+    {
+        $userDetail = getUserDetail($request->user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found'), 'data' => array()];
+        }
+
+        $subjectList = getSubjectList($userDetail);
+        if (!$subjectList) {
+            return ['success' => false, 'message' => trans('api.user_with_not_subjects'), 'data' => array()];
+        }
+
+        $moderatorDailyPost = moderator_daily_posts()->with('moderator_subject.subject')->whereHas('moderator_subject', function ($query) use ($subjectList) {
+            $query->whereIn('subject_uuid', $subjectList);
+        })->orderBy('id', 'DESC')->get()->toArray();
+
+        if (!empty($moderatorDailyPost)) {
+            return ['success' => true, 'message' => trans('api.moderator_posts'), 'data' => $moderatorDailyPost];
+        } else {
+            return ['success' => false, 'message' => trans('api.no_post_found'), 'data' => array()];
+        }
+
+
     }
 
 

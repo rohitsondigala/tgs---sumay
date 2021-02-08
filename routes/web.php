@@ -64,6 +64,8 @@ Route::name('admin.')
         Route::resource('streams','App\Http\Controllers\AdminStreamsController');
         Route::resource('subjects','App\Http\Controllers\AdminSubjectsController');
         Route::resource('moderator','App\Http\Controllers\AdminModeratorController');
+        Route::resource('student','App\Http\Controllers\AdminStudentController');
+        Route::resource('professor','App\Http\Controllers\AdminProfessorController');
         Route::get('/search/{table}',[CustomController::class,'search'])->name('search');
         Route::get('/get-subject-list',[CustomController::class,'getSubjectList'])->name('subject-list');
 

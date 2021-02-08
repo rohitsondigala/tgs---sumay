@@ -20,10 +20,24 @@
                 </li>
                 <li class="{{(\Route::current()->getName() == 'admin.moderator.index') ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.moderator.index')}}" >
-                        <i class="mdi mdi-account-check"></i>
+                        <i class="mdi mdi-account-edit"></i>
                         <span class="nav-text">{{__('Moderator')}}</span>
                     </a>
                 </li>
+                <li class="{{(\Route::current()->getName() == 'admin.student.index') ? 'active' : ''}}">
+                    <a class="sidenav-item-link" href="{{route('admin.student.index')}}" >
+                        <i class="mdi mdi-account-group"></i>
+                        <span class="nav-text">{{__('Students')}}</span>
+                    </a>
+                </li>
+
+                <li class="{{(\Route::current()->getName() == 'admin.professor.index') ? 'active' : ''}}">
+                    <a class="sidenav-item-link" href="{{route('admin.professor.index')}}" >
+                        <i class="mdi mdi-account-check"></i>
+                        <span class="nav-text">{{__('Professors')}}</span>
+                    </a>
+                </li>
+
                 <li class="{{(\Route::current()->getName() == 'admin.streams.index') ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.streams.index')}}" >
                         <i class="mdi mdi-playlist-check"></i>
@@ -36,6 +50,7 @@
                         <span class="nav-text">{{__('Subjects')}}</span>
                     </a>
                 </li>
+
 
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"

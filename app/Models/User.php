@@ -59,10 +59,22 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo('App\Models\UsersOtp','uuid','user_uuid');
     }
     public function student_subjects(){
-        return $this->hasMany('App\Models\StudentSubjects','uuid','user_uuid');
+        return $this->hasMany('App\Models\StudentSubjects','user_uuid','uuid');
+//        return $this->hasManyThrough('App\Models\Subjects','App\Models\StudentSubjects','user_uuid','uuid','uuid');
     }
     public function student_detail(){
         return $this->hasMany('App\Models\StudentDetails','uuid','user_uuid');
+    }
+    public function professor_subjects(){
+        return $this->hasMany('App\Models\ProfessorSubjects','user_uuid','uuid');
+//        return $this->hasManyThrough('App\Models\Subjects','App\Models\StudentSubjects','user_uuid','uuid','uuid');
+    }
+    public function professor_detail(){
+        return $this->hasMany('App\Models\ProfessorDetails','uuid','user_uuid');
+    }
+
+    public function moderator_daily_posts(){
+        return $this->hasMany('App\Models\ModeratorDailyPost','uuid','user_uuid');
     }
 
     public function scopeOfRole($query,$title){
@@ -73,5 +85,6 @@ class User extends Authenticatable implements JWTSubject
     public function moderator(){
         return $this->belongsTo('App\Models\ModeratorSubject','uuid','user_uuid');
     }
+
 
 }

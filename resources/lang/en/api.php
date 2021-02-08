@@ -15,4 +15,8 @@ return [
     'password_updated' => 'Password updated successfully',
     'otp_not_verified'=>'Otp is not verified',
     'no_record_to_resend' =>'You have not requested for resend OTP',
+    'user_not_found' => 'User not registered with us',
+    'user_with_not_subjects' => 'User does not have any subjects',
+    'moderator_posts' => 'Moderator Posts',
+    'no_post_found' => 'No Post found'
 ];

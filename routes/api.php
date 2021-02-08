@@ -32,4 +32,5 @@ Route::group([
     Route::post('/forgot-password',[ApiController::class,'forgotPassword'])->name('forgot-password');
     Route::post('/verify-forgot-password',[ApiController::class,'verifyForgotPassword'])->name('verify-forgot-password');
     Route::post('/verify-change-password',[ApiController::class,'verifyChangePassword'])->name('verify-change-password');
+    Route::post('/moderator-posts',[ApiController::class,'moderatorPosts'])->name('moderator-posts');
 });

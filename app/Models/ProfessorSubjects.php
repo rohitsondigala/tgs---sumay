@@ -21,10 +21,10 @@ class ProfessorSubjects extends Model
             addUUID($model);
         });
     }
-    public function stream(){
-        return $this->belongsTo('App\Models\Streams','stream_uuid','uuid');
-    }
+
     public function subject(){
         return $this->belongsTo('App\Models\Subjects','subject_uuid','uuid');
     }
+
+
 }

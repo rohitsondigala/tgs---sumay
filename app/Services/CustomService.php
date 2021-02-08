@@ -18,11 +18,11 @@ class CustomService {
     function storeModerator($request, $uuid=null){
         $temporaryPassword = Str::random(8);
         $request->merge(['password'=>bcrypt($temporaryPassword)]);
-        $userArray = $request->except(['_token','_method','stream_uuid','subject_uuid','image']);
 
         $moderatorArray = ['stream_uuid'=>$request->stream_uuid,'subject_uuid'=>$request->subject_uuid];
 
         if($uuid){
+            $userArray = $request->except(['_token','_method','stream_uuid','subject_uuid','image','password']);
             if(!empty($request->image)){
                 $filePath = uploadMedia($request->image,'profile');
                 $userArray['image'] = $filePath;
@@ -35,6 +35,7 @@ class CustomService {
                 return ['success'=>false,'message'=>trans('strings.admin|fail')];
             }
         }else{
+            $userArray = $request->except(['_token','_method','stream_uuid','subject_uuid','image']);
             $filePath = uploadMedia($request->image,'profile');
             $userArray['image'] = $filePath;
             $userArray['role_uuid'] = moderator_role_uuid();
