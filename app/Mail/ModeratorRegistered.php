@@ -11,14 +11,18 @@ class ModeratorRegistered extends Mailable
 {
     use Queueable, SerializesModels;
     public $user;
+    public $temporaryPassword;
+
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param $user
+     * @param $temporaryPassword
      */
-    public function __construct($user)
+    public function __construct($user,$temporaryPassword)
     {
         $this->user = $user;
+        $this->temporaryPassword= $temporaryPassword;
     }
 
     /**
@@ -29,6 +33,7 @@ class ModeratorRegistered extends Mailable
     public function build()
     {
         $user = $this->user;
-        return $this->subject('Moderator Registration')->view('mail.moderator-registered',compact('user'));
+        $temporaryPassword = $this->temporaryPassword;
+        return $this->subject('Moderator Registration')->view('mail.moderator-registered',compact('user','temporaryPassword'));
     }
 }

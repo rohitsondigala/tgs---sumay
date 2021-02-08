@@ -141,7 +141,7 @@
                 </tr>
                 <tr>
                     <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 0px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                        <p style="margin: 0;">{{__('Your default password for accessing account is')}} <b>1234</b></p>
+                        <p style="margin: 0;">{{__('Your default password for accessing account is')}} <b>{{$temporaryPassword}}</b></p>
                     </td>
                 </tr>
                 <tr>

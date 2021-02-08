@@ -22,6 +22,7 @@
                                 @endif
                             </div>
                         </div>
+                        @if(!auth()->check())
                         <h4 class="text-dark mb-3">Sign In</h4>
                         {!! Form::open(['route'=>'login','method'=>'post']) !!}
                             <div class="row">
@@ -50,6 +51,21 @@
                                 </div>
                             </div>
                         {!! Form::close() !!}
+                        @else
+                            <div class="profile-content-left ">
+                                <div class="card text-center widget-profile px-0 border-0">
+                                    <div class="card-img mx-auto rounded-circle">
+                                        <img src="{{user_image()}}" alt="{{auth()->user()->name}}">
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="py-2 text-dark">{{auth()->user()->name}}</h4>
+                                        <p>{{auth()->user()->email}}</p>
+                                        <a class="btn btn-primary btn-pill btn-lg my-4" href="{{route('index')}}">{{__('Go To Dashboard')}}</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                       @endif
                     </div>
                 </div>
             </div>

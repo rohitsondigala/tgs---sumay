@@ -16,8 +16,8 @@ class CustomService {
      * @return array
      */
     function storeModerator($request, $uuid=null){
-
-        $request->merge(['password'=>bcrypt('1234')]);
+        $temporaryPassword = Str::random(8);
+        $request->merge(['password'=>bcrypt($temporaryPassword)]);
         $userArray = $request->except(['_token','_method','stream_uuid','subject_uuid','image']);
 
         $moderatorArray = ['stream_uuid'=>$request->stream_uuid,'subject_uuid'=>$request->subject_uuid];
@@ -43,7 +43,7 @@ class CustomService {
                 $moderatorArray['user_uuid'] = $submit->uuid;
                 moderator_subjects()->create($moderatorArray);
                 $user = user()->where('uuid',$submit->uuid)->first();
-                Mail::to($user->email)->send(new \App\Mail\ModeratorRegistered($user));
+                Mail::to($user->email)->send(new \App\Mail\ModeratorRegistered($user,$temporaryPassword));
                 return ['success'=>true,'message'=>trans('strings.admin|moderator|created'),'model'=>$submit];
             }else{
                 return ['success'=>false,'message'=>trans('strings.admin|fail')];
