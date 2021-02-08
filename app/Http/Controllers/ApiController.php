@@ -173,7 +173,7 @@ class ApiController extends Controller
         try {
             $token = JWTAuth::attempt($credentials);
             if (!$token) {
-                return response()->json(['success' => 'false', 'message' => 'invalid_credentials', 'data' => array()], 200);
+                return response()->json(['success' => false, 'message' => 'invalid_credentials', 'data' => array()], 200);
             }
             $data = user()->with('role', 'country_detail', 'state_detail', 'city_detail')->where('email', $email)->first()->toArray();
             $data['token'] = $token;
