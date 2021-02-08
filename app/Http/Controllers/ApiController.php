@@ -59,12 +59,12 @@ class ApiController extends Controller
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
             if ($userDetail->verify) {
-                return response()->json(['success' => 'false', 'message' => 'Email already exists', 'data' => array()], 200);
+                return response()->json(['success' => false, 'message' => 'Email already exists', 'data' => array()], 200);
             } else {
-                return response()->json(['success' => 'true', 'message' => 'Email not found', 'data' => array()], 200);
+                return response()->json(['success' => true, 'message' => 'Email not found', 'data' => array()], 200);
             }
         } else {
-            return response()->json(['success' => 'true', 'message' => 'Email not found', 'data' => array()], 200);
+            return response()->json(['success' => true, 'message' => 'Email not found', 'data' => array()], 200);
 
         }
     }
@@ -92,12 +92,12 @@ class ApiController extends Controller
         if (user()->where('mobile', $mobile)->count() > 0) {
             $userDetail = user()->where('mobile', $mobile)->first();
             if ($userDetail->verify) {
-                return response()->json(['success' => 'false', 'message' => 'Mobile already exists', 'data' => array()], 200);
+                return response()->json(['success' => false, 'message' => 'Mobile already exists', 'data' => array()], 200);
             } else {
-                return response()->json(['success' => 'true', 'message' => 'Mobile not found', 'data' => array()], 200);
+                return response()->json(['success' => true, 'message' => 'Mobile not found', 'data' => array()], 200);
             }
         } else {
-            return response()->json(['success' => 'true', 'message' => 'Mobile not found', 'data' => array()], 200);
+            return response()->json(['success' => true, 'message' => 'Mobile not found', 'data' => array()], 200);
         }
     }
 
@@ -108,9 +108,9 @@ class ApiController extends Controller
     {
         $streams = streams()->where('is_standard', 0)->get()->toArray();
         if (!empty($streams) && count($streams) > 0) {
-            return response()->json(['success' => 'true', 'message' => 'Stream List', 'data' => $streams], 200);
+            return response()->json(['success' => true, 'message' => 'Stream List', 'data' => $streams], 200);
         } else {
-            return response()->json(['success' => 'false', 'message' => 'No Stream Found', 'data' => array()], 200);
+            return response()->json(['success' => false, 'message' => 'No Stream Found', 'data' => array()], 200);
         }
     }
 
@@ -137,9 +137,9 @@ class ApiController extends Controller
         $stream_uuid = $request->stream_uuid;
         $streams = subjects()->where('stream_uuid', $stream_uuid)->orderBy('title', 'ASC')->get()->toArray();
         if (!empty($streams) && count($streams) > 0) {
-            return response()->json(['success' => 'true', 'message' => 'Subject List', 'data' => $streams], 200);
+            return response()->json(['success' => true, 'message' => 'Subject List', 'data' => $streams], 200);
         } else {
-            return response()->json(['success' => 'false', 'message' => 'No Subjects Found', 'data' => array()], 200);
+            return response()->json(['success' => false, 'message' => 'No Subjects Found', 'data' => array()], 200);
         }
     }
 
@@ -178,9 +178,9 @@ class ApiController extends Controller
             $data = user()->with('role', 'country_detail', 'state_detail', 'city_detail')->where('email', $email)->first()->toArray();
             $data['token'] = $token;
             $data['image'] = $this->base_url . $data['image'];
-            return response()->json(['success' => 'true', 'message' => 'Login Successful', 'data' => $data], 200);
+            return response()->json(['success' => true, 'message' => 'Login Successful', 'data' => $data], 200);
         } catch (JWTException $e) {
-            return response()->json(['success' => 'false', 'message' => 'could_not_create_token', 'data' => array()], 200);
+            return response()->json(['success' => false, 'message' => 'could_not_create_token', 'data' => array()], 200);
         }
     }
 
