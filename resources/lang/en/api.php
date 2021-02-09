@@ -19,5 +19,7 @@ return [
     'user_with_not_subjects' => 'User does not have any subjects',
     'moderator_posts' => 'Moderator Posts',
     'no_post_found' => 'No Post found',
-    'do_not_have_access' => 'User does not have access to this url'
+    'do_not_have_access' => 'User does not have access to this url',
+    'student_subject_list' => 'Student subject list',
+    'user_with_no_stream' =>'User does not have selected any stream'
 ];

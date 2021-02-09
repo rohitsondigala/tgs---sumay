@@ -306,4 +306,28 @@ class ApiController extends Controller
         }
         return response()->json($this->apiService->moderatorPosts($request));
     }
+
+    public function studentSubjectList(Request $request){
+        $validation = $this->apiService->studentSubjectListValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+                'data' => array()
+            ], 200);
+        }
+        return response()->json($this->apiService->studentSubjectList($request));
+    }
+
+    public function getAllSubjectList(Request $request){
+        $validation = $this->apiService->getAllSubjectListValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+                'data' => array()
+            ], 200);
+        }
+        return response()->json($this->apiService->getAllSubjectList($request));
+    }
 }

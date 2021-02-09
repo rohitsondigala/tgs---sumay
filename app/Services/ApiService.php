@@ -153,6 +153,10 @@ class ApiService
     }
 
 
+    /**
+     * @param $request
+     * @return array
+     */
     function professorRegisterValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
@@ -178,6 +182,10 @@ class ApiService
 
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     function professorRegistration($request)
     {
         if (user()->where('email', $request->email)->count() > 0) {
@@ -202,6 +210,11 @@ class ApiService
 
     }
 
+    /**
+     * @param $user
+     * @param $request
+     * @return array
+     */
     function professorCreate($user, $request)
     {
         $professorDetails = $request->only('education_qualification', 'research_of_expertise', 'achievements', 'university_name', 'college_name', 'other_information', 'preferred_language');
@@ -507,6 +520,10 @@ class ApiService
         }
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     function moderatorPostsValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
@@ -526,7 +543,7 @@ class ApiService
             return ['success' => false, 'message' => trans('api.user_not_found'), 'data' => array()];
         }
 
-        $subjectList = getSubjectList($userDetail);
+        $subjectList = getSubjectListUUID($userDetail);
         if (!$subjectList) {
             return ['success' => false, 'message' => trans('api.user_with_not_subjects'), 'data' => array()];
         }
@@ -540,8 +557,73 @@ class ApiService
         } else {
             return ['success' => false, 'message' => trans('api.no_post_found'), 'data' => array()];
         }
+    }
 
+    /**
+     * @param $request
+     * @return array
+     */
+    function studentSubjectListValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
 
+    /**
+     * @param $request
+     * @return array
+     */
+    function studentSubjectList($request)
+    {
+        $userDetail = getUserDetail($request->user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found'), 'data' => array()];
+        }
+
+        $subjectList = getSubjectListArray($userDetail);
+        if ($subjectList) {
+            return ['success' => true, 'message' => trans('api.student_subject_list'), 'data' => $subjectList];
+        }else{
+            return ['success' => false, 'message' => trans('api.user_with_not_subjects'), 'data' => array()];
+        }
+    }
+
+    function getAllSubjectListValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function getAllSubjectList($request)
+    {
+        $userDetail = getUserDetail($request->user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found'), 'data' => array()];
+        }
+        $streamDetail = getStudentStreamDetail($userDetail);
+        if(!$streamDetail){
+            return ['success' => false, 'message' => trans('api.user_with_no_stream'), 'data' => array()];
+        }
+
+        $subjectList = getSubjectListUUID($userDetail);
+        if (!$subjectList) {
+            return ['success' => false, 'message' => trans('api.user_with_not_subjects'), 'data' => array()];
+        }
+
+        $allSubjectList =  subjects()->where('stream_uuid',$streamDetail->stream_uuid)->whereNotIn('uuid',$subjectList)->get()->toArray();
+        if (!empty($allSubjectList)) {
+            return ['success' => true, 'message' => trans('api.student_subject_list'), 'data' => $allSubjectList];
+        }else{
+            return ['success' => false, 'message' => trans('api.user_with_not_subjects'), 'data' => array()];
+        }
     }
 
 

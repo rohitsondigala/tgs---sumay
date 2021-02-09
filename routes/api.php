@@ -28,9 +28,9 @@ Route::post('/verify-forgot-password',[ApiController::class,'verifyForgotPasswor
 Route::post('/verify-change-password',[ApiController::class,'verifyChangePassword'])->name('verify-change-password');
 
 Route::group([
-
     'middleware' => 'api_access'
-
 ], function () {
-   Route::post('/moderator-posts',[ApiController::class,'moderatorPosts'])->name('moderator-posts');
+    Route::post('/moderator-posts',[ApiController::class,'moderatorPosts'])->name('moderator-posts');
+    Route::post('/student-subject-list',[ApiController::class,'studentSubjectList'])->name('student-subject-list');
+    Route::post('/all-subject-list',[ApiController::class,'getAllSubjectList'])->name('all-subject-list');
 });
