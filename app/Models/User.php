@@ -82,6 +82,9 @@ class User extends Authenticatable implements JWTSubject
             $query->where('title',$title);
         });
     }
+    public function scopeOfVerify($query){
+        return $query->where('verify',1);
+    }
     public function moderator(){
         return $this->belongsTo('App\Models\ModeratorSubject','uuid','user_uuid');
     }
