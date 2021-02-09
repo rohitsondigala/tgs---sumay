@@ -1,5 +1,8 @@
 <?php
 
+    function checkRoles(){
+        return ['PROFESSOR','STUDENT'];
+    }
     function getUserDetail($user_uuid){
         if(user()->where('uuid',$user_uuid)->count() > 0){
             return user()->where('uuid',$user_uuid)->first();

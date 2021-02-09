@@ -269,6 +269,10 @@ class ApiService
         $otp = $request->otp;
         if (user()->where('email', $request->email)->count() > 0) {
             $user_uuid = user()->where('email', $email)->value('uuid');
+            $userDetail = user()->where('email', $email)->first();
+            if(!in_array($userDetail->role->title,checkRoles())){
+                return ['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()];
+            }
             if (user_otp()->where('user_uuid', $user_uuid)->where('status', 1)->count() > 0) {
                 return ['success' => false, 'message' => trans('api.already_verified')];
             }
@@ -310,6 +314,10 @@ class ApiService
         $email = $request->email;
         if (user()->where('email', $request->email)->count() > 0) {
             $user_uuid = user()->where('email', $email)->value('uuid');
+            $userDetail = user()->where('email', $email)->first();
+            if(!in_array($userDetail->role->title,checkRoles())){
+                return ['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()];
+            }
             if ($user_uuid) {
                 if (user_otp()->where('user_uuid', $user_uuid)->count() <= 0) {
                     return ['success' => false, 'message' => trans('api.no_record_to_resend'), 'data' => array()];
@@ -367,6 +375,9 @@ class ApiService
         $email = $request->email;
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
+            if(!in_array($userDetail->role->title,checkRoles())){
+                return ['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()];
+            }
             $user_uuid = $userDetail->uuid;
             $otp = rand(111111, 999999);
 
@@ -429,6 +440,9 @@ class ApiService
         $email = $request->email;
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
+            if(!in_array($userDetail->role->title,checkRoles())){
+                return ['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()];
+            }
             $user_uuid = $userDetail->uuid;
             $otp = $request->otp;
             if (user_otp()->where('user_uuid', $user_uuid)->where('otp', $otp)->count() > 0) {
@@ -470,6 +484,9 @@ class ApiService
         $password = $request->password;
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
+            if(!in_array($userDetail->role->title,checkRoles())){
+                return ['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()];
+            }
             $user_uuid = $userDetail->uuid;
             if (user_otp()->where('user_uuid', $user_uuid)->where('status', 0)->count() <= 0) {
                 if (!$userDetail->verify) {

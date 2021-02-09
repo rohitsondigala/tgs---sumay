@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\ApiMiddleware;
 use App\Http\Middleware\ModeratorMiddleware;
 use App\Http\Middleware\RevalidateHistory;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -57,6 +58,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
+        'api_access' => ApiMiddleware::class,
         'admin'=>AdminMiddleware::class,
         'moderator'=>ModeratorMiddleware::class,
         'revalidate'=>RevalidateHistory::class,

@@ -18,5 +18,6 @@ return [
     'user_not_found' => 'User not registered with us',
     'user_with_not_subjects' => 'User does not have any subjects',
     'moderator_posts' => 'Moderator Posts',
-    'no_post_found' => 'No Post found'
+    'no_post_found' => 'No Post found',
+    'do_not_have_access' => 'User does not have access to this url'
 ];

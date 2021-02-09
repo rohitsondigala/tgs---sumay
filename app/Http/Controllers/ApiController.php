@@ -33,7 +33,7 @@ class ApiController extends Controller
     {
         $this->apiService = new ApiService();
         $this->base_url = env('APP_URL');
-        $this->middleware('auth:api', ['except' => ['login', 'checkEmail', 'checkMobile', 'streams', 'subjects', 'postStudentRegister', 'verifyEmail','resendOtp','forgotPassword','verifyForgotPassword','verifyChangePassword','postProfessorRegister']]);
+        $this->middleware('api_access', ['except' => ['login', 'checkEmail', 'checkMobile', 'streams', 'subjects', 'postStudentRegister', 'verifyEmail','resendOtp','forgotPassword','verifyForgotPassword','verifyChangePassword','postProfessorRegister']]);
     }
 
     /**
@@ -171,15 +171,23 @@ class ApiController extends Controller
         $password = $request->password;
         $credentials = ['email' => $email, 'password' => $password];
         try {
-            $token = JWTAuth::attempt($credentials);
-            if (!$token) {
-                return response()->json(['success' => false, 'message' => 'invalid_credentials', 'data' => array()], 200);
+            if(user()->where('email',$email)->count() > 0){
+                $userDetail = user()->where('email',$email)->first();
+                if(!in_array($userDetail->role->title,checkRoles())){
+                    return response()->json(['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()]);
+                }
+                $token = JWTAuth::attempt($credentials);
+                if (!$token) {
+                    return response()->json(['success' => false, 'message' => 'invalid_credentials', 'data' => array()], 200);
+                }
+                $data = user()->with('role', 'country_detail', 'state_detail', 'city_detail','student_subjects.subject','professor_subjects.subject')->where('email', $email)->first()->toArray();
+                $data['token'] = $token;
+                $data['image'] = $this->base_url . $data['image'];
+                return response()->json(['success' => true, 'message' => 'Login Successful', 'data' => $data], 200);
+            }else{
+                return response()->json(['success' => false, 'message' => 'Email not found', 'data' => array()], 200);
             }
-            $data = user()->with('role', 'country_detail', 'state_detail', 'city_detail','student_subjects.subject','professor_subjects.subject')->where('email', $email)->first()->toArray();
-            $data['token'] = $token;
-            $data['image'] = $this->base_url . $data['image'];
-            return response()->json(['success' => true, 'message' => 'Login Successful', 'data' => $data], 200);
-        } catch (JWTException $e) {
+      } catch (JWTException $e) {
             return response()->json(['success' => false, 'message' => 'could_not_create_token', 'data' => array()], 200);
         }
     }
@@ -198,7 +206,7 @@ class ApiController extends Controller
                 'data' => array()
             ], 200);
         }
-      return $this->apiService->studentRegistration($request);
+        return response()->json($this->apiService->studentRegistration($request));
     }
 
     /**
@@ -215,7 +223,7 @@ class ApiController extends Controller
                 'data' => array()
             ], 200);
         }
-        return $this->apiService->professorRegistration($request);
+        return response()->json($this->apiService->professorRegistration($request));
     }
 
     /**
@@ -232,7 +240,7 @@ class ApiController extends Controller
                 'data' => array()
             ], 200);
         }
-        return $this->apiService->verifyEmail($request);
+        return response()->json($this->apiService->verifyEmail($request));
     }
 
     /**
@@ -248,7 +256,7 @@ class ApiController extends Controller
                 'data' => array()
             ], 200);
         }
-        return $this->apiService->resendOtp($request);
+        return response()->json($this->apiService->resendOtp($request));
     }
 
     public function forgotPassword(Request $request){
@@ -260,7 +268,7 @@ class ApiController extends Controller
                 'data' => array()
             ], 200);
         }
-        return $this->apiService->forgotPassword($request);
+        return response()->json($this->apiService->forgotPassword($request));
     }
 
     public function verifyForgotPassword(Request $request){
@@ -272,7 +280,7 @@ class ApiController extends Controller
                 'data' => array()
             ], 200);
         }
-        return $this->apiService->verifyForgotPassword($request);
+        return response()->json($this->apiService->verifyForgotPassword($request));
     }
 
     public function verifyChangePassword(Request $request){
@@ -284,7 +292,7 @@ class ApiController extends Controller
                 'data' => array()
             ], 200);
         }
-        return $this->apiService->changePassword($request);
+        return response()->json($this->apiService->changePassword($request));
     }
 
     public function moderatorPosts(Request $request){
@@ -296,6 +304,6 @@ class ApiController extends Controller
                 'data' => array()
             ], 200);
         }
-        return $this->apiService->moderatorPosts($request);
+        return response()->json($this->apiService->moderatorPosts($request));
     }
 }
