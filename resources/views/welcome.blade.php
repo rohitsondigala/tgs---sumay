@@ -55,7 +55,7 @@
                             <div class="profile-content-left ">
                                 <div class="card text-center widget-profile px-0 border-0">
                                     <div class="card-img mx-auto rounded-circle">
-                                        <img src="{{user_image()}}" alt="{{auth()->user()->name}}">
+                                        <img src="{{user_image()}}" alt="{{auth()->user()->name}}" style="width: 100%;">
                                     </div>
                                     <div class="card-body">
                                         <h4 class="py-2 text-dark">{{auth()->user()->name}}</h4>
