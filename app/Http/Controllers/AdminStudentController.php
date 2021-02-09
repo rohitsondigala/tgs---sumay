@@ -31,7 +31,7 @@ class AdminStudentController extends Controller
         $pageTitle = trans('strings.admin|student|index');
         $directory = $this->directory;
         $route = $this->route;
-        $students = user()->ofRole('STUDENT')->orderBy('id','DESC')->get();
+        $students = user()->ofRole('STUDENT')->ofVerify()->orderBy('id','DESC')->get();
         return view($directory.'.index',compact('directory','route','students','pageTitle'));
 
     }

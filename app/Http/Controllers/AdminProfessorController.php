@@ -31,7 +31,7 @@ class AdminProfessorController extends Controller
         $pageTitle = trans('strings.admin|professor|index');
         $directory = $this->directory;
         $route = $this->route;
-        $professors = user()->ofRole('PROFESSOR')->orderBy('id','DESC')->get();
+        $professors = user()->ofRole('PROFESSOR')->ofVerify()->orderBy('id','DESC')->get();
         return view($directory.'.index',compact('directory','route','professors','pageTitle'));
     }
     /**
