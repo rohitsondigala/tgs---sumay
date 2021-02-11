@@ -114,3 +114,18 @@ function moderator_daily_posts(){
     return app(App\Models\ModeratorDailyPost::class);
 }
 
+
+/**
+ * @return Application|mixed
+ */
+function packages(){
+    return app(App\Models\Packages::class);
+}
+
+
+/**
+ * @return Application|mixed
+ */
+function package_subjects(){
+    return app(App\Models\PackageSubjects::class);
+}

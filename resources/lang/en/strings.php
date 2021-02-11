@@ -57,6 +57,15 @@ return [
     'admin|moderator|created' => 'New moderator created successfully',
     'admin|moderator|edited' => 'Moderator edited successfully',
 
+    //Subject Event Texts
+    'admin|package|index' => 'Packages',
+    'admin|package|create' => 'Add New Package',
+    'admin|package|edit' => 'Edit Package',
+    'admin|package|view' => 'View Package',
+
+    'admin|package|created' => 'New package created successfully',
+    'admin|package|edited' => 'Package edited successfully',
+
     //students Event Texts
     'admin|student|index' => 'Student List',
     'admin|professor|index' => 'Professor List',

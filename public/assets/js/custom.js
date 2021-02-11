@@ -302,6 +302,32 @@ $(function() {
         }
     });
 
+    $('#streamList').change(function(){
+        var stream_uuid = $(this).val();
+        if(stream_uuid){
+            $.ajax({
+                type:"GET",
+                url:"/admin/get-subject-list?stream_uuid="+stream_uuid,
+                success:function(res){
+                    if(res){
+                        $("#subject").empty();
+                        $.each(res,function(key,value){
+                            $("#subjectList").append('  <label class="control outlined control-checkbox checkbox-primary">'+value+
+                                '                                    <input name="subjects[]" value='+key+' type="checkbox" >\n' +
+                                '                                    <div class="control-indicator"></div>\n' +
+                                '                                </label>');
+                        });
+
+                    }else{
+                        $("#subject").empty();
+                    }
+                }
+            });
+        }else{
+            $("#subject").empty();
+        }
+    });
+
     $('#country').change(function(){
         var countryID = $(this).val();
         if(countryID){

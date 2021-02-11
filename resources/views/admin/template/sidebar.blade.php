@@ -18,33 +18,39 @@
                         <span class="nav-text">{{__('Dashboard')}}</span>
                     </a>
                 </li>
-                <li class="{{(\Route::current()->getName() == 'admin.moderator.index') ? 'active' : ''}}">
+                <li class="{{(in_array(\Route::current()->getName(),['admin.packages.index','admin.packages.create','admin.packages.edit'])) ? 'active' : ''}}">
+                    <a class="sidenav-item-link" href="{{route('admin.packages.index')}}" >
+                        <i class="mdi mdi-image"></i>
+                        <span class="nav-text">{{__('Packages')}}</span>
+                    </a>
+                </li>
+                <li class="{{(in_array(\Route::current()->getName(),['admin.moderator.index','admin.moderator.create','admin.moderator.edit'])) ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.moderator.index')}}" >
                         <i class="mdi mdi-account-edit"></i>
                         <span class="nav-text">{{__('Moderator')}}</span>
                     </a>
                 </li>
-                <li class="{{(\Route::current()->getName() == 'admin.student.index') ? 'active' : ''}}">
+                <li class="{{(in_array(\Route::current()->getName(),['admin.student.index','admin.student.create','admin.student.edit'])) ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.student.index')}}" >
                         <i class="mdi mdi-account-group"></i>
                         <span class="nav-text">{{__('Students')}}</span>
                     </a>
                 </li>
 
-                <li class="{{(\Route::current()->getName() == 'admin.professor.index') ? 'active' : ''}}">
+                <li class="{{(in_array(\Route::current()->getName(),['admin.professor.index','admin.professor.create','admin.professor.edit'])) ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.professor.index')}}" >
                         <i class="mdi mdi-account-check"></i>
                         <span class="nav-text">{{__('Professors')}}</span>
                     </a>
                 </li>
 
-                <li class="{{(\Route::current()->getName() == 'admin.streams.index') ? 'active' : ''}}">
+                <li class="{{(in_array(\Route::current()->getName(),['admin.streams.index','admin.streams.create','admin.streams.edit'])) ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.streams.index')}}" >
                         <i class="mdi mdi-playlist-check"></i>
                         <span class="nav-text">{{__('Streams')}}</span>
                     </a>
                 </li>
-                <li class="{{(\Route::current()->getName() == 'admin.subjects.index') ? 'active' : ''}}">
+                <li class="{{(in_array(\Route::current()->getName(),['admin.subjects.index','admin.subjects.create','admin.subjects.edit'])) ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.subjects.index')}}" >
                         <i class="mdi mdi-file-document-box-multiple-outline"></i>
                         <span class="nav-text">{{__('Subjects')}}</span>
