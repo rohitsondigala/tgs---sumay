@@ -69,8 +69,10 @@ Route::name('admin.')
         Route::resource('student','App\Http\Controllers\AdminStudentController');
         Route::resource('professor','App\Http\Controllers\AdminProfessorController');
         Route::resource('packages','App\Http\Controllers\AdminPackageController');
+        Route::resource('generate-package','App\Http\Controllers\AdminGeneratePackageController');
         Route::get('/search/{table}',[CustomController::class,'search'])->name('search');
         Route::get('/get-subject-list',[CustomController::class,'getSubjectList'])->name('subject-list');
+        Route::get('/get-package-prices',[CustomController::class,'getPackageDetail'])->name('package-detail');
 
     });
 

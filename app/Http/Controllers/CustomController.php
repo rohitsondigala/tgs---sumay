@@ -59,4 +59,18 @@ class CustomController extends Controller
         })->orderBy('id','DESC')->get()->pluck('user.name','user.uuid')->prepend('All','all');
         return response()->json($notes);
     }
+
+    public function getPackageDetail(Request  $request){
+        $packageData = packages()
+            ->where("uuid",$request->package_uuid)
+            ->first();
+        $returnArray = [
+            '3' =>'3 Months - INR '.$packageData->price_month_3,
+            '6' =>'6 Months - INR '.$packageData->price_month_6,
+            '12' =>'12 Months - INR '.$packageData->price_month_12,
+            '24' =>'24 Months - INR '.$packageData->price_month_24,
+            '36' =>'36 Months - INR '.$packageData->price_month_36,
+            ];
+        return response()->json($returnArray);
+    }
 }

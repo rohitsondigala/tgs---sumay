@@ -69,7 +69,7 @@ class ApiService
             'preferred_language' => 'required',
             'other_information' => 'required',
             'stream_uuid' => 'required',
-            'subjects' => 'array|required|max:3',
+            'subjects' => 'required',
             'access_token' => 'required'
         ]);
         return $this->validationResponse($validate);
@@ -90,12 +90,12 @@ class ApiService
             if (user_otp()->where('user_uuid', $user->uuid)->where('status', 1)->count() > 0) {
                 return ['success' => false, 'message' => trans('api.email_exists'), 'data' => array()];
             } else {
-                student_subjects()->where('user_uuid', $user->uuid)->delete();
+                purchased_packages()->where('user_uuid', $user->uuid)->delete();
                 student_details()->where('user_uuid', $user->uuid)->delete();
                 return $this->studentCreate($user, $request);
             }
         } else {
-            $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city');
+            $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city','stream_uuid');
             $userArray['password'] = bcrypt($request->password);
             $userArray['role_uuid'] = student_role_uuid();
             $user = user()->create($userArray);
@@ -123,9 +123,10 @@ class ApiService
                 'status' => 0,
                 'attempt' => 1
             );
+            $subjects = json_decode($subjects);
             foreach ($subjects as $subject_uuid) {
                 foreach ($subject_uuid as $list) {
-                    student_subjects()->create(['user_uuid' => $user_uuid, 'stream_uuid' => $request->stream_uuid, 'subject_uuid' => $list]);
+                    purchased_packages()->create(['user_uuid' => $user_uuid, 'stream_uuid' => $request->stream_uuid, 'subject_uuid' => $list,'registration'=>1]);
                 }
             }
             student_details()->create($studentDetails);
@@ -175,7 +176,7 @@ class ApiService
             'preferred_language' => 'required',
             'other_information' => 'required',
             'stream_uuid' => 'required',
-            'subjects' => 'array|required|max:3',
+            'subjects' => 'required',
             'access_token' => 'required'
         ]);
         return $this->validationResponse($validate);
@@ -229,6 +230,7 @@ class ApiService
                 'status' => 0,
                 'attempt' => 1
             );
+            $subjects = json_decode($subjects);
             foreach ($subjects as $subject_uuid) {
                 foreach ($subject_uuid as $list) {
                     professor_subjects()->create(['user_uuid' => $user_uuid, 'stream_uuid' => $request->stream_uuid, 'subject_uuid' => $list]);
@@ -577,14 +579,17 @@ class ApiService
      */
     function studentPackageList($request)
     {
-        $userDetail = getUserDetail($request->user_uuid);
+        $user_uuid = $request->user_uuid;
+        $userDetail = getUserDetail($user_uuid);
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found'), 'data' => array()];
         }
-
-        $subjectList = getSubjectListArray($userDetail);
-        if ($subjectList) {
-            return ['success' => true, 'message' => trans('api.student_subject_list'), 'data' => $subjectList];
+        $packageList = packages()->with('subject','stream','purchase_detail')
+            ->whereHas('purchase_detail',function ($query) use ($user_uuid){
+                $query->where('user_uuid',$user_uuid);
+            })->get()->toArray();
+        if ($packageList) {
+            return ['success' => true, 'message' => trans('api.student_subject_list'), 'data' => $packageList];
         }else{
             return ['success' => false, 'message' => trans('api.user_with_not_subjects'), 'data' => array()];
         }
@@ -609,8 +614,13 @@ class ApiService
     function getAllPackageList($request)
     {
         //TODO::Display only packages which are not subscribed
+        $user_uuid = $request->user_uuid;
+        $userDetail = getUserDetail($user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found'), 'data' => array()];
+        }
         $existingPackage = [];
-        $allPackageList =  packages()->with('subjects')->whereNotIn('uuid',$existingPackage)->get()->toArray();
+        $allPackageList =  packages()->with('stream','subject')->where('stream_uuid',$userDetail->stream_uuid)->whereNotIn('uuid',$existingPackage)->get()->toArray();
         if (!empty($allPackageList)) {
             return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $allPackageList];
         }else{

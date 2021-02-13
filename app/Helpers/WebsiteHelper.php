@@ -122,3 +122,10 @@ function getVerifyBadge($status){
     }
 }
 
+function getExpiryDateByMonth($months){
+    return Carbon::now()->addMonths($months);
+}
+
+function getDurationInDaysByExpiryDate($expiryDate){
+    return Carbon::parse($expiryDate)->diffInDays(Carbon::now());
+}

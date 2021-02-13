@@ -301,6 +301,28 @@ $(function() {
             $("#subject").empty();
         }
     });
+    $('#packageList').change(function(){
+        var package_uuid = $(this).val();
+        if(package_uuid){
+            $.ajax({
+                type:"GET",
+                url:"/admin/get-package-prices?package_uuid="+package_uuid,
+                success:function(res){
+                    if(res){
+                        $("#packagePrice").empty();
+                        $.each(res,function(key,value){
+                            $("#packagePrice").append('<option value="'+key+'">'+value+'</option>');
+                        });
+
+                    }else{
+                        $("#packagePrice").empty();
+                    }
+                }
+            });
+        }else{
+            $("#subject").empty();
+        }
+    });
 
     $('#streamList').change(function(){
         var stream_uuid = $(this).val();
@@ -312,8 +334,8 @@ $(function() {
                     if(res){
                         $("#subject").empty();
                         $.each(res,function(key,value){
-                            $("#subjectList").append('  <label class="control outlined control-checkbox checkbox-primary">'+value+
-                                '                                    <input name="subjects[]" value='+key+' type="checkbox" >\n' +
+                            $("#subjectList").append('<label class="control outlined control-radio radio-primary">'+value+
+                                '                                    <input name="subject_uuid" value='+key+' type="radio" >\n' +
                                 '                                    <div class="control-indicator"></div>\n' +
                                 '                                </label>');
                         });

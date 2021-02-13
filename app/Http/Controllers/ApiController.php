@@ -180,7 +180,7 @@ class ApiController extends Controller
                 if (!$token) {
                     return response()->json(['success' => false, 'message' => 'invalid_credentials', 'data' => array()], 200);
                 }
-                $data = user()->with('role', 'country_detail', 'state_detail', 'city_detail','student_subjects.subject','professor_subjects.subject')->where('email', $email)->first()->toArray();
+                $data = user()->with('role', 'country_detail', 'state_detail', 'city_detail','professor_subjects.subject')->where('email', $email)->first()->toArray();
                 $data['token'] = $token;
                 $data['image'] = $this->base_url . $data['image'];
                 return response()->json(['success' => true, 'message' => 'Login Successful', 'data' => $data], 200);

@@ -10,7 +10,7 @@ class Packages extends Model
 {
     use SoftDeletes,HasFactory;
     protected $fillable = [
-        'uuid','user_uuid','title','slug','description','status','image','price_month_3','price_month_6','price_month_12','price_month_24','price_month_36'
+        'uuid','user_uuid','stream_uuid','subject_uuid','title','slug','description','status','image','price_month_3','price_month_6','price_month_12','price_month_24','price_month_36'
     ];
     protected $appends = ['full_image_path'];
     protected $hidden = ['image'];
@@ -23,15 +23,19 @@ class Packages extends Model
             addUUID($model);
         });
     }
-    //        return $this->hasManyThrough('App\Models\Subjects','App\Models\StudentSubjects','user_uuid','uuid','uuid');
 
-    public function subjects(){
-            return $this->hasManyThrough('App\Models\Subjects','App\Models\PackageSubjects','package_uuid','uuid','uuid');
-//        return $this->hasMany('App\Models\PackageSubjects','package_uuid','uuid');
-
+    public function subject(){
+            return $this->belongsTo('App\Models\Subjects','subject_uuid','uuid');
+    }
+    public function stream(){
+        return $this->belongsTo('App\Models\Streams','stream_uuid','uuid');
     }
     public function getFullImagePathAttribute()
     {
         return env('APP_URL').$this->image;
+    }
+    public function purchase_detail()
+    {
+        return $this->hasMany('App\Models\PurchasedPackages', 'package_uuid', 'uuid');
     }
 }

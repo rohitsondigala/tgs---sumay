@@ -82,6 +82,7 @@ return [
 
     'moderator|notes|index' => 'Uploaded Notes',
     'moderator|notes|view' => 'View Note',
+    'admin|generate-package|index' => 'Generate Package',
 
 ]
 ?>

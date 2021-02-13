@@ -79,16 +79,16 @@ overflow-x: scroll;">
                             </div>
                             @else
                                 <div class="col-md-12">
-                                    <h4>{{__('Selected Subjects')}}</h4>
+                                    <h4>{{__('Selected Stream & Subject')}}</h4>
                                     <hr>
                                 </div>
                                 <div class="col-md-12">
                                     <ul class="list-group">
-                                    @forelse($package->subjects as $list)
-                                            <li class="list-group-item font-size-16 text-dark">{{$list->title}}</li>
-                                    @empty
-                                        NA
-                                    @endforelse
+                                        <li class="list-group-item font-size-16 text-dark">{{$package->stream->title}}</li>
+                                    </ul>
+                                    <br>
+                                    <ul class="list-group">
+                                        <li class="list-group-item font-size-16 text-dark">{{$package->subject->title}}</li>
                                     </ul>
 
                                 </div>

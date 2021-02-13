@@ -53,42 +53,20 @@
                     <div class="col-md-4">
 
                         <div class="row">
-
-                            @if(!$package->uuid)
-                                <div class="col-md-12">
-                                    <h4>{{__('Select Subjects')}}</h4>
-                                    <hr>
-                                </div>
-                            <div class="form-group col-md-12 mb-4">
-                                <label> {{__('Select Stream')}}</label>
-                                {!! Form::select('stream_uuid',$streams,null,['class'=>'form-control select2','id'=>'streamList']) !!}
-                                @if($errors->has('stream_uuid'))
-                                    <span class="text text-danger">{{$errors->first('stream_uuid')}}</span>
-                                @endif
+                            <div class="col-md-12">
+                                <h4>{{__('Selected Stream & Subject')}}</h4>
+                                <hr>
                             </div>
-                            <div class="form-group col-md-12 mb-4" id="subjectList" style="height: 400px;
-overflow-x: scroll;">
+                            <div class="col-md-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item font-size-16 text-dark">{{$package->stream->title}}</li>
+                                </ul>
+                                <br>
+                                <ul class="list-group">
+                                    <li class="list-group-item font-size-16 text-dark">{{$package->subject->title}}</li>
+                                </ul>
 
-                                @if($errors->has('subjects'))
-                                    <span class="text text-danger">{{$errors->first('subjects')}}</span>
-                                @endif
                             </div>
-                            @else
-                                <div class="col-md-12">
-                                    <h4>{{__('Selected Subjects')}}</h4>
-                                    <hr>
-                                </div>
-                                <div class="col-md-12">
-                                    <ul class="list-group">
-                                    @forelse($package->subjects as $list)
-                                            <li class="list-group-item font-size-16 text-dark">{{$list->title}}</li>
-                                    @empty
-                                        NA
-                                    @endforelse
-                                    </ul>
-
-                                </div>
-                            @endif
 
                         </div>
                     </div>

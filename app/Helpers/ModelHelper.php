@@ -122,13 +122,13 @@ function packages(){
     return app(App\Models\Packages::class);
 }
 
-
 /**
  * @return Application|mixed
  */
-function package_subjects(){
-    return app(App\Models\PackageSubjects::class);
+function purchased_packages(){
+    return app(App\Models\PurchasedPackages::class);
 }
+
 /**
  * @return Application|mixed
  */

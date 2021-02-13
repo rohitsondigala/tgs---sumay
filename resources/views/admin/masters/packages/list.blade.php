@@ -5,7 +5,8 @@
         <th>{{__('No')}}</th>
         <th>{{__('Title')}}</th>
         <th>{{__('Description')}}</th>
-        <th>{{__('Subjects')}}</th>
+        <th>{{__('Stream')}}</th>
+        <th>{{__('Subject')}}</th>
         <th>{{__('Action')}}</th>
     </tr>
     </thead>
@@ -16,13 +17,8 @@
             <td>{{$loop->iteration}}</td>
             <td>{{$list->title}}</td>
             <td>{{$list->description}}</td>
-            <td>
-                @forelse($list->subjects as $sList)
-                    {{$sList->title}}<br>
-                @empty
-                    NA
-                @endforelse
-            </td>
+            <td>{{$list->stream->title}}</td>
+            <td>{{$list->subject->title}}</td>
             <td>
                 <a href="{{route($route.'.show',$list->uuid)}}">View </a>
                 <span>|</span>

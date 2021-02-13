@@ -6,6 +6,7 @@
         <th>{{__('No')}}</th>
         <th>{{__('Title')}}</th>
         <th>{{__('Email')}}</th>
+        <th>{{__('Stream')}}</th>
         <th>{{__('Subjects')}}</th>
         <th>{{__('Action')}}</th>
     </tr>
@@ -17,6 +18,7 @@
             <td>{{$loop->iteration}}</td>
             <td>{{$list->name}}</td>
             <td>{{$list->email}}</td>
+            <td>{{$list->stream->title}}</td>
             <td>
                 @if(!empty($list->student_subjects))
                     @foreach($list->student_subjects as $subjectList)

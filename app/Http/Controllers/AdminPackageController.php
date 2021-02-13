@@ -46,7 +46,7 @@ class AdminPackageController extends Controller
         $pageTitle = trans('strings.admin|package|index');
         $directory = $this->directory;
         $route = $this->route;
-        $packages = packages()->with('subjects')->orderBy('id','DESC')->get();
+        $packages = packages()->orderBy('id','DESC')->get();
         return view($directory.'.index',compact('directory','route','packages','pageTitle'));
     }
 
@@ -77,15 +77,11 @@ class AdminPackageController extends Controller
         $route = route($this->route.'.index');
         $request->merge(['slug'=>Str::slug($request->title)]);
         $request->merge(['user_uuid'=>user_uuid()]);
-        $parameters = $request->except('_method','_token','stream_uuid','subjects','image');
+        $parameters = $request->except('_method','_token','image');
         $filePath = uploadMedia($request->image,'packages');
         $parameters['image'] = $filePath;
         $store = $this->crudService->storeData($parameters,packages(),'package');
         if($store['success']){
-            $packageDetail= $store['model'];
-            foreach ($request->subjects as $uuid){
-                package_subjects()->create(['package_uuid'=>$packageDetail->uuid,'stream_uuid'=>$request->stream_uuid,'subject_uuid'=>$uuid]);
-            }
             return redirect($route)->with(['message'=>$store['message'],'class'=>'alert-success']);
         }else{
             return redirect()->back()->with(['message'=>$store['message'],'class'=>'alert-danger']);

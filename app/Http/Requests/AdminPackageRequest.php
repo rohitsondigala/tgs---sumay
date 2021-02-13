@@ -36,7 +36,7 @@ class AdminPackageRequest extends FormRequest
         if($this->method() == 'POST'){
             $rules['image'] = 'required|mimes:jpg,jpeg,png|max:1024';
             $rules['stream_uuid'] = 'required';
-            $rules['subjects'] = 'required';
+            $rules['subject_uuid'] = 'required';
         }
         return $rules;
     }
