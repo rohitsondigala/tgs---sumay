@@ -28,11 +28,7 @@ class AdminStudentController extends Controller
     }
     public function index()
     {
-        $students = array(
-            '0' =>'86a1397d-7047-4611-b451-3f8b8a64de74',
-            '1' =>'86a1397d-7047-4611-b451-3f8b8a64de74',
-            '2' =>'86a1397d-7047-4611-b451-3f8b8a64de74'
-        );
+
         $pageTitle = trans('strings.admin|student|index');
         $directory = $this->directory;
         $route = $this->route;

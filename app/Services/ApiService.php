@@ -82,6 +82,7 @@ class ApiService
      */
     function studentRegistration($request)
     {
+
         if (user()->where('email', $request->email)->count() > 0) {
             $user = user()->where('email', $request->email)->first();
             if ($user->verify) {
@@ -95,7 +96,7 @@ class ApiService
                 return $this->studentCreate($user, $request);
             }
         } else {
-            $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city','stream_uuid');
+            $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city', 'stream_uuid');
             $userArray['password'] = bcrypt($request->password);
             $userArray['role_uuid'] = student_role_uuid();
             $user = user()->create($userArray);
@@ -112,7 +113,7 @@ class ApiService
     function studentCreate($user, $request)
     {
         $studentDetails = $request->only('university_name', 'college_name', 'other_information', 'preferred_language');
-        $subjects = $request->only('subjects');
+        $subjects = $request->subjects;
         if ($user) {
             $user_uuid = $user->uuid;
             $studentDetails['user_uuid'] = $user_uuid;
@@ -123,11 +124,9 @@ class ApiService
                 'status' => 0,
                 'attempt' => 1
             );
-            $subjects = json_decode($subjects);
-            foreach ($subjects as $subject_uuid) {
-                foreach ($subject_uuid as $list) {
-                    purchased_packages()->create(['user_uuid' => $user_uuid, 'stream_uuid' => $request->stream_uuid, 'subject_uuid' => $list,'registration'=>1]);
-                }
+            $subjects = explode(',', $subjects);
+            foreach ($subjects as $list) {
+                purchased_packages()->create(['user_uuid' => $user_uuid, 'stream_uuid' => $request->stream_uuid, 'subject_uuid' => $list, 'registration' => 1]);
             }
             student_details()->create($studentDetails);
             if (user_otp()->where('user_uuid', $user_uuid)->count() > 0) {
@@ -219,7 +218,7 @@ class ApiService
     function professorCreate($user, $request)
     {
         $professorDetails = $request->only('education_qualification', 'research_of_expertise', 'achievements', 'university_name', 'college_name', 'other_information', 'preferred_language');
-        $subjects = $request->only('subjects');
+        $subjects = $request->subjects;
         if ($user) {
             $user_uuid = $user->uuid;
             $professorDetails['user_uuid'] = $user_uuid;
@@ -230,12 +229,10 @@ class ApiService
                 'status' => 0,
                 'attempt' => 1
             );
-            $subjects = json_decode($subjects);
-            foreach ($subjects as $subject_uuid) {
-                foreach ($subject_uuid as $list) {
+            $subjects = explode(',', $subjects);
+            foreach ($subjects as $list) {
                     professor_subjects()->create(['user_uuid' => $user_uuid, 'stream_uuid' => $request->stream_uuid, 'subject_uuid' => $list]);
                 }
-            }
             professor_details()->create($professorDetails);
             if (user_otp()->where('user_uuid', $user_uuid)->count() > 0) {
                 $userOtpDetail = user_otp()->where('user_uuid', $user_uuid)->first();
@@ -285,7 +282,7 @@ class ApiService
         if (user()->where('email', $request->email)->count() > 0) {
             $user_uuid = user()->where('email', $email)->value('uuid');
             $userDetail = user()->where('email', $email)->first();
-            if(!in_array($userDetail->role->title,checkRoles())){
+            if (!in_array($userDetail->role->title, checkRoles())) {
                 return ['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()];
             }
             if (user_otp()->where('user_uuid', $user_uuid)->where('status', 1)->count() > 0) {
@@ -330,7 +327,7 @@ class ApiService
         if (user()->where('email', $request->email)->count() > 0) {
             $user_uuid = user()->where('email', $email)->value('uuid');
             $userDetail = user()->where('email', $email)->first();
-            if(!in_array($userDetail->role->title,checkRoles())){
+            if (!in_array($userDetail->role->title, checkRoles())) {
                 return ['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()];
             }
             if ($user_uuid) {
@@ -390,7 +387,7 @@ class ApiService
         $email = $request->email;
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
-            if(!in_array($userDetail->role->title,checkRoles())){
+            if (!in_array($userDetail->role->title, checkRoles())) {
                 return ['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()];
             }
             $user_uuid = $userDetail->uuid;
@@ -455,7 +452,7 @@ class ApiService
         $email = $request->email;
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
-            if(!in_array($userDetail->role->title,checkRoles())){
+            if (!in_array($userDetail->role->title, checkRoles())) {
                 return ['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()];
             }
             $user_uuid = $userDetail->uuid;
@@ -499,7 +496,7 @@ class ApiService
         $password = $request->password;
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
-            if(!in_array($userDetail->role->title,checkRoles())){
+            if (!in_array($userDetail->role->title, checkRoles())) {
                 return ['success' => false, 'message' => trans('api.do_not_have_access'), 'data' => array()];
             }
             $user_uuid = $userDetail->uuid;
@@ -584,13 +581,13 @@ class ApiService
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found'), 'data' => array()];
         }
-        $packageList = packages()->with('subject','stream','purchase_detail')
-            ->whereHas('purchase_detail',function ($query) use ($user_uuid){
-                $query->where('user_uuid',$user_uuid);
+        $packageList = packages()->with('subject', 'stream', 'purchase_detail')
+            ->whereHas('purchase_detail', function ($query) use ($user_uuid) {
+                $query->where('user_uuid', $user_uuid);
             })->get()->toArray();
         if ($packageList) {
             return ['success' => true, 'message' => trans('api.student_subject_list'), 'data' => $packageList];
-        }else{
+        } else {
             return ['success' => false, 'message' => trans('api.user_with_not_subjects'), 'data' => array()];
         }
     }
@@ -620,10 +617,10 @@ class ApiService
             return ['success' => false, 'message' => trans('api.user_not_found'), 'data' => array()];
         }
         $existingPackage = [];
-        $allPackageList =  packages()->with('stream','subject')->where('stream_uuid',$userDetail->stream_uuid)->whereNotIn('uuid',$existingPackage)->get()->toArray();
+        $allPackageList = packages()->with('stream', 'subject')->where('stream_uuid', $userDetail->stream_uuid)->whereNotIn('uuid', $existingPackage)->get()->toArray();
         if (!empty($allPackageList)) {
             return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $allPackageList];
-        }else{
+        } else {
             return ['success' => false, 'message' => trans('api.user_with_not_subjects'), 'data' => array()];
         }
     }
@@ -657,30 +654,30 @@ class ApiService
     function userUploadNotes($request)
     {
         $streamUUID = getStreamUUIDbySubjectUUID($request->subject_uuid);
-        if(!$streamUUID){
+        if (!$streamUUID) {
             return ['success' => false, 'message' => trans('api.subject_not_registered'), 'data' => array()];
         }
-        $request->merge(['stream_uuid'=>$streamUUID,'slug'=>Str::slug($request->title)]);
-        $notesDetail = $request->except('_token','_method','image_files','pdf_files','audio_files');
+        $request->merge(['stream_uuid' => $streamUUID, 'slug' => Str::slug($request->title)]);
+        $notesDetail = $request->except('_token', '_method', 'image_files', 'pdf_files', 'audio_files');
 
         $createNotes = notes()->create($notesDetail);
-        if($createNotes){
+        if ($createNotes) {
             $notes_uuid = $createNotes->uuid;
             $image_files = $request->image_files;
-            if(!empty($image_files)){
-                uploadNotesFiles($image_files,$notes_uuid,'IMAGE');
+            if (!empty($image_files)) {
+                uploadNotesFiles($image_files, $notes_uuid, 'IMAGE');
             }
             $pdf_files = $request->pdf_files;
-            if(!empty($pdf_files)){
-                uploadNotesFiles($pdf_files,$notes_uuid,'PDF');
+            if (!empty($pdf_files)) {
+                uploadNotesFiles($pdf_files, $notes_uuid, 'PDF');
             }
             $audio_files = $request->audio_files;
-            if(!empty($audio_files)){
-                uploadNotesFiles($audio_files,$notes_uuid,'AUDIO');
+            if (!empty($audio_files)) {
+                uploadNotesFiles($audio_files, $notes_uuid, 'AUDIO');
             }
             sendNewNewNoteUploadNotification($createNotes);
             return ['success' => true, 'message' => trans('api.notes_uploaded'), 'data' => array()];
-        }else{
+        } else {
             return ['success' => false, 'message' => trans('api.fail'), 'data' => array()];
         }
     }
