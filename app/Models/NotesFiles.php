@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Subjects extends Model
+class NotesFiles extends Model
 {
     use SoftDeletes,HasFactory;
     protected $fillable = [
-        'uuid','stream_uuid','title','slug','status'
+        'uuid','note_uuid','file_name','file_type','file_mime_type','file_size','file_path','status'
     ];
+    protected $appends = ['full_image_path'];
+    protected $hidden = ['image'];
 
-    protected $appends = ['is_selected'];
     protected static function boot()
     {
         parent::boot();
@@ -21,13 +22,5 @@ class Subjects extends Model
         static::creating(function ($model) {
             addUUID($model);
         });
-    }
-
-    public function stream(){
-        return $this->belongsTo('App\Models\Streams','stream_uuid','uuid');
-    }
-
-    public function getIsSelectedAttribute(){
-        return 0;
     }
 }

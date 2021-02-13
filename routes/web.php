@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\CustomController;
 use App\Http\Controllers\ModeratorDashboardController;
+use App\Http\Controllers\ModeratorNotesController;
 use App\Http\Controllers\ModeratorProfileController;
 use App\Http\Controllers\UserAuthController;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,7 @@ Route::get('mail', function () {
 });
 Route::get('/get-state-list',[CustomController::class,'getStateList'])->name('state-list');
 Route::get('/get-city-list',[CustomController::class,'getCityList'])->name('city-list');
+Route::get('/get-user-type-list',[CustomController::class,'getUserListNotes'])->name('get-user-list');
 
 Route::name('admin.')
     ->middleware(['auth', 'admin','revalidate'])
@@ -84,5 +86,9 @@ Route::name('moderator.')
         Route::get('/profile',[ModeratorProfileController::class,'profile'])->name('profile');
         Route::post('/profile',[ModeratorProfileController::class,'postProfile'])->name('profile');
         Route::resource('daily-posts','App\Http\Controllers\ModeratorDailyPostController');
+        Route::resource('notes','App\Http\Controllers\ModeratorNotesController');
+        Route::get('/read/{id}',[ModeratorDashboardController::class,'readNotification'])->name('read');
+        Route::post('/approve_post',[ModeratorNotesController::class,'approvePost'])->name('notes.approve-post');
+        Route::post('/reject_post',[ModeratorNotesController::class,'rejectPost'])->name('notes.reject-post');
 
     });

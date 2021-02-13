@@ -63,4 +63,10 @@ class ModeratorDashboardController extends Controller
             return redirect()->back()->with(['message'=>$return ['message'],'class'=>'alert-danger']);
         }
     }
+
+    public function readNotification(Request $request,$id){
+
+        auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
+        return redirect($request->link);
+    }
 }

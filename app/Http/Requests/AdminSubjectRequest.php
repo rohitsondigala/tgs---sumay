@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AdminSubjectRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class AdminSubjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|unique:subjects,deleted_at',
+            'title' => ['required',Rule::unique('subjects')->where('stream_uuid',$this->stream_uuid)->whereNull('deleted_at')],
             'stream_uuid' =>'required',
         ];
     }

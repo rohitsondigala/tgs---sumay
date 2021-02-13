@@ -31,6 +31,8 @@ Route::group([
     'middleware' => 'api_access'
 ], function () {
     Route::post('/moderator-posts',[ApiController::class,'moderatorPosts'])->name('moderator-posts');
-    Route::post('/student-subject-list',[ApiController::class,'studentSubjectList'])->name('student-subject-list');
-    Route::post('/all-subject-list',[ApiController::class,'getAllSubjectList'])->name('all-subject-list');
+    Route::post('/student-package-list',[ApiController::class,'studentPackageList'])->name('student-package-list');
+    Route::post('/all-package-list',[ApiController::class,'getAllPackageList'])->name('all-package-list');
+    Route::post('/all-package-list',[ApiController::class,'getAllPackageList'])->name('all-package-list');
+    Route::post('/upload-notes',[ApiController::class,'userUploadNotes'])->name('user-upload-notes');
 });

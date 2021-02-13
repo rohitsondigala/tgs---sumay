@@ -11,9 +11,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use SoftDeletes,HasFactory;
+    use SoftDeletes,HasFactory,Notifiable;
     protected $fillable = [
-        'uuid','uuid','role_uuid','name','username','mobile','email','email_verified_at','password','country','state','city','image'
+        'uuid','uuid','role_uuid','name','username','mobile','email','email_verified_at','password','country','state','city','image','university_name','college_name'
     ];
 
     protected static function boot()

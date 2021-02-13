@@ -30,6 +30,8 @@ class AdminModeratorRequest extends FormRequest
             'country' => 'required',
             'state' => 'required',
             'city' => 'required',
+            'university_name' => 'required',
+            'college_name' => 'required',
         ];
 
         if($this->method() == 'POST'){

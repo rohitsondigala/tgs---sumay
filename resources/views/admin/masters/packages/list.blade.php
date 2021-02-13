@@ -18,7 +18,7 @@
             <td>{{$list->description}}</td>
             <td>
                 @forelse($list->subjects as $sList)
-                    {{$sList->subject->title}}<br>
+                    {{$sList->title}}<br>
                 @empty
                     NA
                 @endforelse

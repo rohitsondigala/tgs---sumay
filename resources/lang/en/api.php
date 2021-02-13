@@ -20,6 +20,9 @@ return [
     'moderator_posts' => 'Moderator Posts',
     'no_post_found' => 'No Post found',
     'do_not_have_access' => 'User does not have access to this url',
-    'student_subject_list' => 'Student subject list',
-    'user_with_no_stream' =>'User does not have selected any stream'
+    'student_subject_list' => 'Student package list',
+    'all_package_list' => 'All package list',
+    'user_with_no_stream' =>'User does not have selected any stream',
+    'subject_not_registered' =>'Subject is not registered with us',
+    'notes_uploaded' => 'Notes uploaded successfully'
 ];

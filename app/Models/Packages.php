@@ -23,7 +23,15 @@ class Packages extends Model
             addUUID($model);
         });
     }
+    //        return $this->hasManyThrough('App\Models\Subjects','App\Models\StudentSubjects','user_uuid','uuid','uuid');
+
     public function subjects(){
-        return $this->hasMany('App\Models\PackageSubjects','package_uuid','uuid');
+            return $this->hasManyThrough('App\Models\Subjects','App\Models\PackageSubjects','package_uuid','uuid','uuid');
+//        return $this->hasMany('App\Models\PackageSubjects','package_uuid','uuid');
+
+    }
+    public function getFullImagePathAttribute()
+    {
+        return env('APP_URL').$this->image;
     }
 }

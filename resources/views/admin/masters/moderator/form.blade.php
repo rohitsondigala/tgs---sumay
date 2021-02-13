@@ -15,14 +15,14 @@
                 @endif
                 <div class="row">
                     <div class="form-group col-md-12 mb-4">
-                        <label>{{__('Select Stream')}}</label>
+                        <label>{{__('Stream')}}</label>
                         {!! Form::select('stream_uuid',$streams,($user->uuid) ? $user->moderator->stream->uuid : null,['class'=>'form-control select2','id'=>'stream']) !!}
                         @if($errors->has('stream_uuid'))
                             <span class="text text-danger">{{$errors->first('stream_uuid')}}</span>
                         @endif
                     </div>
                     <div class="form-group col-md-12 mb-4 subject-list">
-                        <label>{{__('Select Subject')}}</label>
+                        <label>{{__('Subject')}}</label>
                         {!! Form::select('subject_uuid',($user->uuid) ? $subjects : [''=>'Select Subject'],($user->uuid) ? $user->moderator->subject->uuid : null,['class'=>'form-control select2','id'=>'subject']) !!}
                         @if($errors->has('subject_uuid'))
                             <span class="text text-danger">{{$errors->first('subject_uuid')}}</span>
@@ -52,6 +52,21 @@
                                         <span class="text text-danger">{{$errors->first('mobile')}}</span>
                                     @endif
                                 </div>
+                                <div class="form-group mb-4">
+                                    <label>{{__('University Name')}}</label>
+                                    {!! Form::text('university_name',null,['class'=>'form-control input-lg','placeholder'=>'Enter University Name']) !!}
+                                    @if($errors->has('university_name'))
+                                        <span class="text text-danger">{{$errors->first('university_name')}}</span>
+                                    @endif
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label>{{__('College Name')}}</label>
+                                    {!! Form::text('college_name',null,['class'=>'form-control input-lg','placeholder'=>'Enter College Name']) !!}
+                                    @if($errors->has('college_name'))
+                                        <span class="text text-danger">{{$errors->first('college_name')}}</span>
+                                    @endif
+                                </div>
+
                                 <div class="form-group">
                                     <label>{{__('Photograph')}}</label><br>
                                     {!! Form::file('image',['id'=>'photograph']) !!}<br>
@@ -77,21 +92,21 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label>{{__('Select Country')}}</label>
+                                    <label>{{__('Country')}}</label>
                                     {!! Form::select('country',$countries,($user->uuid) ? $user->country : null,['class'=>'form-control select2','id'=>'country']) !!}
                                     @if($errors->has('country'))
                                         <span class="text text-danger">{{$errors->first('country')}}</span>
                                     @endif
                                 </div>
                                 <div class="form-group  mb-4 subject-list">
-                                    <label>{{__('Select State')}}</label>
+                                    <label>{{__('State')}}</label>
                                     {!! Form::select('state',($user->uuid) ? $states : [''=>'Select State'],($user->uuid) ? $user->state : null,['class'=>'form-control select2','id'=>'state']) !!}
                                     @if($errors->has('state'))
                                         <span class="text text-danger">{{$errors->first('state')}}</span>
                                     @endif
                                 </div>
                                 <div class="form-group  mb-4 subject-list">
-                                    <label>{{__('Select City')}}</label>
+                                    <label>{{__('City')}}</label>
                                     {!! Form::select('city',($user->uuid) ? $cities : [''=>'Select City'],($user->uuid) ? $user->city : null,['class'=>'form-control select2','id'=>'city']) !!}
                                     @if($errors->has('city'))
                                         <span class="text text-danger">{{$errors->first('city')}}</span>

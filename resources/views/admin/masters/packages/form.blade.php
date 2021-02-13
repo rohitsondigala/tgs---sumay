@@ -85,7 +85,7 @@ overflow-x: scroll;">
                                 <div class="col-md-12">
                                     <ul class="list-group">
                                     @forelse($package->subjects as $list)
-                                            <li class="list-group-item font-size-16 text-dark">{{$list->subject->title}}</li>
+                                            <li class="list-group-item font-size-16 text-dark">{{$list->title}}</li>
                                     @empty
                                         NA
                                     @endforelse

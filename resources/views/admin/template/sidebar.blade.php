@@ -30,6 +30,12 @@
                         <span class="nav-text">{{__('Moderator')}}</span>
                     </a>
                 </li>
+                <li class="{{(in_array(\Route::current()->getName(),['admin.professor.index','admin.professor.create','admin.professor.edit'])) ? 'active' : ''}}">
+                    <a class="sidenav-item-link" href="{{route('admin.professor.index')}}" >
+                        <i class="mdi mdi-account-check"></i>
+                        <span class="nav-text">{{__('Professors')}}</span>
+                    </a>
+                </li>
                 <li class="{{(in_array(\Route::current()->getName(),['admin.student.index','admin.student.create','admin.student.edit'])) ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.student.index')}}" >
                         <i class="mdi mdi-account-group"></i>
@@ -37,12 +43,7 @@
                     </a>
                 </li>
 
-                <li class="{{(in_array(\Route::current()->getName(),['admin.professor.index','admin.professor.create','admin.professor.edit'])) ? 'active' : ''}}">
-                    <a class="sidenav-item-link" href="{{route('admin.professor.index')}}" >
-                        <i class="mdi mdi-account-check"></i>
-                        <span class="nav-text">{{__('Professors')}}</span>
-                    </a>
-                </li>
+
 
                 <li class="{{(in_array(\Route::current()->getName(),['admin.streams.index','admin.streams.create','admin.streams.edit'])) ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.streams.index')}}" >

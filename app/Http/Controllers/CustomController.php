@@ -51,4 +51,12 @@ class CustomController extends Controller
             ->get()->pluck("name","id");
         return response()->json($cities);
     }
+
+    public function getUserListNotes(Request $request){
+        $role = $request->role;
+        $notes = notes()->where('subject_uuid',auth()->user()->moderator->subject_uuid)->whereHas('user.role',function ($query) use ($role){
+            $query->where('title',$role);
+        })->orderBy('id','DESC')->get()->pluck('user.name','user.uuid')->prepend('All','all');
+        return response()->json($notes);
+    }
 }

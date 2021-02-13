@@ -563,7 +563,7 @@ class ApiService
      * @param $request
      * @return array
      */
-    function studentSubjectListValidationRules($request)
+    function studentPackageListValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
             'user_uuid' => 'required|size:36',
@@ -575,7 +575,7 @@ class ApiService
      * @param $request
      * @return array
      */
-    function studentSubjectList($request)
+    function studentPackageList($request)
     {
         $userDetail = getUserDetail($request->user_uuid);
         if (!$userDetail) {
@@ -590,7 +590,11 @@ class ApiService
         }
     }
 
-    function getAllSubjectListValidationRules($request)
+    /**
+     * @param $request
+     * @return array
+     */
+    function getAllPackageListValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
             'user_uuid' => 'required|size:36',
@@ -602,27 +606,72 @@ class ApiService
      * @param $request
      * @return array
      */
-    function getAllSubjectList($request)
+    function getAllPackageList($request)
     {
-        $userDetail = getUserDetail($request->user_uuid);
-        if (!$userDetail) {
-            return ['success' => false, 'message' => trans('api.user_not_found'), 'data' => array()];
-        }
-        $streamDetail = getStudentStreamDetail($userDetail);
-        if(!$streamDetail){
-            return ['success' => false, 'message' => trans('api.user_with_no_stream'), 'data' => array()];
-        }
-
-        $subjectList = getSubjectListUUID($userDetail);
-        if (!$subjectList) {
-            return ['success' => false, 'message' => trans('api.user_with_not_subjects'), 'data' => array()];
-        }
-
-        $allSubjectList =  subjects()->where('stream_uuid',$streamDetail->stream_uuid)->whereNotIn('uuid',$subjectList)->get()->toArray();
-        if (!empty($allSubjectList)) {
-            return ['success' => true, 'message' => trans('api.student_subject_list'), 'data' => $allSubjectList];
+        //TODO::Display only packages which are not subscribed
+        $existingPackage = [];
+        $allPackageList =  packages()->with('subjects')->whereNotIn('uuid',$existingPackage)->get()->toArray();
+        if (!empty($allPackageList)) {
+            return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $allPackageList];
         }else{
             return ['success' => false, 'message' => trans('api.user_with_not_subjects'), 'data' => array()];
+        }
+    }
+
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function userUploadNotesValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+            'subject_uuid' => 'required|size:36',
+            'title' => 'required',
+            'description' => 'required',
+            'image_files' => 'array',
+            'image_files.*' => 'mimes:jpeg,png,jpg',
+            'pdf_files' => 'array',
+            'pdf_files.*' => 'sometimes|mimes:pdf',
+            'audio_files' => 'array',
+            'audio_files.*' => 'sometimes|mimes:mp3',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function userUploadNotes($request)
+    {
+        $streamUUID = getStreamUUIDbySubjectUUID($request->subject_uuid);
+        if(!$streamUUID){
+            return ['success' => false, 'message' => trans('api.subject_not_registered'), 'data' => array()];
+        }
+        $request->merge(['stream_uuid'=>$streamUUID,'slug'=>Str::slug($request->title)]);
+        $notesDetail = $request->except('_token','_method','image_files','pdf_files','audio_files');
+
+        $createNotes = notes()->create($notesDetail);
+        if($createNotes){
+            $notes_uuid = $createNotes->uuid;
+            $image_files = $request->image_files;
+            if(!empty($image_files)){
+                uploadNotesFiles($image_files,$notes_uuid,'IMAGE');
+            }
+            $pdf_files = $request->pdf_files;
+            if(!empty($pdf_files)){
+                uploadNotesFiles($pdf_files,$notes_uuid,'PDF');
+            }
+            $audio_files = $request->audio_files;
+            if(!empty($audio_files)){
+                uploadNotesFiles($audio_files,$notes_uuid,'AUDIO');
+            }
+            sendNewNewNoteUploadNotification($createNotes);
+            return ['success' => true, 'message' => trans('api.notes_uploaded'), 'data' => array()];
+        }else{
+            return ['success' => false, 'message' => trans('api.fail'), 'data' => array()];
         }
     }
 

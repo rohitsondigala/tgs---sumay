@@ -376,6 +376,30 @@ $(function() {
 
     });
 
+    $('#userTypeList').on('change',function(){
+        var role = $(this).val();
+        if(role){
+            $.ajax({
+                type:"GET",
+                url:"/get-user-type-list?role="+role,
+                success:function(res){
+                    if(res){
+                        $("#userList").empty();
+                        $.each(res,function(key,value){
+                            $("#userList").append('<option value="'+key+'">'+value+'</option>');
+                        });
+
+                    }else{
+                        $("#userList").empty();
+                    }
+                }
+            });
+        }else{
+            $("#userList").empty();
+        }
+
+    });
+
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -391,6 +415,10 @@ $(function() {
     $("#photograph").change(function(){
         readURL(this);
     });
+    //
+    // $(document).on('change','.filterChange',function (){
+    //     $('#filter-form').submit();
+    // });
 
 });
 

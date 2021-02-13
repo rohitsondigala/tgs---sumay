@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AdminStreamRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class AdminStreamRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|unique:streams,deleted_at',
+            'title' => ['required',Rule::unique('streams')->whereNull('deleted_at')],
             'is_standard' =>'required',
         ];
     }

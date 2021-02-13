@@ -259,6 +259,10 @@ class ApiController extends Controller
         return response()->json($this->apiService->resendOtp($request));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function forgotPassword(Request $request){
         $validation = $this->apiService->forgotPasswordValidationRules($request);
         if (!$validation['success']) {
@@ -271,6 +275,10 @@ class ApiController extends Controller
         return response()->json($this->apiService->forgotPassword($request));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function verifyForgotPassword(Request $request){
         $validation = $this->apiService->verifyForgotPasswordValidationRules($request);
         if (!$validation['success']) {
@@ -283,6 +291,10 @@ class ApiController extends Controller
         return response()->json($this->apiService->verifyForgotPassword($request));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function verifyChangePassword(Request $request){
         $validation = $this->apiService->changePasswordValidationRules($request);
         if (!$validation['success']) {
@@ -295,6 +307,10 @@ class ApiController extends Controller
         return response()->json($this->apiService->changePassword($request));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function moderatorPosts(Request $request){
         $validation = $this->apiService->moderatorPostsValidationRules($request);
         if (!$validation['success']) {
@@ -307,8 +323,12 @@ class ApiController extends Controller
         return response()->json($this->apiService->moderatorPosts($request));
     }
 
-    public function studentSubjectList(Request $request){
-        $validation = $this->apiService->studentSubjectListValidationRules($request);
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function studentPackageList(Request $request){
+        $validation = $this->apiService->studentPackageListValidationRules($request);
         if (!$validation['success']) {
             return response()->json([
                 'success' => $validation['success'],
@@ -316,11 +336,15 @@ class ApiController extends Controller
                 'data' => array()
             ], 200);
         }
-        return response()->json($this->apiService->studentSubjectList($request));
+        return response()->json($this->apiService->studentPackageList($request));
     }
 
-    public function getAllSubjectList(Request $request){
-        $validation = $this->apiService->getAllSubjectListValidationRules($request);
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllPackageList(Request $request){
+        $validation = $this->apiService->getAllPackageListValidationRules($request);
         if (!$validation['success']) {
             return response()->json([
                 'success' => $validation['success'],
@@ -328,6 +352,21 @@ class ApiController extends Controller
                 'data' => array()
             ], 200);
         }
-        return response()->json($this->apiService->getAllSubjectList($request));
+        return response()->json($this->apiService->getAllPackageList($request));
+    }
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function userUploadNotes(Request $request){
+        $validation = $this->apiService->userUploadNotesValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+                'data' => array()
+            ], 200);
+        }
+        return response()->json($this->apiService->userUploadNotes($request));
     }
 }

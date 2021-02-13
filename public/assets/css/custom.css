@@ -34,3 +34,24 @@
 .app-brand .brand-name{
     color: #000 !important;
 }
+
+.ml-30{
+    margin-left: 30px;
+}
+.navbar .navbar-right .navbar-nav .notifications-menu .dropdown-toggle::after{
+    content:none;
+}
+.notification-badge{
+    background: red;
+    padding: 1px 4px;
+    font-size: 10px;
+    color: #fff;
+    border-radius: 12px;
+    position: relative;
+    left: -19px;
+    top: -18px;
+}
+.not_read_status td{
+    color:  #000;
+    font-weight: bold;
+}

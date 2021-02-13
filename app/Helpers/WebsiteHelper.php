@@ -112,3 +112,13 @@ function uploadMedia(\Illuminate\Http\UploadedFile $requestFile,$folderName): st
 
     return $uploadLocalPath.'/'.$uploadFileName;
 }
+function getVerifyBadge($status){
+    if($status == 1){
+        return '<span class="badge badge-success">Approved</span>';
+    }elseif($status == 2){
+        return '<span class="badge badge-danger">Rejected</span>';
+    }else{
+        return '<span class="badge badge-warning">Pending</span>';
+    }
+}
+

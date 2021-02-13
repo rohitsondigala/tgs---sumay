@@ -129,3 +129,17 @@ function packages(){
 function package_subjects(){
     return app(App\Models\PackageSubjects::class);
 }
+/**
+ * @return Application|mixed
+ */
+function notes(){
+    return app(App\Models\Notes::class);
+}
+
+
+/**
+ * @return Application|mixed
+ */
+function notes_files(){
+    return app(App\Models\NotesFiles::class);
+}
