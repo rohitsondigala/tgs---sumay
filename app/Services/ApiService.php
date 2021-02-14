@@ -59,7 +59,7 @@ class ApiService
         $validate = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required',
-            'mobile' => 'required|numeric',
+            'mobile' => 'required',
             'country' => 'required',
             'state' => 'required',
             'city' => 'required',
@@ -162,7 +162,7 @@ class ApiService
         $validate = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required',
-            'mobile' => 'required|numeric',
+            'mobile' => 'required',
             'country' => 'required',
             'state' => 'required',
             'city' => 'required',
