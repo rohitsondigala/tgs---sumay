@@ -21,15 +21,15 @@ class ApiMiddleware
         try {
             $user = JWTAuth::parseToken()->authenticate();
             if(!in_array($user->role->title,$userArray)){
-                return response()->json(['success' => false, 'message' => trans('Invalid user type'), 'data' => array()]);
+                return response()->json(['success' => false, 'message' => trans('Invalid user type')]);
             }
         } catch (\Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
-                return response()->json(['success' => false, 'message' => trans('Token is invalid'), 'data' => array()]);
+                return response()->json(['success' => false, 'message' => trans('Token is invalid')]);
             }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
-                return response()->json(['success' => false, 'message' => trans('Token is expired'), 'data' => array()]);
+                return response()->json(['success' => false, 'message' => trans('Token is expired')]);
             }else{
-                return response()->json(['success' => false, 'message' => trans('Authorization token not found '), 'data' => array()]);
+                return response()->json(['success' => false, 'message' => trans('Authorization token not found ')]);
             }
         }
         return $next($request);
