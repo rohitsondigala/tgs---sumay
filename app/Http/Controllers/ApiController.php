@@ -178,17 +178,17 @@ class ApiController extends Controller
                 }
                 $token = JWTAuth::attempt($credentials);
                 if (!$token) {
-                    return response()->json(['success' => false, 'message' => 'invalid_credentials', 'data' => array()], 200);
+                    return response()->json(['success' => false, 'message' => 'invalid_credentials'], 200);
                 }
                 $data = user()->with('role', 'country_detail', 'state_detail', 'city_detail','professor_subjects.subject')->where('email', $email)->first()->toArray();
                 $data['token'] = $token;
                 $data['image'] = $this->base_url . $data['image'];
                 return response()->json(['success' => true, 'message' => 'Login Successful', 'data' => $data], 200);
             }else{
-                return response()->json(['success' => false, 'message' => 'Email not found', 'data' => array()], 200);
+                return response()->json(['success' => false, 'message' => 'Email not found'], 200);
             }
       } catch (JWTException $e) {
-            return response()->json(['success' => false, 'message' => 'could_not_create_token', 'data' => array()], 200);
+            return response()->json(['success' => false, 'message' => 'could_not_create_token'], 200);
         }
     }
 
