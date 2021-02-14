@@ -129,3 +129,38 @@ function getExpiryDateByMonth($months){
 function getDurationInDaysByExpiryDate($expiryDate){
     return Carbon::parse($expiryDate)->diffInDays(Carbon::now());
 }
+
+function getPriceByMonthPackage($package_uuid,$month){
+    $columnName = 'price_month_3';
+    if($month == 3){
+        $columnName = 'price_month_3';
+    }elseif($month == 6){
+        $columnName = 'price_month_6';
+    }elseif($month == 12){
+        $columnName = 'price_month_12';
+    }elseif($month == 24){
+        $columnName = 'price_month_24';
+    }elseif($month == 36){
+        $columnName = 'price_month_36';
+    }
+    return packages()->where('uuid',$package_uuid)->value($columnName);
+}
+function getGeneratePackageDetail($request,$userDetail,$packageDetail){
+    $stream_uuid = $packageDetail->stream->uuid;
+    $subject_uuid = $packageDetail->subject->uuid;
+    $purchase_date = \Carbon\Carbon::now();
+    $expiry_date = getExpiryDateByMonth($request->duration_month);
+    $duration_in_days = getDurationInDaysByExpiryDate($expiry_date);
+    $price = getPriceByMonthPackage($packageDetail->uuid,$request->duration_month);
+    return [
+        'user_uuid' => $userDetail->uuid,
+        'package_uuid' => $packageDetail->uuid,
+        'stream_uuid' => $stream_uuid,
+        'subject_uuid' => $subject_uuid,
+        'purchase_date' => $purchase_date,
+        'expiry_date' => $expiry_date,
+        'duration_in_days' => $duration_in_days,
+        'price' => $price,
+        'is_purchased' =>1,
+    ];
+}

@@ -104,3 +104,16 @@ function sendNewNewNoteUploadNotification($noteDetail)
         return false;
     }
 }
+
+function getStudentSubjects($userDetail){
+    $subjects = $userDetail->student_subjects;
+    if (!empty($subjects)) {
+        $subjectList = array();
+        foreach ($subjects as $list) {
+            array_push($subjectList, $list->subject->uuid);
+        }
+        return $subjectList;
+    } else {
+        return false;
+    }
+}

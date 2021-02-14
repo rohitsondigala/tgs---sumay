@@ -33,7 +33,7 @@ class ApiController extends Controller
     {
         $this->apiService = new ApiService();
         $this->base_url = env('APP_URL');
-        $this->middleware('api_access', ['except' => ['login', 'checkEmail', 'checkMobile', 'streams', 'subjects', 'postStudentRegister', 'verifyEmail','resendOtp','forgotPassword','verifyForgotPassword','verifyChangePassword','postProfessorRegister']]);
+        $this->middleware('api_access', ['except' => ['login', 'checkEmail', 'checkMobile', 'streams', 'subjects', 'postStudentRegister', 'verifyEmail','resendOtp','forgotPassword','verifyForgotPassword','verifyChangePassword','postProfessorRegister','countries','states','cities']]);
     }
 
     /**
@@ -104,6 +104,67 @@ class ApiController extends Controller
     /**
      * @return \Illuminate\Http\JsonResponse
      */
+    public function countries()
+    {
+        $countries = country()->get()->toArray();
+        if (!empty($countries) && count($countries) > 0) {
+            return response()->json(['success' => true, 'message' => 'Country List', 'data' => $countries], 200);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No Country Found', ], 200);
+        }
+    }
+
+    public function states(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'country_id' => 'required',
+        ]);
+        $errors = json_decode($validate->errors());
+        foreach ($errors as $list) {
+            if ($validate->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $list[0],
+                ], 200);
+            }
+        }
+
+        $country_id = $request->country_id;
+        $states= state()->where('country_id',$country_id)->orderBy('name', 'ASC')->get()->toArray();
+        if (!empty($states) && count($states) > 0) {
+            return response()->json(['success' => true, 'message' => 'State List', 'data' => $states], 200);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No State Found', ], 200);
+        }
+    }
+    public function cities(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'state_id' => 'required',
+        ]);
+        $errors = json_decode($validate->errors());
+        foreach ($errors as $list) {
+            if ($validate->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $list[0],
+                ], 200);
+            }
+        }
+
+        $state_id = $request->state_id;
+        $cities= city()->where('state_id',$state_id)->orderBy('name', 'ASC')->get()->toArray();
+        if (!empty($cities) && count($cities) > 0) {
+            return response()->json(['success' => true, 'message' => 'City List', 'data' => $cities], 200);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No City Found', ], 200);
+        }
+    }
+
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function streams()
     {
         $streams = streams()->where('is_standard', 0)->get()->toArray();
@@ -113,6 +174,8 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => 'No Stream Found', ], 200);
         }
     }
+
+
 
     /**
      * @param Request $request

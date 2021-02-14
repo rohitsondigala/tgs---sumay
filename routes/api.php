@@ -19,6 +19,9 @@ Route::post('/check-email',[ApiController::class,'checkEmail'])->name('check-ema
 Route::post('/check-mobile',[ApiController::class,'checkMobile'])->name('check-mobile');
 Route::post('/streams',[ApiController::class,'streams'])->name('streams');
 Route::post('/subjects',[ApiController::class,'subjects'])->name('subjects');
+Route::post('/countries',[ApiController::class,'countries'])->name('countries');
+Route::post('/states',[ApiController::class,'states'])->name('states');
+Route::post('/cities',[ApiController::class,'cities'])->name('cities');
 Route::post('/student-register',[ApiController::class,'postStudentRegister'])->name('student-register');
 Route::post('/professor-register',[ApiController::class,'postProfessorRegister'])->name('professor-register');
 Route::post('/resend-otp',[ApiController::class,'resendOtp'])->name('resend-otp');

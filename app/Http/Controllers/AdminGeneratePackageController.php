@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminGeneratePackageRequest;
 use App\Services\CrudService;
+use App\Services\CustomService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -74,39 +75,41 @@ class AdminGeneratePackageController extends Controller
         $user_uuid = $request->user_uuid;
         if (user()->where('uuid', $user_uuid)->count() <= 0) {
             return redirect()->back()->with(['message' => 'User not found!!', 'class' => 'alert-danger']);
+        }else{
+            $request->merge(['user_uuid'=>$user_uuid]);
         }
 
         $package_uuid = $request->package_uuid;
         if (packages()->where('uuid', $package_uuid)->count() <= 0) {
             return redirect()->back()->with(['message' => 'Package not found!!', 'class' => 'alert-danger']);
+        }else{
+            $request->merge(['package_uuid'=>$package_uuid]);
         }
-        if(purchased_packages()->where('package_uuid',$package_uuid)->where('user_uuid',$user_uuid)->count() > 0){
+
+        if(purchased_packages()->where('package_uuid',$package_uuid)->where('user_uuid',$user_uuid)->where('is_purchased',1)->count() > 0){
             return redirect()->back()->with(['message' => 'Package is already purchased', 'class' => 'alert-danger']);
+        }else{
+            $userDetail = user()->where('uuid',$request->user_uuid)->first();
+            $packageDetail = packages()->where('uuid',$request->package_uuid)->first();
+
+            $purchaseArray = getGeneratePackageDetail($request,$userDetail,$packageDetail);
+            $isExists  = purchased_packages()->where('user_uuid',$user_uuid)->where('subject_uuid',$packageDetail->subject_uuid)->first();
+            if(!empty($isExists)){
+                $submitArray = $isExists->update($purchaseArray);
+            }else{
+                $purchaseArray['registration'] = 0;
+                $submitArray =purchased_packages()->create($purchaseArray);
+            }
+
+            if ($submitArray) {
+                $route = route($this->route.'.index');
+                return redirect($route)->with(['message' => "Package generated successfully", 'class' => 'alert-success']);
+            } else {
+                return redirect()->back()->with(['message' => "Fail to generate package", 'class' => 'alert-danger']);
+            }
         }
 
-        $packageDetail = packages()->where('uuid', $package_uuid)->first();
 
-        $stream_uuid = $packageDetail->stream->uuid;
-        $subject_uuid = $packageDetail->subject->uuid;
-        $purchase_date = Carbon::now();
-        $expiry_date = getExpiryDateByMonth($request->duration_month);
-        $duration_in_days = getDurationInDaysByExpiryDate($expiry_date);
-        $purchaseArray = [
-            'user_uuid' => $user_uuid,
-            'package_uuid' => $package_uuid,
-            'stream_uuid' => $stream_uuid,
-            'subject_uuid' => $subject_uuid,
-            'purchase_date' => $purchase_date,
-            'expiry_date' => $expiry_date,
-            'duration_in_days' => $duration_in_days,
-        ];
-        $route = route($this->route.'.index');
-
-        if (purchased_packages()->create($purchaseArray)) {
-            return redirect($route)->with(['message' => "Package generated successfully", 'class' => 'alert-success']);
-        } else {
-            return redirect()->back()->with(['message' => "Fail to generate package", 'class' => 'alert-danger']);
-        }
     }
 
     /**
