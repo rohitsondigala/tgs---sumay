@@ -51,7 +51,7 @@ class ApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => $list[0],
-                    'data' => array()
+
                 ], 200);
             }
         }
@@ -59,12 +59,12 @@ class ApiController extends Controller
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
             if ($userDetail->verify) {
-                return response()->json(['success' => false, 'message' => 'Email already exists', 'data' => array()], 200);
+                return response()->json(['success' => false, 'message' => 'Email already exists', ], 200);
             } else {
-                return response()->json(['success' => true, 'message' => 'Email not found', 'data' => array()], 200);
+                return response()->json(['success' => true, 'message' => 'Email not found', ], 200);
             }
         } else {
-            return response()->json(['success' => true, 'message' => 'Email not found', 'data' => array()], 200);
+            return response()->json(['success' => true, 'message' => 'Email not found', ], 200);
 
         }
     }
@@ -84,7 +84,7 @@ class ApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => $list[0],
-                    'data' => array()
+
                 ], 200);
             }
         }
@@ -92,12 +92,12 @@ class ApiController extends Controller
         if (user()->where('mobile', $mobile)->count() > 0) {
             $userDetail = user()->where('mobile', $mobile)->first();
             if ($userDetail->verify) {
-                return response()->json(['success' => false, 'message' => 'Mobile already exists', 'data' => array()], 200);
+                return response()->json(['success' => false, 'message' => 'Mobile already exists', ], 200);
             } else {
-                return response()->json(['success' => true, 'message' => 'Mobile not found', 'data' => array()], 200);
+                return response()->json(['success' => true, 'message' => 'Mobile not found', ], 200);
             }
         } else {
-            return response()->json(['success' => true, 'message' => 'Mobile not found', 'data' => array()], 200);
+            return response()->json(['success' => true, 'message' => 'Mobile not found', ], 200);
         }
     }
 
@@ -110,7 +110,7 @@ class ApiController extends Controller
         if (!empty($streams) && count($streams) > 0) {
             return response()->json(['success' => true, 'message' => 'Stream List', 'data' => $streams], 200);
         } else {
-            return response()->json(['success' => false, 'message' => 'No Stream Found', 'data' => array()], 200);
+            return response()->json(['success' => false, 'message' => 'No Stream Found', ], 200);
         }
     }
 
@@ -129,7 +129,7 @@ class ApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => $list[0],
-                    'data' => array()
+
                 ], 200);
             }
         }
@@ -139,7 +139,7 @@ class ApiController extends Controller
         if (!empty($streams) && count($streams) > 0) {
             return response()->json(['success' => true, 'message' => 'Subject List', 'data' => $streams], 200);
         } else {
-            return response()->json(['success' => false, 'message' => 'No Subjects Found', 'data' => array()], 200);
+            return response()->json(['success' => false, 'message' => 'No Subjects Found', ], 200);
         }
     }
 
@@ -162,7 +162,7 @@ class ApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => $list[0],
-                    'data' => array()
+
                 ], 200);
             }
         }
@@ -203,7 +203,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->studentRegistration($request));
@@ -220,7 +220,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->professorRegistration($request));
@@ -237,7 +237,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->verifyEmail($request));
@@ -253,7 +253,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->resendOtp($request));
@@ -269,7 +269,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->forgotPassword($request));
@@ -285,7 +285,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->verifyForgotPassword($request));
@@ -301,7 +301,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->changePassword($request));
@@ -317,7 +317,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->moderatorPosts($request));
@@ -333,7 +333,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->studentPackageList($request));
@@ -349,7 +349,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->getAllPackageList($request));
@@ -364,7 +364,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => $validation['success'],
                 'message' => $validation['message'],
-                'data' => array()
+
             ], 200);
         }
         return response()->json($this->apiService->userUploadNotes($request));
