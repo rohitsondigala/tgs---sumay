@@ -58,7 +58,7 @@ class ApiService
     {
         $validate = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required',
             'mobile' => 'required|numeric',
             'country' => 'required',
             'state' => 'required',
@@ -161,7 +161,7 @@ class ApiService
     {
         $validate = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required',
             'mobile' => 'required|numeric',
             'country' => 'required',
             'state' => 'required',
@@ -265,7 +265,7 @@ class ApiService
     function verifyEmailValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required',
             'otp' => 'required|digits:6'
         ]);
         return $this->validationResponse($validate);
@@ -312,7 +312,7 @@ class ApiService
     function resendOtpValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required',
         ]);
         return $this->validationResponse($validate);
     }
@@ -373,7 +373,7 @@ class ApiService
     function forgotPasswordValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required',
         ]);
         return $this->validationResponse($validate);
     }
@@ -437,7 +437,7 @@ class ApiService
     function verifyForgotPasswordValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required',
             'otp' => 'required|digits:6'
         ]);
         return $this->validationResponse($validate);
@@ -480,7 +480,7 @@ class ApiService
     function changePasswordValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required'
         ]);
         return $this->validationResponse($validate);
@@ -616,12 +616,12 @@ class ApiService
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
-        $existingPackage = [];
-        $allPackageList = packages()->with('stream', 'subject')->where('stream_uuid', $userDetail->stream_uuid)->whereNotIn('uuid', $existingPackage)->get()->toArray();
+        $existingSubjects = getStudentSubjects($userDetail);
+        $allPackageList = packages()->with('stream', 'subject')->where('stream_uuid', $userDetail->stream_uuid)->whereNotIn('subject_uuid', $existingSubjects)->get()->toArray();
         if (!empty($allPackageList)) {
             return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $allPackageList];
         } else {
-            return ['success' => false, 'message' => trans('api.user_with_not_subjects')];
+            return ['success' => false, 'message' => trans('api.user_with_not_packages')];
         }
     }
 
