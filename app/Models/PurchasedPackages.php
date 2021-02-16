@@ -27,6 +27,14 @@ class PurchasedPackages extends Model
     {
         return $this->belongsTo('App\Models\Subjects', 'subject_uuid', 'uuid');
     }
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'uuid', 'user_uuid');
+    }
+    public function user_city_detail()
+    {
+        return $this->hasOneThrough('App\Models\City', 'App\Models\User','uuid','id','user_uuid');
+    }
 
     public function stream()
     {

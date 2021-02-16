@@ -22,7 +22,7 @@ class CrudService {
     }
 
     function deleteModuleItem($uuid,$model){
-        if($model->where('uuid',$uuid)->delete()){
+        if($model->where('uuid',$uuid)->first()->delete()){
             return ['success'=>true,'message'=>trans('strings.admin|delete')];
         }else{
             return ['success'=>true,'message'=>trans('strings.admin|fail')];

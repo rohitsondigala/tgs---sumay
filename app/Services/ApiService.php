@@ -7,6 +7,7 @@ use App\Mail\ForgotPasswordOtp;
 use App\Mail\ProfessorRegistraionOtp;
 use App\Mail\StudentRegistraionOtp;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -201,7 +202,7 @@ class ApiService
                 return $this->professorCreate($user, $request);
             }
         } else {
-            $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city');
+            $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city','stream_uuid');
             $userArray['role_uuid'] = professor_role_uuid();
             $userArray['password'] = bcrypt($request->password);
             $user = user()->create($userArray);
@@ -231,8 +232,8 @@ class ApiService
             );
             $subjects = explode(',', $subjects);
             foreach ($subjects as $list) {
-                    professor_subjects()->create(['user_uuid' => $user_uuid, 'stream_uuid' => $request->stream_uuid, 'subject_uuid' => $list]);
-                }
+                professor_subjects()->create(['user_uuid' => $user_uuid, 'stream_uuid' => $request->stream_uuid, 'subject_uuid' => $list]);
+            }
             professor_details()->create($professorDetails);
             if (user_otp()->where('user_uuid', $user_uuid)->count() > 0) {
                 $userOtpDetail = user_otp()->where('user_uuid', $user_uuid)->first();
@@ -519,10 +520,63 @@ class ApiService
         }
     }
 
+    public function getUserProfileListValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+
+    public function getUserProfile($request)
+    {
+        $user_uuid = $request->user_uuid;
+        $userDetail = getUserDetail($user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+        if($userDetail->role->title == "STUDENT"){
+            $userDetail =
+                user()
+                    ->with(
+                        'country_detail:id,name',
+                        'state_detail:id,name',
+                        'city_detail:id,name',
+                        'stream:uuid,title',
+                        'student_detail:id,user_uuid,university_name,college_name,preferred_language,other_information',
+                        'student_subjects_all')
+                    ->where('uuid',$user_uuid)
+                    ->first(['id','uuid','name','email','mobile','image','country','state','city','stream_uuid']);
+        }else{
+            $userDetail = user()->with('country_detail','state_detail','city_detail','stream','professor_subjects','professor_detail','professor_subjects.subject')->where('uuid',$user_uuid)->first();
+        }
+        if (!empty($userDetail)) {
+            return ['success' => true, 'message' => trans('api.get_user_profile'), 'data' => $userDetail];
+        } else {
+            return ['success' => false, 'message' => trans('api.user_with_not_packages')];
+        }
+    }
+
+    public function updateUserProfileListValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+
+    public function updateUserProfile($request)
+    {
+
+    }
+
     /**
-     * @param $request
+     * @param $user_uuid
      * @return array
      */
+
     function moderatorPostsValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
@@ -544,7 +598,7 @@ class ApiService
 
         $subjectList = getSubjectListUUID($userDetail);
         if (!$subjectList) {
-            return ['success' => false, 'message' => trans('api.user_with_not_subjects')];
+            return ['success' => false, 'message' => trans('api.user_with_not_moderator_posts')];
         }
 
         $moderatorDailyPost = moderator_daily_posts()->with('moderator_subject.subject')->whereHas('moderator_subject', function ($query) use ($subjectList) {
@@ -588,7 +642,7 @@ class ApiService
         if ($packageList) {
             return ['success' => true, 'message' => trans('api.student_subject_list'), 'data' => $packageList];
         } else {
-            return ['success' => false, 'message' => trans('api.user_with_not_subjects')];
+            return ['success' => false, 'message' => trans('api.user_with_not_packages')];
         }
     }
 
@@ -680,6 +734,70 @@ class ApiService
         } else {
             return ['success' => false, 'message' => trans('api.fail')];
         }
+    }
+
+    public function userGetNotesValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    public function userGetNotes($request)
+    {
+        $userDetail = getUserDetail($request->user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+        $existingSubjects = getStudentSubjects($userDetail);
+        $allNotes = notes()->ofApprove()->where('user_uuid', '!=', $userDetail->uuid)->whereIn('subject_uuid', $existingSubjects)->ofOrderBy('DESC')->get()->toArray();
+        if (!empty($allNotes)) {
+            return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $allNotes];
+        } else {
+            return ['success' => false, 'message' => trans('api.user_with_no_notes')];
+        }
+
+    }
+
+    public function getStudentListValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+
+    public function getStudentList($request)
+    {
+        $userDetail = getUserDetail($request->user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+
+        $existingSubjects = getStudentSubjects($userDetail);
+//        $studentList = user()->with(['student_subjects.subject','city_detail','student_detail'])
+//            ->whereHas('student_subjects',function ($query) use ($userDetail,$existingSubjects){
+//                $query->where('user_uuid','!=',$userDetail->uuid)->whereIn('subject_uuid',$existingSubjects);
+//            })
+//            ->orderBy('uuid')
+//            ->get(['uuid','name','email','mobile'])
+//            ->toArray();
+        $studentList = purchased_packages()
+                    ->with('subject:uuid,title','user:uuid,name,city','user_city_detail')
+                    ->where('user_uuid','!=',$userDetail->uuid)
+                    ->whereIn('subject_uuid',$existingSubjects)
+                    ->orderBy('user_uuid')
+                    ->get(['uuid','user_uuid','package_uuid','subject_uuid'])
+                    ->toArray();
+
+        if (!empty($studentList)) {
+            return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $studentList];
+        } else {
+            return ['success' => false, 'message' => trans('api.user_with_no_notes')];
+        }
+
     }
 
 

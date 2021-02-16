@@ -30,11 +30,13 @@ class CreatePurchasedPackagesTable extends Migration
             $table->uuid('stream_uuid');
             $table->foreign('stream_uuid')
                 ->references('uuid')
-                ->on('streams');
+                ->on('streams')
+                ->onDelete('cascade');
             $table->uuid('subject_uuid');
             $table->foreign('subject_uuid')
                 ->references('uuid')
-                ->on('subjects');
+                ->on('subjects')
+                ->onDelete('cascade');
             $table->date('purchase_date')->nullable();
             $table->date('expiry_date')->nullable();
             $table->integer('duration_in_days')->nullable();

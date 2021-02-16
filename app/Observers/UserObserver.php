@@ -38,7 +38,8 @@ class UserObserver
     {
 
         $user->update([
-            'email' => time() . '::' . $user->email
+            'email' => time() . '::' . $user->email,
+            'mobile' => time() . '::' . $user->mobile
         ]);
     }
 

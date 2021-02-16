@@ -35,4 +35,11 @@ class Notes extends Model
     public function pdf_files(){
         return $this->hasMany('App\Models\NotesFiles','note_uuid','uuid')->where('file_type','PDF');
     }
+
+    public function scopeOfApprove($q){
+        return $q->where('approve',1);
+    }
+    public function scopeOfOrderBy($q,$order){
+        return $q->orderBy('id',$order);
+    }
 }

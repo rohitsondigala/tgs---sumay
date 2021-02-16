@@ -17,6 +17,7 @@ return [
     'no_record_to_resend' =>'You have not requested for resend OTP',
     'user_not_found' => 'User not registered with us',
     'user_with_not_packages' => 'User does not have any package to display',
+    'user_with_not_moderator_posts' => 'User does not have any moderator post to display',
     'moderator_posts' => 'Moderator Posts',
     'no_post_found' => 'No Post found',
     'do_not_have_access' => 'User does not have access to this url',
@@ -24,5 +25,7 @@ return [
     'all_package_list' => 'All package list',
     'user_with_no_stream' =>'User does not have selected any stream',
     'subject_not_registered' =>'Subject is not registered with us',
-    'notes_uploaded' => 'Notes uploaded successfully'
+    'notes_uploaded' => 'Notes uploaded successfully',
+    'user_with_no_notes' => 'No notes found.',
+    'get_user_profile' => 'User Detail'
 ];

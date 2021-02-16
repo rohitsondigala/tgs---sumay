@@ -53,7 +53,7 @@ class AdminStreamsController extends Controller
         $pageTitle = trans('strings.admin|stream|index');
         $directory = $this->directory;
         $route = $this->route;
-        $streams = streams()->orderBy('id','DESC')->get();
+        $streams = streams()->with('subjects')->orderBy('id','DESC')->get();
         return view($directory.'.index',compact('directory','route','streams','pageTitle'));
     }
 

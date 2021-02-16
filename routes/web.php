@@ -40,10 +40,10 @@ Route::get('index',[UserAuthController::class,'index'])->name('index');
 Route::get('logout',[UserAuthController::class,'logout'])->name('logout');
 Route::get('index',[UserAuthController::class,'index'])->name('index');
 Route::get('mail', function () {
-    $user = user()->find(14);
+    $user = user()->find(3);
 //    return view('mail.forgot-password-otp',compact('user'));
-    return view('mail.moderator-registered',compact('user'));
-//    Mail::to($user->email)->send(new \App\Mail\ModeratorRegistered($user));
+//    return view('mail.moderator-registered',compact('user'));
+    Mail::to($user->email)->send(new \App\Mail\ModeratorRegistered($user,'1243'));
 });
 Route::get('/get-state-list',[CustomController::class,'getStateList'])->name('state-list');
 Route::get('/get-city-list',[CustomController::class,'getCityList'])->name('city-list');

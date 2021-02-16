@@ -17,7 +17,8 @@ class AlterUserTableForRoleForeignKey extends Migration
             $table->uuid('role_uuid')->after('uuid');
             $table->foreign('role_uuid')
                 ->references('uuid')
-                ->on('users_roles');
+                ->on('users_roles')
+                ->onDelete('cascade');
         });
     }
 

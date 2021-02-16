@@ -20,11 +20,13 @@ class CreateModeratorDailyPostsTable extends Migration
             $table->uuid('user_uuid');
             $table->foreign('user_uuid')
                 ->references('uuid')
-                ->on('users');
+                ->on('users')
+                ->onDelete('cascade');
             $table->uuid('moderator_subject_uuid');
             $table->foreign('moderator_subject_uuid')
                 ->references('uuid')
-                ->on('moderator_subjects');
+                ->on('moderator_subjects')
+                ->onDelete('cascade');
             $table->string('title')->nullable();;
             $table->string('slug')->nullable();;
             $table->string('description')->nullable();;

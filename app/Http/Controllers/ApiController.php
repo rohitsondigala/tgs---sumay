@@ -370,6 +370,30 @@ class ApiController extends Controller
         return response()->json($this->apiService->changePassword($request));
     }
 
+    public function getUserProfile(Request  $request){
+        $validation = $this->apiService->getUserProfileListValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->getUserProfile($request));
+    }
+
+    public function updateUserProfile(Request  $request){
+        $validation = $this->apiService->updateUserProfileListValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->updateUserProfile($request));
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -432,4 +456,55 @@ class ApiController extends Controller
         }
         return response()->json($this->apiService->userUploadNotes($request));
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function userGetNotes(Request  $request){
+        $validation = $this->apiService->userGetNotesValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->userGetNotes($request));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getStudentList(Request  $request){
+        $validation = $this->apiService->getStudentListValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->getStudentList($request));
+    }
+
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getProfessorList(Request  $request){
+        $validation = $this->apiService->getProfessorListValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->getProfessorList($request));
+    }
+
 }

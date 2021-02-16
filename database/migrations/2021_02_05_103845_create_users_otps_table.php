@@ -20,7 +20,8 @@ class CreateUsersOtpsTable extends Migration
             $table->uuid('user_uuid');
             $table->foreign('user_uuid')
                 ->references('uuid')
-                ->on('users');
+                ->on('users')
+                ->onDelete('cascade');
             $table->integer('otp')->nullable();
             $table->boolean('status')->default(0)->nullable();
             $table->integer('attempt')->nullable();

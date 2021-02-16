@@ -36,6 +36,11 @@ Route::group([
     Route::post('/moderator-posts',[ApiController::class,'moderatorPosts'])->name('moderator-posts');
     Route::post('/student-package-list',[ApiController::class,'studentPackageList'])->name('student-package-list');
     Route::post('/all-package-list',[ApiController::class,'getAllPackageList'])->name('all-package-list');
-    Route::post('/all-package-list',[ApiController::class,'getAllPackageList'])->name('all-package-list');
     Route::post('/upload-notes',[ApiController::class,'userUploadNotes'])->name('user-upload-notes');
+    Route::post('/get-notes',[ApiController::class,'userGetNotes'])->name('user-get-notes');
+    Route::post('/get-student-list',[ApiController::class,'getStudentList'])->name('get-student-list');
+    Route::post('/get-professor-list',[ApiController::class,'getProfessorList'])->name('get-professor-list');
+    Route::post('/get-user-profile',[ApiController::class,'getUserProfile'])->name('get-user-profile');
+    Route::post('/update-user-profile',[ApiController::class,'updateUserProfile'])->name('update-user-profile');
+
 });

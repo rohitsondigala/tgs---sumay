@@ -19,7 +19,8 @@ class CreateSubjectsTable extends Migration
             $table->uuid('stream_uuid');
             $table->foreign('stream_uuid')
                 ->references('uuid')
-                ->on('streams');
+                ->on('streams')
+                ->onDelete('cascade');
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
             $table->boolean('status')->nullable();

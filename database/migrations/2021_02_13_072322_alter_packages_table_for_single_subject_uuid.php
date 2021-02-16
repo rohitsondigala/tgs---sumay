@@ -22,7 +22,8 @@ class AlterPackagesTableForSingleSubjectUuid extends Migration
             $table->uuid('subject_uuid')->after('stream_uuid');
             $table->foreign('subject_uuid')
                 ->references('uuid')
-                ->on('subjects');
+                ->on('subjects')
+                ->onDelete('cascade');
         });
     }
 

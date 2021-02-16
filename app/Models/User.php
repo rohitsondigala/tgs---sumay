@@ -15,6 +15,7 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'uuid','uuid','role_uuid','name','username','mobile','email','email_verified_at','password','country','state','city','image','university_name','college_name','stream_uuid'
     ];
+    protected $appends = ['full_image_path'];
 
     protected static function boot()
     {
@@ -40,7 +41,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function stream(){
-        return $this->belongsTo('App\Models\Streams','stream_uuid','uuid');
+        return $this->hasOne('App\Models\Streams','uuid','stream_uuid');
     }
     public function role(){
         return $this->belongsTo('App\Models\UsersRoles','role_uuid','uuid');
@@ -65,14 +66,17 @@ class User extends Authenticatable implements JWTSubject
     public function student_subjects(){
         return $this->hasMany('App\Models\PurchasedPackages','user_uuid','uuid');
     }
+    public function student_subjects_all(){
+        return $this->hasManyThrough('App\Models\Subjects','App\Models\PurchasedPackages','user_uuid','uuid','uuid');
+    }
     public function student_detail(){
-        return $this->hasMany('App\Models\StudentDetails','uuid','user_uuid');
+        return $this->hasOne('App\Models\StudentDetails','user_uuid','uuid');
     }
     public function professor_subjects(){
-        return $this->hasMany('App\Models\ProfessorSubjects','user_uuid','uuid');
+        return $this->hasManyThrough('App\Models\Subjects','App\Models\ProfessorSubjects','user_uuid','uuid','subject_uuid','uuid');
     }
     public function professor_detail(){
-        return $this->hasMany('App\Models\ProfessorDetails','uuid','user_uuid');
+        return $this->hasOne('App\Models\ProfessorDetails','user_uuid','uuid');
     }
 
     public function moderator_daily_posts(){
@@ -92,4 +96,12 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
+        public function getFullImagePathAttribute()
+        {
+            if(!empty($this->image)){
+                return env('APP_URL').$this->image;
+            }else{
+                return null;
+            }
+        }
 }

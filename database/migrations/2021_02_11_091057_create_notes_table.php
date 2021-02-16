@@ -25,11 +25,13 @@ class CreateNotesTable extends Migration
             $table->uuid('stream_uuid');
             $table->foreign('stream_uuid')
                 ->references('uuid')
-                ->on('streams');
+                ->on('streams')
+                ->onDelete('cascade');
             $table->uuid('subject_uuid');
             $table->foreign('subject_uuid')
                 ->references('uuid')
-                ->on('subjects');
+                ->on('subjects')
+                ->onDelete('cascade');
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
             $table->string('description')->nullable();

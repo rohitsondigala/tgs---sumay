@@ -20,7 +20,8 @@ class CreateProfessorDetailsTable extends Migration
             $table->uuid('user_uuid');
             $table->foreign('user_uuid')
                 ->references('uuid')
-                ->on('users');
+                ->on('users')
+                ->onDelete('cascade');
             $table->string('university_name')->nullable();
             $table->string('college_name')->nullable();
             $table->string('education_qualification')->nullable();
