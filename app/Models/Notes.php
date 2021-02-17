@@ -25,6 +25,14 @@ class Notes extends Model
     public function user(){
         return $this->belongsTo('App\Models\User','user_uuid','uuid');
     }
+    public function subject()
+    {
+        return $this->belongsTo('App\Models\Subjects', 'subject_uuid', 'uuid');
+    }
+    public function stream()
+    {
+        return $this->belongsTo('App\Models\Streams', 'stream_uuid', 'uuid');
+    }
 
     public function image_files(){
         return $this->hasMany('App\Models\NotesFiles','note_uuid','uuid')->where('file_type','IMAGE');

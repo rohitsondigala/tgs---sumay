@@ -370,8 +370,8 @@ class ApiController extends Controller
         return response()->json($this->apiService->changePassword($request));
     }
 
-    public function getUserProfile(Request  $request){
-        $validation = $this->apiService->getUserProfileListValidationRules($request);
+    public function editUserProfile(Request  $request){
+        $validation = $this->apiService->editUserProfileListValidationRules($request);
         if (!$validation['success']) {
             return response()->json([
                 'success' => $validation['success'],
@@ -379,7 +379,7 @@ class ApiController extends Controller
 
             ], 200);
         }
-        return response()->json($this->apiService->getUserProfile($request));
+        return response()->json($this->apiService->editUserProfile($request));
     }
 
     public function updateUserProfile(Request  $request){
@@ -505,6 +505,23 @@ class ApiController extends Controller
             ], 200);
         }
         return response()->json($this->apiService->getProfessorList($request));
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function userChangePassword(Request  $request){
+        $validation = $this->apiService->userChangePasswordValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->userChangePassword($request));
     }
 
 }

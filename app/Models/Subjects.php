@@ -27,6 +27,10 @@ class Subjects extends Model
         return $this->belongsTo('App\Models\Streams','stream_uuid','uuid');
     }
 
+    public function purchase_packages(){
+        return $this->hasMany('App\Models\PurchasedPackage','uuid','subject_uuid');
+    }
+
     public function getIsSelectedAttribute(){
         return 0;
     }

@@ -27,6 +27,10 @@ class PurchasedPackages extends Model
     {
         return $this->belongsTo('App\Models\Subjects', 'subject_uuid', 'uuid');
     }
+    public function stream()
+    {
+        return $this->belongsTo('App\Models\Streams', 'stream_uuid', 'uuid');
+    }
     public function user()
     {
         return $this->hasOne('App\Models\User', 'uuid', 'user_uuid');
@@ -36,13 +40,10 @@ class PurchasedPackages extends Model
         return $this->hasOneThrough('App\Models\City', 'App\Models\User','uuid','id','user_uuid');
     }
 
-    public function stream()
-    {
-        return $this->belongsTo('App\Models\Streams', 'stream_uuid', 'uuid');
-    }
+
     public function package()
     {
-        return $this->belongsTo('App\Models\Packages', 'package_uuid', 'uuid');
+        return $this->hasOne('App\Models\Packages', 'uuid','package_uuid');
     }
 
 }

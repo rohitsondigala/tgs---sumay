@@ -3,11 +3,20 @@
 namespace App\Services;
 
 
+use App\Http\Resources\AllPackageListResource;
+use App\Http\Resources\GetModeratorPostsResource;
+use App\Http\Resources\GetProfessorListResource;
+use App\Http\Resources\GetStudentListResource;
+use App\Http\Resources\ProfessorGetProfileResource;
+use App\Http\Resources\StudentGetProfileResource;
+use App\Http\Resources\StudentPackageListResource;
+use App\Http\Resources\UserGetNotesResource;
 use App\Mail\ForgotPasswordOtp;
 use App\Mail\ProfessorRegistraionOtp;
 use App\Mail\StudentRegistraionOtp;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -202,7 +211,7 @@ class ApiService
                 return $this->professorCreate($user, $request);
             }
         } else {
-            $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city','stream_uuid');
+            $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city', 'stream_uuid');
             $userArray['role_uuid'] = professor_role_uuid();
             $userArray['password'] = bcrypt($request->password);
             $user = user()->create($userArray);
@@ -520,63 +529,11 @@ class ApiService
         }
     }
 
-    public function getUserProfileListValidationRules($request)
-    {
-        $validate = Validator::make($request->all(), [
-            'user_uuid' => 'required|size:36',
-        ]);
-        return $this->validationResponse($validate);
-    }
-
-
-    public function getUserProfile($request)
-    {
-        $user_uuid = $request->user_uuid;
-        $userDetail = getUserDetail($user_uuid);
-        if (!$userDetail) {
-            return ['success' => false, 'message' => trans('api.user_not_found')];
-        }
-        if($userDetail->role->title == "STUDENT"){
-            $userDetail =
-                user()
-                    ->with(
-                        'country_detail:id,name',
-                        'state_detail:id,name',
-                        'city_detail:id,name',
-                        'stream:uuid,title',
-                        'student_detail:id,user_uuid,university_name,college_name,preferred_language,other_information',
-                        'student_subjects_all')
-                    ->where('uuid',$user_uuid)
-                    ->first(['id','uuid','name','email','mobile','image','country','state','city','stream_uuid']);
-        }else{
-            $userDetail = user()->with('country_detail','state_detail','city_detail','stream','professor_subjects','professor_detail','professor_subjects.subject')->where('uuid',$user_uuid)->first();
-        }
-        if (!empty($userDetail)) {
-            return ['success' => true, 'message' => trans('api.get_user_profile'), 'data' => $userDetail];
-        } else {
-            return ['success' => false, 'message' => trans('api.user_with_not_packages')];
-        }
-    }
-
-    public function updateUserProfileListValidationRules($request)
-    {
-        $validate = Validator::make($request->all(), [
-            'user_uuid' => 'required|size:36',
-        ]);
-        return $this->validationResponse($validate);
-    }
-
-
-    public function updateUserProfile($request)
-    {
-
-    }
 
     /**
-     * @param $user_uuid
+     * @param $request
      * @return array
      */
-
     function moderatorPostsValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
@@ -603,13 +560,15 @@ class ApiService
 
         $moderatorDailyPost = moderator_daily_posts()->with('moderator_subject.subject')->whereHas('moderator_subject', function ($query) use ($subjectList) {
             $query->whereIn('subject_uuid', $subjectList);
-        })->orderBy('id', 'DESC')->get()->toArray();
+        })->orderBy('id', 'DESC')->get();
 
-        if (!empty($moderatorDailyPost)) {
-            return ['success' => true, 'message' => trans('api.moderator_posts'), 'data' => $moderatorDailyPost];
+        if ($moderatorDailyPost->isNotEmpty()) {
+            $returnData = GetModeratorPostsResource::collection($moderatorDailyPost)->toArray($request);
+            return ['success' => true, 'message' => trans('api.moderator_posts'), 'data' => $returnData];
         } else {
             return ['success' => false, 'message' => trans('api.no_post_found')];
         }
+
     }
 
     /**
@@ -635,14 +594,12 @@ class ApiService
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
-        $packageList = packages()->with('subject', 'stream', 'purchase_detail')
-            ->whereHas('purchase_detail', function ($query) use ($user_uuid) {
-                $query->where('user_uuid', $user_uuid);
-            })->get()->toArray();
-        if ($packageList) {
-            return ['success' => true, 'message' => trans('api.student_subject_list'), 'data' => $packageList];
-        } else {
+        $packageList = purchased_packages()->with('package', 'stream', 'subject')->where('user_uuid', $user_uuid)->where('is_purchased', 1)->get();
+        if ($packageList->isEmpty()) {
             return ['success' => false, 'message' => trans('api.user_with_not_packages')];
+        } else {
+            $returnData = StudentPackageListResource::collection($packageList)->toArray($request);
+            return ['success' => true, 'message' => trans('api.student_package_list'), 'data' => $returnData];
         }
     }
 
@@ -670,13 +627,16 @@ class ApiService
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
-        $existingSubjects = getStudentSubjects($userDetail);
-        $allPackageList = packages()->with('stream', 'subject')->where('stream_uuid', $userDetail->stream_uuid)->whereNotIn('subject_uuid', $existingSubjects)->get()->toArray();
-        if (!empty($allPackageList)) {
-            return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $allPackageList];
-        } else {
+        $existingSubjects = getStudentSubjectsPurchased($userDetail);
+        $allPackageList = packages()->with('stream', 'subject')->where('stream_uuid', $userDetail->stream_uuid)->whereNotIn('subject_uuid', $existingSubjects)->get();
+
+        if ($allPackageList->isEmpty()) {
             return ['success' => false, 'message' => trans('api.user_with_not_packages')];
+        } else {
+            $returnData = AllPackageListResource::collection($allPackageList)->toArray($request);
+            return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $returnData];
         }
+
     }
 
 
@@ -736,6 +696,10 @@ class ApiService
         }
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     public function userGetNotesValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
@@ -744,6 +708,10 @@ class ApiService
         return $this->validationResponse($validate);
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     public function userGetNotes($request)
     {
         $userDetail = getUserDetail($request->user_uuid);
@@ -751,15 +719,20 @@ class ApiService
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
         $existingSubjects = getStudentSubjects($userDetail);
-        $allNotes = notes()->ofApprove()->where('user_uuid', '!=', $userDetail->uuid)->whereIn('subject_uuid', $existingSubjects)->ofOrderBy('DESC')->get()->toArray();
-        if (!empty($allNotes)) {
-            return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $allNotes];
+        $allNotes = notes()->ofApprove()->where('user_uuid', '!=', $userDetail->uuid)->whereIn('subject_uuid', $existingSubjects)->ofOrderBy('DESC')->get();
+        if ($allNotes->isNotEmpty()) {
+            $returnData = UserGetNotesResource::collection($allNotes)->toArray($request);
+            return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $returnData];
         } else {
             return ['success' => false, 'message' => trans('api.user_with_no_notes')];
         }
 
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     public function getStudentListValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
@@ -769,6 +742,10 @@ class ApiService
     }
 
 
+    /**
+     * @param $request
+     * @return array
+     */
     public function getStudentList($request)
     {
         $userDetail = getUserDetail($request->user_uuid);
@@ -777,28 +754,199 @@ class ApiService
         }
 
         $existingSubjects = getStudentSubjects($userDetail);
-//        $studentList = user()->with(['student_subjects.subject','city_detail','student_detail'])
-//            ->whereHas('student_subjects',function ($query) use ($userDetail,$existingSubjects){
-//                $query->where('user_uuid','!=',$userDetail->uuid)->whereIn('subject_uuid',$existingSubjects);
-//            })
-//            ->orderBy('uuid')
-//            ->get(['uuid','name','email','mobile'])
-//            ->toArray();
         $studentList = purchased_packages()
-                    ->with('subject:uuid,title','user:uuid,name,city','user_city_detail')
-                    ->where('user_uuid','!=',$userDetail->uuid)
-                    ->whereIn('subject_uuid',$existingSubjects)
-                    ->orderBy('user_uuid')
-                    ->get(['uuid','user_uuid','package_uuid','subject_uuid'])
-                    ->toArray();
+            ->where('user_uuid', '!=', $userDetail->uuid)
+            ->whereIn('subject_uuid', $existingSubjects)
+            ->orderBy('user_uuid')
+            ->get();
 
-        if (!empty($studentList)) {
-            return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $studentList];
+        if ($studentList->isNotEmpty()) {
+            $returnData = GetStudentListResource::collection($studentList)->toArray($request);
+            return ['success' => true, 'message' => trans('api.get_student_list'), 'data' => $returnData];
         } else {
-            return ['success' => false, 'message' => trans('api.user_with_no_notes')];
+            return ['success' => false, 'message' => trans('api.no_student_to_related_subjects')];
         }
 
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
+    public function getProfessorListValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+
+    /**
+     * @param $request
+     * @return array
+     */
+    public function getProfessorList($request)
+    {
+        $userDetail = getUserDetail($request->user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+
+        $existingSubjects = getStudentSubjects($userDetail);
+        $studentList = professor_subjects()
+            ->where('user_uuid', '!=', $userDetail->uuid)
+            ->whereIn('subject_uuid', $existingSubjects)
+            ->orderBy('user_uuid')
+            ->get();
+
+        if ($studentList->isNotEmpty()) {
+            $returnData = GetProfessorListResource::collection($studentList)->toArray($request);
+            return ['success' => true, 'message' => trans('api.get_student_list'), 'data' => $returnData];
+        } else {
+            return ['success' => false, 'message' => trans('api.no_student_to_related_subjects')];
+        }
+
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    public function editUserProfileListValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return ProfessorGetProfileResource|StudentGetProfileResource|array
+     */
+    public function editUserProfile($request)
+    {
+        $user_uuid = $request->user_uuid;
+        $userDetail = getUserDetail($user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+        if ($userDetail->role->title == "STUDENT") {
+            return (new StudentGetProfileResource($userDetail));
+        } else {
+            return (new ProfessorGetProfileResource($userDetail));
+        }
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    public function updateUserProfileListValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'name' => 'required',
+            'country' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'university_name' => 'sometimes',
+            'college_name' => 'sometimes',
+            'preferred_language' => 'sometimes',
+            'other_information' => 'sometimes',
+            'access_token' => 'sometimes',
+            'image' => 'sometimes',
+            'research_of_expertise' => 'sometimes',
+            'achievements' => 'sometimes',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     */
+    public function updateUserProfile($request)
+    {
+        $user_uuid = $request->user_uuid;
+        $userDetail = getUserDetail($user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+        $userArray = [
+            'name' => $request->name,
+            'country' => $request->country,
+            'state' => $request->state,
+            'city' => $request->city,
+            'access_token' => $request->access_token
+        ];
+        if (!empty($request->image)) {
+            $filePath = uploadMedia($request->image, 'profile');
+            $userArray['image'] = $filePath;
+        }
+
+        $userUpdate = user()->where('uuid', $user_uuid)->update($userArray);
+
+
+        if ($userDetail->role->title == 'PROFESSOR') {
+            $userDetail = professor_details()->where('user_uuid', $user_uuid)->update(
+                $request->only(['university_name', 'college_name', 'preferred_language', 'other_information', 'achievements', 'research_of_expertise'])
+            );
+        } else {
+            $userDetail = student_details()->where('user_uuid', $user_uuid)->update(
+                $request->only(['university_name', 'college_name', 'preferred_language', 'other_information'])
+            );
+        }
+
+        if ($userUpdate && $userDetail) {
+            return ['success' => true, 'message' => trans('api.user_updated')];
+        } else {
+            return ['success' => false, 'message' => trans('api.fail_to_update')];
+        }
+
+
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function userChangePasswordValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required',
+            'old_password' => 'required',
+            'new_password' => 'required',
+            'confirm_password' => 'required'
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function userChangePassword($request)
+    {
+        $user_uuid = $request->user_uuid;
+        $userDetail = getUserDetail($user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+        $current_password = $request->old_password;
+        $new_password = $request->new_password;
+        $confirm_password = $request->confirm_password;
+        if(Hash::check($current_password,$userDetail->password)){
+            if($current_password == $new_password){
+                return ['success'=>false,'message'=>trans('auth.old_new_same')];
+            }elseif($new_password == $confirm_password){
+                user()->where('uuid',$user_uuid)->update(['password'=>bcrypt($confirm_password)]);
+                return ['success'=>true,'message'=>trans('api.password_updated')];
+            }else{
+                return ['success'=>false,'message'=>trans('api.password_not_match')];
+            }
+        }else{
+            return ['success'=>false,'message'=>trans('api.current_password_does_not_match')];
+        }
+    }
 
 }

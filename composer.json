@@ -16,7 +16,8 @@
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
         "tymon/jwt-auth": "dev-develop",
-        "ext-json": "*"
+        "ext-json": "*",
+        "doctrine/dbal": "v2.4.2"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

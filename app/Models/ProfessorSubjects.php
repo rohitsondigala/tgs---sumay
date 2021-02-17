@@ -25,6 +25,12 @@ class ProfessorSubjects extends Model
     public function subject(){
         return $this->belongsTo('App\Models\Subjects','subject_uuid','uuid');
     }
+    public function stream(){
+        return $this->belongsTo('App\Models\Streams','stream_uuid','uuid');
+    }
+    public function user(){
+        return $this->belongsTo('App\Models\User','user_uuid','uuid');
+    }
 
 
 }

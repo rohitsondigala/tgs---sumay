@@ -40,7 +40,8 @@ Route::group([
     Route::post('/get-notes',[ApiController::class,'userGetNotes'])->name('user-get-notes');
     Route::post('/get-student-list',[ApiController::class,'getStudentList'])->name('get-student-list');
     Route::post('/get-professor-list',[ApiController::class,'getProfessorList'])->name('get-professor-list');
-    Route::post('/get-user-profile',[ApiController::class,'getUserProfile'])->name('get-user-profile');
+    Route::post('/edit-user-profile',[ApiController::class,'editUserProfile'])->name('edit-user-profile');
     Route::post('/update-user-profile',[ApiController::class,'updateUserProfile'])->name('update-user-profile');
+    Route::post('/user-change-password',[ApiController::class,'userChangePassword'])->name('user-change-password');
 
 });

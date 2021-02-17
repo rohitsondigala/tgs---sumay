@@ -41,6 +41,8 @@ class UserObserver
             'email' => time() . '::' . $user->email,
             'mobile' => time() . '::' . $user->mobile
         ]);
+        $user->moderator()->delete();
+        $user->moderator_daily_post()->delete();
     }
 
     /**

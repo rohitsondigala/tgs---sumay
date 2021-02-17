@@ -17,6 +17,7 @@ class User extends Authenticatable implements JWTSubject
     ];
     protected $appends = ['full_image_path'];
 
+    protected $touches = ['student_subjects'];
     protected static function boot()
     {
         parent::boot();
@@ -66,14 +67,11 @@ class User extends Authenticatable implements JWTSubject
     public function student_subjects(){
         return $this->hasMany('App\Models\PurchasedPackages','user_uuid','uuid');
     }
-    public function student_subjects_all(){
-        return $this->hasManyThrough('App\Models\Subjects','App\Models\PurchasedPackages','user_uuid','uuid','uuid');
-    }
     public function student_detail(){
         return $this->hasOne('App\Models\StudentDetails','user_uuid','uuid');
     }
     public function professor_subjects(){
-        return $this->hasManyThrough('App\Models\Subjects','App\Models\ProfessorSubjects','user_uuid','uuid','subject_uuid','uuid');
+        return $this->hasMany('App\Models\ProfessorSubjects','user_uuid','uuid');
     }
     public function professor_detail(){
         return $this->hasOne('App\Models\ProfessorDetails','user_uuid','uuid');
@@ -92,7 +90,10 @@ class User extends Authenticatable implements JWTSubject
         return $query->where('verify',1);
     }
     public function moderator(){
-        return $this->belongsTo('App\Models\ModeratorSubject','uuid','user_uuid');
+        return $this->hasOne('App\Models\ModeratorSubject','user_uuid','uuid');
+    }
+    public function moderator_daily_post(){
+        return $this->hasMany('App\Models\ModeratorDailyPost','user_uuid','uuid');
     }
 
 

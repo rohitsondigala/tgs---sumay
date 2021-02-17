@@ -12,7 +12,6 @@ class NotesFiles extends Model
     protected $fillable = [
         'uuid','note_uuid','file_name','file_type','file_mime_type','file_size','file_path','status'
     ];
-    protected $appends = ['full_image_path'];
     protected $hidden = ['image'];
 
     protected static function boot()
@@ -22,5 +21,9 @@ class NotesFiles extends Model
         static::creating(function ($model) {
             addUUID($model);
         });
+    }
+    public function getFullPathAttribute()
+    {
+        return env('APP_URL').$this->file_path;
     }
 }

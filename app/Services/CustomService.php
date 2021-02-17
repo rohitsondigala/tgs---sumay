@@ -60,8 +60,6 @@ class CustomService {
     function deleteModerator($uuid){
         $userDetail = user()->where('uuid',$uuid)->first();
         if($userDetail->delete()){
-            user()->where('uuid',$uuid)->update(['email' => time() . '::' . $userDetail->email]);
-            moderator_subjects()->where('user_uuid',$uuid)->delete();
             return ['success'=>true,'message'=>trans('strings.admin|delete')];
         }else{
             return ['success'=>false,'message'=>trans('strings.admin|fail')];

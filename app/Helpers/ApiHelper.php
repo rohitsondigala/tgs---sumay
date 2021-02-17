@@ -117,3 +117,19 @@ function getStudentSubjects($userDetail){
         return false;
     }
 }
+
+function getStudentSubjectsPurchased($userDetail){
+    $subjects = $userDetail->student_subjects;
+    if (!empty($subjects)) {
+        $subjectList = array();
+        foreach ($subjects as $list) {
+            if($list->is_purchased){
+                array_push($subjectList, $list->subject->uuid);
+            }
+        }
+        return $subjectList;
+    } else {
+        return false;
+    }
+}
+
