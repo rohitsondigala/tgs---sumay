@@ -24,7 +24,7 @@ class AdminProfileController extends Controller
         return view('admin.profile',compact('pageTitle','user'));
     }
 
-    public function postProfile(ModeratorProfileRequest $request){
+    public function postProfile(AdminProfileRequest $request){
         $store = $this->customService->saveProfile($request);
         if($store['success']){
             return redirect('/admin/profile')->with(['message'=>$store['message'],'class'=>'alert-success']);

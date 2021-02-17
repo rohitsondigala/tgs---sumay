@@ -25,7 +25,7 @@ class AdminProfileRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'mobile' => 'required',
+            'mobile' => 'required|unique:users',
             'image' =>  'sometimes|mimes:jpg,jpeg,png|max:1024',
 
         ];
