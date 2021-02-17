@@ -28,7 +28,7 @@ class AllPackageListResource extends JsonResource
         $returnData['stream']['id'] = $this->stream->uuid;
         $returnData['stream']['title'] = $this->stream->title;
         $returnData['subject']['uuid'] = $this->subject->uuid;
-        $returnData['subject']['name'] = $this->subject->name;
+        $returnData['subject']['title'] = $this->subject->title;
         return $returnData;
     }
 
