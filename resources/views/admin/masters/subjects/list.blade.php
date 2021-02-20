@@ -26,10 +26,10 @@
             <td>{{$list->title}}</td>
             <td>
                 <a href="{{route($route.'.edit',$list->uuid)}}">Edit </a>
-                <span>|</span>
-                <a class="delete-item" data-delete='delete-form-{{$list->uuid}}' href="javascript:;">Delete</a>
-            {!! Form::model($subjects,array('url'=>route($route.'.destroy',$list->uuid),'method'=>'DELETE','class'=>'delete-form-'.$list->uuid)) !!}
-            {!! Form::close() !!}
+{{--                <span>|</span>--}}
+{{--                <a class="delete-item" data-delete='delete-form-{{$list->uuid}}' href="javascript:;">Delete</a>--}}
+{{--            {!! Form::model($subjects,array('url'=>route($route.'.destroy',$list->uuid),'method'=>'DELETE','class'=>'delete-form-'.$list->uuid)) !!}--}}
+{{--            {!! Form::close() !!}--}}
         </tr>
      @endforeach
    @else
