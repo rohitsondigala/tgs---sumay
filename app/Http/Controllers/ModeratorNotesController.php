@@ -40,7 +40,7 @@ class ModeratorNotesController extends Controller
      */
     public function index(Request  $request)
     {
-        $notes = notes()->where('subject_uuid',auth()->user()->moderator->subject_uuid)->orderBy('id','DESC');
+            $notes = notes()->where('subject_uuid',auth()->user()->moderator->subject_uuid);
         $notesUserList = notes()->with('user')->where('subject_uuid',auth()->user()->moderator->subject_uuid)->groupBy('user_uuid')->get()->pluck('user.name','user.uuid')->prepend('All','all');
 
         $user_type = $request->user_type;
@@ -67,7 +67,7 @@ class ModeratorNotesController extends Controller
             $notes->where('title','like','%'.$title.'%');
         }
 
-        $notes = $notes->orderBy('id','DESC')->get();
+        $notes = $notes->orderBy('updated_at','DESC')->get();
 
         $pageTitle = trans('strings.moderator|notes|index');
         $directory = $this->directory;

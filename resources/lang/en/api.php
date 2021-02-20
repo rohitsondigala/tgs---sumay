@@ -35,4 +35,8 @@ return [
     'no_student_to_related_subjects' => "No students found",
     'user_updated' => 'User updated successfully',
     'fail_to_update' => 'Fail to update user',
+    'user_uploaded_notes' => 'Notes List',
+    'note_not_found' => 'Incorrect notes detail entered',
+    'user_note_deleted' => 'Note deleted successfully',
+    'notes_edited' => 'Notes edited successfully'
 ];

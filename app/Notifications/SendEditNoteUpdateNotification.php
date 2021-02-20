@@ -7,9 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NotesUploadedNotification extends Notification
+class SendEditNoteUpdateNotification extends Notification
 {
     use Queueable;
+
     public $data;
     /**
      * Create a new notification instance.
@@ -56,7 +57,7 @@ class NotesUploadedNotification extends Notification
     {
         $data= $this->data;
         return [
-            'type' => 'New Note',
+            'type' => 'Edit Note',
             'title' => $data['title'],
             'icon' => $data['icon'],
             'url' => $data['url'],

@@ -1,17 +1,25 @@
-@if(!empty($subjects) && !$subjects->isEmpty())
 
-    <table id="basic-data-table" class="table nowrap" style="width:100%">
+
+
+
+
+<table class="table nowrap" style="width:100%">
     <thead>
     <tr>
+        <th colspan="4"><input type="text" class="form-control" placeholder="Search Words by stream or subject"  wire:model="searchWords"></th>
+    </tr>
+    <tr>
         <th>{{__('No')}}</th>
-        <th>{{__('Stream')}}</th>
-        <th>{{__('Subject')}}</th>
+        <th width="20%">{{__('Stream')}}</th>
+        <th width="50%">{{__('Subject')}}</th>
         <th>{{__('Action')}}</th>
     </tr>
     </thead>
 
     <tbody>
-    @forelse($subjects as $list)
+
+   @if(!empty($subjects) && !$subjects->isEmpty())
+       @foreach($subjects as $list)
         <tr>
             <td>{{$loop->iteration}}</td>
             <td>{{!empty($list->stream) ? $list->stream->title : 'NA'}}</td>
@@ -23,11 +31,12 @@
             {!! Form::model($subjects,array('url'=>route($route.'.destroy',$list->uuid),'method'=>'DELETE','class'=>'delete-form-'.$list->uuid)) !!}
             {!! Form::close() !!}
         </tr>
-    @empty
-        @include('common.no-record-found')
-    @endforelse
+     @endforeach
+   @else
+       <tr>
+           <td colspan="4" class="text-center">No Record Found</td>
+       </tr>
+    @endif
+
     </tbody>
 </table>
-@else
-    @include('common.no-record-found')
-@endif

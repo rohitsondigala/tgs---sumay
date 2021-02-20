@@ -23,7 +23,7 @@
                     @forelse(auth()->user()->unreadNotifications->take(5) as $notification)
                         <li>
                             <a href="{{route('moderator.read',[$notification->id,'link'=>$notification->data['url']])}}">
-                                <i class="{{$notification->data['icon']}}"></i> <span class="text-success">New Note</span>  {{$notification->data['title']}}
+                                <i class="{{$notification->data['icon']}}"></i> <span class="{{($notification->data['type'] == 'New Note') ? 'text-success' : 'text-warning'}}">{{$notification->data['type']}}</span>  {{$notification->data['title']}}
                                 <br>
                                 <span class="ml-30 font-size-12 d-inline-block"><i class="mdi mdi-clock-outline"></i> {{\Carbon\Carbon::parse($notification->created_at)->diffForHumans()}}</span>
                             </a>

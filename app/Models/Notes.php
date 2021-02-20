@@ -10,7 +10,7 @@ class Notes extends Model
 {
     use SoftDeletes,HasFactory;
     protected $fillable = [
-        'uuid','user_uuid','stream_uuid','subject_uuid','title','slug','description','read_status','approved_by','reason'
+        'uuid','user_uuid','stream_uuid','subject_uuid','title','slug','description','read_status','approved_by','reason','approve'
     ];
 
     protected static function boot()

@@ -43,5 +43,8 @@ Route::group([
     Route::post('/edit-user-profile',[ApiController::class,'editUserProfile'])->name('edit-user-profile');
     Route::post('/update-user-profile',[ApiController::class,'updateUserProfile'])->name('update-user-profile');
     Route::post('/user-change-password',[ApiController::class,'userChangePassword'])->name('user-change-password');
+    Route::post('/get-user-notes',[ApiController::class,'getUserNotes'])->name('get-user-notes');
+    Route::post('/delete-user-notes',[ApiController::class,'deleteUserNotes'])->name('delete-user-notes');
+    Route::post('/edit-user-notes',[ApiController::class,'userEditNotes'])->name('user-edit-notes');
 
 });

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserGetNotesResource extends JsonResource
+class GetStudentProfessorNotesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,12 +21,6 @@ class UserGetNotesResource extends JsonResource
         $returnData['title'] = $this->title;
         $returnData['date'] = Carbon::parse($this->created_at)->format('d M Y');
         $returnData['description'] = $this->description;
-        $returnData['user']['uuid'] = $this->user->uuid;
-        $returnData['user']['name'] = $this->user->name;
-        $returnData['user']['role'] = $this->user->role->title;
-        $returnData['user']['full_image_path'] = $this->user->full_image_path;
-        $returnData['stream']['uuid'] = $this->stream->uuid;
-        $returnData['stream']['title'] = $this->stream->title;
         $returnData['subject']['uuid'] = $this->subject->uuid;
         $returnData['subject']['title'] = $this->subject->title;
         $returnData['image_files'] = UserGetNotesFilesResource::collection($this->image_files)->toArray($request);

@@ -26,11 +26,10 @@
                 @endif
             </td>
             <td>
-                <a href="{{route($route.'.edit',$list->uuid)}}">Edit </a>
+                <a href="{{route($route.'.show',$list->uuid)}}">Activites </a>
                 <span>|</span>
-                <a class="delete-item" data-delete='delete-form-{{$list->uuid}}' href="javascript:;">Delete</a>
-            {!! Form::model($professors,array('url'=>route($route.'.destroy',$list->uuid),'method'=>'DELETE','class'=>'delete-form-'.$list->uuid)) !!}
-            {!! Form::close() !!}
+                <a href="{{route($route.'.show',$list->uuid)}}">Edit </a>
+
         </tr>
     @empty
         @include('common.no-record-found')

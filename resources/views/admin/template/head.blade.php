@@ -19,5 +19,5 @@
     <link href="{{asset('/assets/plugins/daterangepicker/daterangepicker.css')}}" rel="stylesheet" />
     <link href="{{asset('/assets/plugins/data-tables/datatables.bootstrap4.min.css')}}" rel="stylesheet" />
     <link href="{{asset('/assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet" />
-
+    @livewireStyles
 </head>

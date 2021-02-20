@@ -438,9 +438,9 @@ $(function() {
         readURL(this);
     });
     //
-    // $(document).on('change','.filterChange',function (){
-    //     $('#filter-form').submit();
-    // });
+    $(document).on('change','.filterChange',function (){
+        $('#filter-form').submit();
+    });
 
 });
 

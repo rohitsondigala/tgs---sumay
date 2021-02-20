@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Request;
 
 function upload_path(){
-    return '/uploads/media/:userId/:year/:month/:day/';
+    return '/uploads/media/:year/:month/:day/';
 }
 function logo(){
     return asset('logo.jpeg');
@@ -94,10 +94,9 @@ function uploadMedia(\Illuminate\Http\UploadedFile $requestFile,$folderName): st
     $fileName = $requestFile->getClientOriginalName();
     $carbon = new Carbon();
     $replacePathArray = [
-        ':userId' => auth()->user()->uuid ?? '',
         ':year' => $carbon->format('Y'),
         ':month' => $carbon->format('m'),
-        ':day' => $carbon->format('d')
+        ':day' => $carbon->format('d'),
     ];
     $uploadLocalPath = strtr(upload_path().$folderName, $replacePathArray);
     $uploadPath = public_path($uploadLocalPath);
@@ -107,7 +106,7 @@ function uploadMedia(\Illuminate\Http\UploadedFile $requestFile,$folderName): st
         File::makeDirectory($uploadPath, 0755, true, true);
     }
     $uploadFileName = \Illuminate\Support\Str::slug($fileName,'-');
-    $uploadFileName = $uploadFileName.time() . '.' . $extension;
+    $uploadFileName = $uploadFileName.'-'.rand(111111,999999) . '.' . $extension;
     $requestFile->move($uploadPath, $uploadFileName);
 
     return $uploadLocalPath.'/'.$uploadFileName;
@@ -117,9 +116,12 @@ function getVerifyBadge($status){
         return '<span class="badge badge-success">Approved</span>';
     }elseif($status == 2){
         return '<span class="badge badge-danger">Rejected</span>';
-    }else{
+    }elseif($status == 0) {
         return '<span class="badge badge-warning">Pending</span>';
+    }else{
+        return '<span class="badge badge-danger">Edited</span>';
     }
+
 }
 
 function getExpiryDateByMonth($months){

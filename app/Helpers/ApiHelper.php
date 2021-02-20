@@ -1,6 +1,7 @@
 <?php
 
 use App\Notifications\NotesUploadedNotification;
+use App\Notifications\SendEditNoteUpdateNotification;
 
 function checkRoles()
 {
@@ -98,6 +99,28 @@ function sendNewNewNoteUploadNotification($noteDetail)
     if (!empty($moderators)) {
         foreach ($moderators as $moderator) {
             $moderator->notify(new NotesUploadedNotification($data));
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function sendEditNotesUpdateNotification($noteDetail)
+{
+    $subject_uuid = $noteDetail->subject_uuid;
+    $moderators = user()->whereHas('moderator', function ($query) use ($subject_uuid) {
+        $query->where('subject_uuid', $subject_uuid);
+    })->get();
+
+    $data = [
+        'title' => $noteDetail->title,
+        'icon' => 'mdi mdi-file-image',
+        'url' => '/moderator/notes',
+    ];
+    if (!empty($moderators)) {
+        foreach ($moderators as $moderator) {
+            $moderator->notify(new SendEditNoteUpdateNotification($data));
         }
         return true;
     } else {

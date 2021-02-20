@@ -34,7 +34,7 @@
                 <td><a class="text-primary" href="{{route($route.'.show',$note->uuid)}}">{{$note->title}}</a></td>
                 <td>
                     {!! getVerifyBadge($note->approve) !!}
-                    @if($note->approve == 0)
+                    @if($note->approve == 0 || $note->approve ==4)
                         <a class="btn btn-sm btn-success text-white" data-toggle="modal"
                            data-target="#approve-{{$note->id}}" title="APPROVE">
                             <i class="mdi mdi-check"></i>

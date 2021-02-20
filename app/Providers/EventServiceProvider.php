@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Notes;
 use App\Models\Streams;
 use App\Models\User;
+use App\Observers\NotesObserver;
 use App\Observers\StreamObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -34,5 +36,6 @@ class EventServiceProvider extends ServiceProvider
 
         User::observe(UserObserver::class);
         Streams::observe(StreamObserver::class);
+        Notes::observe(NotesObserver::class);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AdminProfileRequest extends FormRequest
 {
@@ -25,7 +26,8 @@ class AdminProfileRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'mobile' => 'required|unique:users',
+            'mobile' => ['required',
+                Rule::unique('users')->ignore(auth()->user()->id)],
             'image' =>  'sometimes|mimes:jpg,jpeg,png|max:1024',
 
         ];

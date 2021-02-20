@@ -7,6 +7,7 @@ use App\Http\Resources\AllPackageListResource;
 use App\Http\Resources\GetModeratorPostsResource;
 use App\Http\Resources\GetProfessorListResource;
 use App\Http\Resources\GetStudentListResource;
+use App\Http\Resources\GetStudentProfessorNotesResource;
 use App\Http\Resources\ProfessorGetProfileResource;
 use App\Http\Resources\StudentGetProfileResource;
 use App\Http\Resources\StudentPackageListResource;
@@ -16,6 +17,7 @@ use App\Mail\ProfessorRegistraionOtp;
 use App\Mail\StudentRegistraionOtp;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
@@ -651,11 +653,8 @@ class ApiService
             'subject_uuid' => 'required|size:36',
             'title' => 'required',
             'description' => 'required',
-            'image_files' => 'array',
             'image_files.*' => 'mimes:jpeg,png,jpg',
-            'pdf_files' => 'array',
             'pdf_files.*' => 'sometimes|mimes:pdf',
-            'audio_files' => 'array',
             'audio_files.*' => 'sometimes|mimes:mp3',
         ]);
         return $this->validationResponse($validate);
@@ -949,4 +948,149 @@ class ApiService
         }
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
+    public function getUserNotesValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return GetStudentProfessorNotesResource|array
+     */
+    public function getUserNotes($request)
+    {
+        $userDetail = getUserDetail($request->user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+        $allNotes = notes()->where('user_uuid',$userDetail->uuid)->ofOrderBy('DESC')->get();
+        if ($allNotes->isNotEmpty()) {
+            $returnData = GetStudentProfessorNotesResource::collection($allNotes)->toArray($request);
+            return ['success' => true, 'message' => trans('api.user_uploaded_notes'), 'data' => $returnData];
+        } else {
+            return ['success' => false, 'message' => trans('api.user_with_no_notes')];
+        }
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    public function deleteUserNotesValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'note_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return GetStudentProfessorNotesResource|array
+     */
+    public function deleteUserNotes($request)
+    {
+        $note_uuid = $request->note_uuid;
+        if(notes()->where('uuid',$note_uuid)->count()  > 0){
+            $noteDetail = notes()->where('uuid',$note_uuid)->first();
+            if ($noteDetail->delete()) {
+                return ['success' => true, 'message' => trans('api.user_note_deleted')];
+            } else {
+                return ['success' => false, 'message' => trans('api.fail')];
+            }
+        }else{
+            return ['success' => false, 'message' => trans('api.note_not_found')];
+        }
+
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    public function editUserNotesValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+            'note_uuid' => 'required|size:36',
+            'title' => 'required',
+            'description' => 'required',
+            'image_files.*' => 'mimes:jpeg,png,jpg',
+            'pdf_files.*' => 'sometimes|mimes:pdf',
+            'audio_files.*' => 'sometimes|mimes:mp3',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return GetStudentProfessorNotesResource|array
+     */
+    public function editUserNotes($request)
+    {
+        $note_uuid = $request->note_uuid;
+        $user_uuid = $request->user_uuid;
+        if(notes()->where('uuid',$note_uuid)->where('user_uuid',$user_uuid)->count()  > 0){
+            $notesArray = $request->except('_token', '_method', 'image_files', 'pdf_files', 'audio_files');
+            $noteDetail = notes()->where('uuid',$note_uuid)->first();
+            $notesArray['approve'] = 4;
+            $updateNotes = $noteDetail->update($notesArray);
+            $noteDetail->increment('edited_count');
+            if ($updateNotes) {
+                $notes_uuid = $noteDetail->uuid;
+                if(!empty($noteDetail->image_files)){
+                    foreach ($noteDetail->image_files as $list){
+                        if(File::exists(public_path($list->file_path))){
+                            File::delete(public_path($list->file_path));
+                        }
+                    }
+                }
+                $noteDetail->image_files()->delete();
+                if(!empty($noteDetail->pdf_files)){
+                    foreach ($noteDetail->pdf_files as $list){
+                        if(File::exists(public_path($list->file_path))){
+                            File::delete(public_path($list->file_path));
+                        }
+                    }
+                }
+                $noteDetail->pdf_files()->delete();
+                if(!empty($noteDetail->audio_files)){
+                    foreach ($noteDetail->audio_files as $list){
+                        if(File::exists(public_path($list->file_path))){
+                            File::delete(public_path($list->file_path));
+                        }
+                    }
+                }
+                $noteDetail->audio_files()->delete();
+
+                $image_files = $request->image_files;
+                if (!empty($image_files)) {
+                    uploadNotesFiles($image_files, $notes_uuid, 'IMAGE');
+                }
+                $pdf_files = $request->pdf_files;
+                if (!empty($pdf_files)) {
+                    uploadNotesFiles($pdf_files, $notes_uuid, 'PDF');
+                }
+                $audio_files = $request->audio_files;
+                if (!empty($audio_files)) {
+                    uploadNotesFiles($audio_files, $notes_uuid, 'AUDIO');
+                }
+
+                sendEditNotesUpdateNotification($noteDetail);
+                return ['success' => true, 'message' => trans('api.notes_edited')];
+            } else {
+                return ['success' => false, 'message' => trans('api.fail')];
+            }
+        }else{
+            return ['success' => false, 'message' => trans('api.note_not_found')];
+        }
+
+    }
 }

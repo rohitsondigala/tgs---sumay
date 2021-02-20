@@ -114,6 +114,10 @@ class ApiController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function states(Request $request)
     {
         $validate = Validator::make($request->all(), [
@@ -137,6 +141,11 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => 'No State Found', ], 200);
         }
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function cities(Request $request)
     {
         $validate = Validator::make($request->all(), [
@@ -370,6 +379,10 @@ class ApiController extends Controller
         return response()->json($this->apiService->changePassword($request));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function editUserProfile(Request  $request){
         $validation = $this->apiService->editUserProfileListValidationRules($request);
         if (!$validation['success']) {
@@ -382,6 +395,10 @@ class ApiController extends Controller
         return response()->json($this->apiService->editUserProfile($request));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateUserProfile(Request  $request){
         $validation = $this->apiService->updateUserProfileListValidationRules($request);
         if (!$validation['success']) {
@@ -523,5 +540,54 @@ class ApiController extends Controller
         }
         return response()->json($this->apiService->userChangePassword($request));
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserNotes(Request  $request){
+        $validation = $this->apiService->getUserNotesValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->getUserNotes($request));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteUserNotes(Request  $request){
+        $validation = $this->apiService->deleteUserNotesValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->deleteUserNotes($request));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function userEditNotes(Request  $request){
+        $validation = $this->apiService->editUserNotesValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->editUserNotes($request));
+    }
+
 
 }

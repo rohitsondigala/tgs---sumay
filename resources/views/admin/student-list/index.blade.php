@@ -10,7 +10,8 @@
             </div>
 
             <div class="card-body">
-                @include($directory.'.list')
+                @livewire('admin.student-list')
+{{--                @include($directory.'.list')--}}
             </div>
         </div>
     </div>
