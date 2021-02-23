@@ -899,18 +899,18 @@ class ApiService
 
 
         if ($userDetail->role->title == 'PROFESSOR') {
-            $userDetail = professor_details()->where('user_uuid', $user_uuid)->update(
+            $userDetailUpdate = professor_details()->where('user_uuid', $user_uuid)->update(
                 $request->only(['university_name', 'college_name', 'preferred_language', 'other_information', 'achievements', 'research_of_expertise'])
             );
         } else {
-            $userDetail = student_details()->where('user_uuid', $user_uuid)->update(
+            $userDetailUpdate = student_details()->where('user_uuid', $user_uuid)->update(
                 $request->only(['university_name', 'college_name', 'preferred_language', 'other_information'])
             );
         }
 
-        if ($userUpdate && $userDetail) {
-            if(!empty($userArray['image'])){
-                $image = env('APP_URL').$userArray['image'];
+        if ($userUpdate && $userDetailUpdate) {
+            if(!empty($userDetail->image)){
+                $image = env('APP_URL').$userDetail->image;
             }else{
                 $image = null;
             }
