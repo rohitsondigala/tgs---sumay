@@ -909,6 +909,7 @@ class ApiService
         }
 
         if ($userUpdate && $userDetailUpdate) {
+            $userDetail = getUserDetail($user_uuid);
             if(!empty($userDetail->image)){
                 $image = env('APP_URL').$userDetail->image;
             }else{
