@@ -909,7 +909,12 @@ class ApiService
         }
 
         if ($userUpdate && $userDetail) {
-            return ['success' => true, 'message' => trans('api.user_updated')];
+            if(!empty($userArray['image'])){
+                $image = env('APP_URL').$userArray['image'];
+            }else{
+                $image = null;
+            }
+            return ['success' => true, 'message' => trans('api.user_updated'),'full_image_path'=>$image];
         } else {
             return ['success' => false, 'message' => trans('api.fail_to_update')];
         }
