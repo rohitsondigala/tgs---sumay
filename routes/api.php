@@ -46,5 +46,8 @@ Route::group([
     Route::post('/get-user-notes',[ApiController::class,'getUserNotes'])->name('get-user-notes');
     Route::post('/delete-user-notes',[ApiController::class,'deleteUserNotes'])->name('delete-user-notes');
     Route::post('/edit-user-notes',[ApiController::class,'userEditNotes'])->name('user-edit-notes');
+    Route::post('/student-purchase-subjects',[ApiController::class,'studentPurchasedSubjects'])->name('student-purchased-subjects');
+    Route::post('/add-review',[ApiController::class,'addReview'])->name('add-review');
+    Route::post('/get-submitted-reviews',[ApiController::class,'getSubmittedReviews'])->name('get-submitted-reviews');
 
 });

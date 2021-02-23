@@ -589,5 +589,55 @@ class ApiController extends Controller
         return response()->json($this->apiService->editUserNotes($request));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function studentPurchasedSubjects(Request  $request)
+    {
+        $validation = $this->apiService->studentPurchasedSubjectsValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->studentPurchasedSubjects($request));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addReview(Request  $request)
+    {
+        $validation = $this->apiService->addReviewValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->addReview($request));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getSubmittedReviews(Request  $request)
+    {
+        $validation = $this->apiService->getSubmittedReviewsValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->getSubmittedReviews($request));
+    }
 
 }

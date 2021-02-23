@@ -143,3 +143,11 @@ function notes(){
 function notes_files(){
     return app(App\Models\NotesFiles::class);
 }
+
+
+/**
+ * @return Application|mixed
+ */
+function reviews(){
+    return app(App\Models\Reviews::class);
+}

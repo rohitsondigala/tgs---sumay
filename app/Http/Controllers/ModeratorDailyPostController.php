@@ -76,8 +76,8 @@ class ModeratorDailyPostController extends Controller
         $route = route($this->route.'.index');
         $request->merge(['slug'=>Str::slug($request->title)]);
         $parameters = $request->except('_method','_token','image');
-        $filePath = uploadMedia($request->image,'daily-posts');
-        $parameters['image'] = $filePath;
+//        $filePath = uploadMedia($request->image,'daily-posts');
+//        $parameters['image'] = $filePath;
         $parameters['user_uuid'] =auth()->user()->uuid;
         $parameters['moderator_subject_uuid'] =auth()->user()->moderator->uuid;
         $store = $this->moderatorService->storeData($parameters,moderator_daily_posts(),'daily_post');

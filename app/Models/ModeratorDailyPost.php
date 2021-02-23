@@ -28,7 +28,7 @@ class ModeratorDailyPost extends Model
         return $query->where('user_uuid',auth()->user()->user_uuid);
     }
     public function moderator_subject(){
-        return $this->hasMany('App\Models\ModeratorSubject','uuid','moderator_subject_uuid');
+        return $this->hasOne('App\Models\ModeratorSubject','uuid','moderator_subject_uuid');
     }
 
     public function getFullImagePathAttribute()

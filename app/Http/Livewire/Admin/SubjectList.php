@@ -31,7 +31,7 @@ class SubjectList extends Component
           $query->where('title','like','%'.$this->searchWords.'%');
         })->orWhere('title','like','%'.$this->searchWords.'%');
 
-        $subjects = $subjects->paginate($this->perPage);
+        $subjects = $subjects->orderBy('id','DESC')->paginate($this->perPage);
         return view('admin.masters.subjects.list',compact('subjects','streamList'));
     }
 }

@@ -36,13 +36,7 @@
                             <span class="text text-danger">{{$errors->first('description')}}</span>
                         @endif
                     </div>
-                    <div class="form-group col-md-12">
-                        <label>{{__('Image')}}</label><br>
-                        {!! Form::file('image',['id'=>'photograph']) !!}<br>
-                        @if($errors->has('image'))
-                            <span class="text text-danger">{{$errors->first('image')}}</span>
-                        @endif
-                    </div>
+
                     <div class="col-md-12">
                         <div class="row">
 

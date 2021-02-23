@@ -10,12 +10,15 @@ use App\Http\Resources\GetStudentListResource;
 use App\Http\Resources\GetStudentProfessorNotesResource;
 use App\Http\Resources\ProfessorGetProfileResource;
 use App\Http\Resources\StudentGetProfileResource;
+use App\Http\Resources\StudentGetReviewsResource;
 use App\Http\Resources\StudentPackageListResource;
+use App\Http\Resources\StudentPurchasedSubjectsResource;
 use App\Http\Resources\UserGetNotesResource;
 use App\Mail\ForgotPasswordOtp;
 use App\Mail\ProfessorRegistraionOtp;
 use App\Mail\StudentRegistraionOtp;
 use Carbon\Carbon;
+use http\Env\Request;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -109,6 +112,10 @@ class ApiService
             }
         } else {
             $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city', 'stream_uuid');
+            if (!empty($request->image)) {
+                $filePath = uploadMedia($request->image, 'profile');
+                $userArray['image'] = $filePath;
+            }
             $userArray['password'] = bcrypt($request->password);
             $userArray['role_uuid'] = student_role_uuid();
             $user = user()->create($userArray);
@@ -216,6 +223,10 @@ class ApiService
             $userArray = $request->only('name', 'email', 'mobile', 'country', 'state', 'city', 'stream_uuid');
             $userArray['role_uuid'] = professor_role_uuid();
             $userArray['password'] = bcrypt($request->password);
+            if (!empty($request->image)) {
+                $filePath = uploadMedia($request->image, 'profile');
+                $userArray['image'] = $filePath;
+            }
             $user = user()->create($userArray);
             return $this->professorCreate($user, $request);
         }
@@ -793,6 +804,7 @@ class ApiService
         }
 
         $existingSubjects = getStudentSubjects($userDetail);
+
         $studentList = professor_subjects()
             ->where('user_uuid', '!=', $userDetail->uuid)
             ->whereIn('subject_uuid', $existingSubjects)
@@ -801,7 +813,7 @@ class ApiService
 
         if ($studentList->isNotEmpty()) {
             $returnData = GetProfessorListResource::collection($studentList)->toArray($request);
-            return ['success' => true, 'message' => trans('api.get_student_list'), 'data' => $returnData];
+            return ['success' => true, 'message' => trans('api.get_professor_list'), 'data' => $returnData];
         } else {
             return ['success' => false, 'message' => trans('api.no_student_to_related_subjects')];
         }
@@ -1092,5 +1104,97 @@ class ApiService
             return ['success' => false, 'message' => trans('api.note_not_found')];
         }
 
+    }
+    /**
+     * @param $request
+     * @return array
+     */
+    public function studentPurchasedSubjectsValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    function studentPurchasedSubjects($request)
+    {
+        $user_uuid = $request->user_uuid;
+        $userDetail = getUserDetail($user_uuid);
+        if (!$userDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+        $packageList = purchased_packages()->where('user_uuid', $user_uuid)->where('is_purchased', 1)->get();
+        if ($packageList->isEmpty()) {
+            return ['success' => false, 'message' => trans('api.user_with_not_packages')];
+        } else {
+            $returnData = StudentPurchasedSubjectsResource::collection($packageList)->toArray($request);
+            return ['success' => true, 'message' => trans('api.student_purchased_subjects'), 'data' => $returnData];
+        }
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    public function addReviewValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'from_user_uuid' => 'required|size:36',
+            'to_user_uuid' => 'required|size:36',
+            'subject_uuid' => 'required|size:36',
+            'rating' => 'required',
+            'description' => 'required',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    function addReview($request)
+    {
+        $subject_uuid = $request->subject_uuid;
+        $from_user_uuid = $request->from_user_uuid;
+        $fromUserDetail = getUserDetail($from_user_uuid);
+
+        $to_user_uuid = $request->to_user_uuid;
+        $toUserDetail = getUserDetail($to_user_uuid);
+
+        if (!$fromUserDetail && !$toUserDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+
+        if(subjects()->where('uuid',$subject_uuid)->count() <= 0){
+            return ['success' => false, 'message' => trans('api.subject_not_found')];
+        }
+
+        if (reviews()->create($request->except(['_token','_method']))) {
+            return ['success' => true, 'message' => trans('api.review_added')];
+        } else {
+            return ['success' => false, 'message' => trans('api.fail')];
+        }
+    }
+
+    public function getSubmittedReviewsValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'from_user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+
+    function getSubmittedReviews($request){
+        $from_user_uuid = $request->from_user_uuid;
+        $fromUserDetail = getUserDetail($from_user_uuid);
+
+        if (!$fromUserDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+        $reviews = reviews()->where('from_user_uuid', $from_user_uuid)->orderBy('id','DESC')->get();
+        if ($reviews->isEmpty()) {
+            return ['success' => false, 'message' => trans('api.no_review_found')];
+        } else {
+            $returnData = StudentGetReviewsResource::collection($reviews)->toArray($request);
+            return ['success' => true, 'message' => trans('api.reviews'), 'data' => $returnData];
+        }
     }
 }

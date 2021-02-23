@@ -28,7 +28,7 @@ class ModeratorDailPostRequest extends FormRequest
             'description' =>'required',
         ];
         if($this->method() == 'POST'){
-            $rules['image'] = 'required|mimes:jpg,jpeg,png|max:1024';
+//            $rules['image'] = 'required|mimes:jpg,jpeg,png|max:1024';
         }
         return $rules;
 

@@ -16,7 +16,9 @@ class GetModeratorPostsResource extends JsonResource
     {
         $returnData = array();
         $returnData['uuid'] = $this->uuid;
-        $returnData['image_path'] = $this->full_image_path;
-//        $returnData['subject']['uuid'] = $this->moderator_subject->subject->title;
+        $returnData['title'] = $this->title;
+        $returnData['description'] = $this->description;
+        $returnData['subject']['uuid'] = !empty($this->moderator_subject) ? $this->moderator_subject->subject->uuid : null;
+        $returnData['subject']['title'] = !empty($this->moderator_subject) ? $this->moderator_subject->subject->title : null;
         return $returnData;    }
 }

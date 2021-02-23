@@ -38,5 +38,11 @@ return [
     'user_uploaded_notes' => 'Notes List',
     'note_not_found' => 'Incorrect notes detail entered',
     'user_note_deleted' => 'Note deleted successfully',
-    'notes_edited' => 'Notes edited successfully'
+    'notes_edited' => 'Notes edited successfully',
+    'student_purchased_subjects' => 'Student purchased subjects',
+    'subject_not_found'=>'Subject not found',
+    'review_added' => 'Review added successfully',
+    'get_professor_list' => 'Professor List',
+    'reviews' => 'Reviews',
+    'no_review_found' => 'No review found'
 ];
