@@ -38,6 +38,7 @@ class GetProfessorListResource extends JsonResource
         $returnData['city']['title'] = $this->user->city_detail->name;
         $returnData['full_image_path'] = $this->user->full_image_path;
         $returnData['rating'] = 0;
+        $returnData['is_review'] = 0;
         $returnData['total_reviews'] = 0;
         $returnData['total_notes'] = 0;
         $returnData['total_queries'] = 0;
