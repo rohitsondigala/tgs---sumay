@@ -26,10 +26,10 @@
                 @endif
             </td>
             <td>
-                <a href="{{route($route.'.show',$list->uuid)}}">Activites </a>
+                <a href="{{route($route.'.show',$list->uuid)}}">Activities </a>
                 <span>|</span>
-                <a href="{{route($route.'.show',$list->uuid)}}">Edit </a>
-
+                <a href="{{route($route.'.show',$list->uuid)}}">View </a>
+            </td>
         </tr>
     @empty
         @include('common.no-record-found')
