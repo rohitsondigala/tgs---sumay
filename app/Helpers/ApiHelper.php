@@ -129,7 +129,11 @@ function sendEditNotesUpdateNotification($noteDetail)
 }
 
 function getStudentSubjects($userDetail){
-    $subjects = $userDetail->student_subjects;
+    $roleTitle = $userDetail->role->title;
+    $subjects = ($roleTitle == 'PROFESSOR')
+        ? $userDetail->professor_subjects
+        : $userDetail->student_subjects;
+//    $subjects = $userDetail->student_subjects;
     if (!empty($subjects)) {
         $subjectList = array();
         foreach ($subjects as $list) {
@@ -139,6 +143,8 @@ function getStudentSubjects($userDetail){
     } else {
         return false;
     }
+
+
 }
 
 function getStudentSubjectsPurchased($userDetail){

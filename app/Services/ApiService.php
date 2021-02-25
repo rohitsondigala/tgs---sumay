@@ -10,6 +10,7 @@ use App\Http\Resources\GetStudentListResource;
 use App\Http\Resources\GetStudentProfessorNotesResource;
 use App\Http\Resources\ProfessorGetProfileResource;
 use App\Http\Resources\ProfessorGetQueryResource;
+use App\Http\Resources\ProfessorGetReviewsResource;
 use App\Http\Resources\StudentGetProfileResource;
 use App\Http\Resources\StudentGetReviewsResource;
 use App\Http\Resources\StudentPackageListResource;
@@ -1212,11 +1213,20 @@ class ApiService
         if (!$fromUserDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
-        $reviews = reviews()->where('from_user_uuid', $from_user_uuid)->orderBy('id','DESC')->get();
+
+        if($fromUserDetail->role->title == "STUDENT"){
+            $reviews = reviews()->where('from_user_uuid', $from_user_uuid)->orderBy('id','DESC')->get();
+        }else{
+            $reviews = reviews()->where('to_user_uuid', $from_user_uuid)->orderBy('id','DESC')->get();
+        }
         if ($reviews->isEmpty()) {
             return ['success' => false, 'message' => trans('api.no_review_found')];
         } else {
-            $returnData = StudentGetReviewsResource::collection($reviews)->toArray($request);
+            if($fromUserDetail->role->title == "STUDENT") {
+                $returnData = StudentGetReviewsResource::collection($reviews)->toArray($request);
+            }else{
+                $returnData = ProfessorGetReviewsResource::collection($reviews)->toArray($request);
+            }
             return ['success' => true, 'message' => trans('api.reviews'), 'data' => $returnData];
         }
     }
