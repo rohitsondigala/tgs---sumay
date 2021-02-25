@@ -14,3 +14,4 @@ yarn-error.log
 /public/uploads
 workspace.xml
 /config/mail.php
+.idea

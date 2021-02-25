@@ -12,6 +12,7 @@ use App\Http\Resources\ProfessorGetProfileResource;
 use App\Http\Resources\ProfessorGetQueryResource;
 use App\Http\Resources\ProfessorGetReviewsResource;
 use App\Http\Resources\StudentGetProfileResource;
+use App\Http\Resources\StudentGetQueryResource;
 use App\Http\Resources\StudentGetReviewsResource;
 use App\Http\Resources\StudentPackageListResource;
 use App\Http\Resources\StudentPurchasedSubjectsResource;
@@ -1290,10 +1291,10 @@ class ApiService
      * @param $request
      * @return array
      */
-    public function professorGetQueryValidationRules($request)
+    public function userGetQueryValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
-            'to_user_uuid' => 'required|size:36',
+            'user_uuid' => 'required|size:36',
         ]);
         return $this->validationResponse($validate);
     }
@@ -1302,18 +1303,26 @@ class ApiService
      * @param $request
      * @return array
      */
-    function professorGetQuery($request){
-        $to_user_uuid = $request->to_user_uuid;
-        $toUserDetail = getUserDetail($to_user_uuid);
+    function userGetQuery($request){
+        $user_uuid = $request->user_uuid;
+        $userDetail = getUserDetail($user_uuid);
 
-        if (!$toUserDetail) {
+        if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
-        $reviews = post_query()->where('to_user_uuid', $to_user_uuid)->orderBy('id','DESC')->get();
+        if($userDetail->role->title == 'STUDENT'){
+            $reviews = post_query()->where('from_user_uuid', $user_uuid)->orderBy('id','DESC')->get();
+        }else{
+            $reviews = post_query()->where('to_user_uuid', $user_uuid)->orderBy('id','DESC')->get();
+        }
         if ($reviews->isEmpty()) {
             return ['success' => false, 'message' => trans('api.no_queries_found')];
         } else {
-            $returnData = ProfessorGetQueryResource::collection($reviews)->toArray($request);
+            if($userDetail->role->title == 'STUDENT') {
+                $returnData = StudentGetQueryResource::collection($reviews)->toArray($request);
+            }else{
+                $returnData = ProfessorGetQueryResource::collection($reviews)->toArray($request);
+            }
             return ['success' => true, 'message' => trans('api.queries'), 'data' => $returnData];
         }
     }

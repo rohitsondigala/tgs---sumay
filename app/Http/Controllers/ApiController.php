@@ -662,9 +662,9 @@ class ApiController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function professorGetQuery(Request  $request)
+    public function userGetQuery(Request  $request)
     {
-        $validation = $this->apiService->professorGetQueryValidationRules($request);
+        $validation = $this->apiService->userGetQueryValidationRules($request);
         if (!$validation['success']) {
             return response()->json([
                 'success' => $validation['success'],
@@ -672,7 +672,7 @@ class ApiController extends Controller
 
             ], 200);
         }
-        return response()->json($this->apiService->professorGetQuery($request));
+        return response()->json($this->apiService->userGetQuery($request));
     }
 
     /**

@@ -50,7 +50,7 @@ Route::group([
     Route::post('/add-review',[ApiController::class,'addReview'])->name('add-review');
     Route::post('/get-submitted-reviews',[ApiController::class,'getSubmittedReviews'])->name('get-submitted-reviews');
     Route::post('/post-query',[ApiController::class,'postQuery'])->name('post-query');
-    Route::post('/professor-get-query',[ApiController::class,'professorGetQuery'])->name('professor-get-query');
+    Route::post('/user-get-query',[ApiController::class,'userGetQuery'])->name('user-get-query');
     Route::post('/professor-reply-query',[ApiController::class,'professorReplyQuery'])->name('professor-reply-query');
 
 });
