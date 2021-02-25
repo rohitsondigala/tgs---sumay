@@ -44,5 +44,11 @@ return [
     'review_added' => 'Review added successfully',
     'get_professor_list' => 'Professor List',
     'reviews' => 'Reviews',
-    'no_review_found' => 'No review found'
+    'no_review_found' => 'No review found',
+    'query_uploaded' => 'Query posted',
+    'no_queries_found' => 'No student queries found',
+    'queries' => 'Student Queries',
+    'posted_query_not_found' => 'Posted query not found in our list',
+    'replied'=>'Your reply submitted successfully',
+    'already_replied' => 'You have already replied to this query'
 ];

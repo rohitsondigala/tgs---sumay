@@ -156,3 +156,50 @@ function getStudentSubjectsPurchased($userDetail){
     }
 }
 
+
+function uploadPostQueryFiles($files, $post_query_uuid,$file_type)
+{
+    foreach ($files as $file) {
+        $fileType = $file_type;
+        $fileMimeType = $file->getMimeType();
+        $fileSize = $file->getSize();
+        $fileName = $file->getClientOriginalName();
+        $filePath = uploadMedia($file, 'notes');
+        $fileArray = [
+            'post_query_uuid' => $post_query_uuid,
+            'file_name' => $fileName,
+            'file_type' => $fileType,
+            'file_mime_type' => $fileMimeType,
+            'file_size' => $fileSize,
+            'file_path' => $filePath,
+            'status' => 1
+        ];
+        post_query_files()->create($fileArray);
+    }
+    return true;
+}
+
+
+function uploadPostQueryReplyFiles($files, $post_reply_uuid,$file_type)
+{
+    foreach ($files as $file) {
+        $fileType = $file_type;
+        $fileMimeType = $file->getMimeType();
+        $fileSize = $file->getSize();
+        $fileName = $file->getClientOriginalName();
+        $filePath = uploadMedia($file, 'notes');
+        $fileArray = [
+            'post_reply_uuid' => $post_reply_uuid,
+            'file_name' => $fileName,
+            'file_type' => $fileType,
+            'file_mime_type' => $fileMimeType,
+            'file_size' => $fileSize,
+            'file_path' => $filePath,
+            'status' => 1
+        ];
+        post_query_reply_files()->create($fileArray);
+    }
+    return true;
+}
+
+

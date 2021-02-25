@@ -9,6 +9,7 @@ use App\Http\Resources\GetProfessorListResource;
 use App\Http\Resources\GetStudentListResource;
 use App\Http\Resources\GetStudentProfessorNotesResource;
 use App\Http\Resources\ProfessorGetProfileResource;
+use App\Http\Resources\ProfessorGetQueryResource;
 use App\Http\Resources\StudentGetProfileResource;
 use App\Http\Resources\StudentGetReviewsResource;
 use App\Http\Resources\StudentPackageListResource;
@@ -1123,6 +1124,10 @@ class ApiService
         return $this->validationResponse($validate);
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     function studentPurchasedSubjects($request)
     {
         $user_uuid = $request->user_uuid;
@@ -1155,6 +1160,10 @@ class ApiService
         return $this->validationResponse($validate);
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     function addReview($request)
     {
         $subject_uuid = $request->subject_uuid;
@@ -1179,6 +1188,10 @@ class ApiService
         }
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     public function getSubmittedReviewsValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
@@ -1188,6 +1201,10 @@ class ApiService
     }
 
 
+    /**
+     * @param $request
+     * @return array
+     */
     function getSubmittedReviews($request){
         $from_user_uuid = $request->from_user_uuid;
         $fromUserDetail = getUserDetail($from_user_uuid);
@@ -1201,6 +1218,147 @@ class ApiService
         } else {
             $returnData = StudentGetReviewsResource::collection($reviews)->toArray($request);
             return ['success' => true, 'message' => trans('api.reviews'), 'data' => $returnData];
+        }
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function postQueryValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'from_user_uuid' => 'required|size:36',
+            'to_user_uuid' => 'required|size:36',
+            'subject_uuid' => 'required|size:36',
+            'title' => 'required',
+            'description' => 'required',
+            'image_files.*' => 'mimes:jpeg,png,jpg',
+            'pdf_files.*' => 'sometimes|mimes:pdf',
+            'audio_files.*' => 'sometimes|mimes:mp3',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function postQuery($request)
+    {
+        $streamUUID = getStreamUUIDbySubjectUUID($request->subject_uuid);
+        if (!$streamUUID) {
+            return ['success' => false, 'message' => trans('api.subject_not_registered')];
+        }
+
+        $request->merge(['stream_uuid' => $streamUUID, 'slug' => Str::slug($request->title)]);
+        $notesDetail = $request->except('_token', '_method', 'image_files', 'pdf_files', 'audio_files');
+
+        $createNotes = post_query()->create($notesDetail);
+        if ($createNotes) {
+            $notes_uuid = $createNotes->uuid;
+            $image_files = $request->image_files;
+            if (!empty($image_files)) {
+                uploadPostQueryFiles($image_files, $notes_uuid, 'IMAGE');
+            }
+            $pdf_files = $request->pdf_files;
+            if (!empty($pdf_files)) {
+                uploadPostQueryFiles($pdf_files, $notes_uuid, 'PDF');
+            }
+            $audio_files = $request->audio_files;
+            if (!empty($audio_files)) {
+                uploadPostQueryFiles($audio_files, $notes_uuid, 'AUDIO');
+            }
+//            sendNewNewNoteUploadNotification($createNotes);
+            return ['success' => true, 'message' => trans('api.query_uploaded')];
+        } else {
+            return ['success' => false, 'message' => trans('api.fail')];
+        }
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    public function professorGetQueryValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'to_user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function professorGetQuery($request){
+        $to_user_uuid = $request->to_user_uuid;
+        $toUserDetail = getUserDetail($to_user_uuid);
+
+        if (!$toUserDetail) {
+            return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+        $reviews = post_query()->where('to_user_uuid', $to_user_uuid)->orderBy('id','DESC')->get();
+        if ($reviews->isEmpty()) {
+            return ['success' => false, 'message' => trans('api.no_queries_found')];
+        } else {
+            $returnData = ProfessorGetQueryResource::collection($reviews)->toArray($request);
+            return ['success' => true, 'message' => trans('api.queries'), 'data' => $returnData];
+        }
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function professorReplyQueryValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'post_query_uuid' => 'required|size:36',
+            'description' => 'required',
+            'image_files.*' => 'mimes:jpeg,png,jpg',
+            'pdf_files.*' => 'sometimes|mimes:pdf',
+            'audio_files.*' => 'sometimes|mimes:mp3',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function professorReplyQuery($request)
+    {
+        $post_query_uuid = $request->post_query_uuid;
+        if (post_query()->where('uuid',$post_query_uuid)->count() <= 0) {
+            return ['success' => false, 'message' => trans('api.posted_query_not_found')];
+        }else{
+            $postDetail = post_query()->where('uuid',$post_query_uuid)->first();
+            if($postDetail->post_reply()->count() > 0){
+                return ['success' => false, 'message' => trans('api.already_replied')];
+            }
+        }
+        $notesDetail = $request->except('_token', '_method', 'image_files', 'pdf_files', 'audio_files');
+        $postQueryReply = post_query_reply()->create($notesDetail);
+        if ($postQueryReply) {
+            $notes_uuid = $postQueryReply->uuid;
+            $image_files = $request->image_files;
+            if (!empty($image_files)) {
+                uploadPostQueryReplyFiles($image_files, $notes_uuid, 'IMAGE');
+            }
+            $pdf_files = $request->pdf_files;
+            if (!empty($pdf_files)) {
+                uploadPostQueryReplyFiles($pdf_files, $notes_uuid, 'PDF');
+            }
+            $audio_files = $request->audio_files;
+            if (!empty($audio_files)) {
+                uploadPostQueryReplyFiles($audio_files, $notes_uuid, 'AUDIO');
+            }
+//            sendNewNewNoteUploadNotification($createNotes);
+            return ['success' => true, 'message' => trans('api.replied')];
+        } else {
+            return ['success' => false, 'message' => trans('api.fail')];
         }
     }
 }

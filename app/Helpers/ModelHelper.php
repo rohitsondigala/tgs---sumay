@@ -151,3 +151,31 @@ function notes_files(){
 function reviews(){
     return app(App\Models\Reviews::class);
 }
+
+/**
+ * @return Application|mixed
+ */
+function post_query(){
+    return app(App\Models\PostQuery::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function post_query_files(){
+    return app(App\Models\PostQueryFiles::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function post_query_reply(){
+    return app(App\Models\PostQueryReply::class);
+}
+
+/**
+ * @return Application|mixed
+ */
+function post_query_reply_files(){
+    return app(App\Models\PostQueryReplyFiles::class);
+}

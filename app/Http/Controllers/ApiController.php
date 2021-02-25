@@ -640,4 +640,59 @@ class ApiController extends Controller
         return response()->json($this->apiService->getSubmittedReviews($request));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function postQuery(Request  $request)
+    {
+        $validation = $this->apiService->postQueryValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->postQuery($request));
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function professorGetQuery(Request  $request)
+    {
+        $validation = $this->apiService->professorGetQueryValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->professorGetQuery($request));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function professorReplyQuery(Request  $request)
+    {
+        $validation = $this->apiService->professorReplyQueryValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->professorReplyQuery($request));
+    }
+
+
+
+
 }
