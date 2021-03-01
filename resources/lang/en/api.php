@@ -50,5 +50,11 @@ return [
     'queries' => 'Student Queries',
     'posted_query_not_found' => 'Posted query not found in our list',
     'replied'=>'Your reply submitted successfully',
-    'already_replied' => 'You have already replied to this query'
+    'already_replied' => 'You have already replied to this query',
+    'note_file_not_found' => 'Note file not found',
+    'note_file_deleted' => 'Note file deleted successfully',
+    'user_with_this_subject_not_found' => 'User with this subject not found',
+    'package_purchased' => 'Packaged purchased successfully',
+    'payment_fail' => 'Payment is fail',
+    'already_purchased' => 'Package is already purchased',
 ];

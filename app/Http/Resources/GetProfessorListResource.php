@@ -37,11 +37,11 @@ class GetProfessorListResource extends JsonResource
         $returnData['city']['uuid'] = $this->user->city_detail->id;
         $returnData['city']['title'] = $this->user->city_detail->name;
         $returnData['full_image_path'] = $this->user->full_image_path;
-        $returnData['rating'] = 0;
-        $returnData['is_review'] = 0;
-        $returnData['total_reviews'] = 0;
-        $returnData['total_notes'] = 0;
-        $returnData['total_queries'] = 0;
+        $returnData['rating'] = $this->user->reviews()->count() > 0 ? (float) number_format($this->user->reviews()->avg('rating'),1) :0;
+        $returnData['is_review'] = isReviewed($userDetail->uuid,$this->user->uuid);
+        $returnData['total_reviews'] = $this->user->reviews()->count();
+        $returnData['total_notes'] = $this->user->notes()->count();
+        $returnData['total_queries'] = $this->user->professor_post_queries()->count();
         if(in_array($this->subject->uuid,$existingSubjects)){
             $returnData['subject']['is_purchased'] = 1;
         }else{

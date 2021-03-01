@@ -39,8 +39,8 @@ class UserGetNotesResource extends JsonResource
             $returnData['user']['rating'] = 0;
             $returnData['user']['is_review'] = 0;
             $returnData['user']['total_reviews'] = 0;
-            $returnData['user']['total_notes'] = 0;
-            $returnData['user']['total_queries'] = 0;
+            $returnData['user']['total_notes'] = $this->user->notes()->count();
+            $returnData['user']['total_queries'] = $this->user->student_post_queries()->count();
         }else{
             $returnData['user']['university_name'] =  !empty($this->user->professor_detail) ? $this->user->professor_detail->university_name : null;
             $returnData['user']['college_name'] =  !empty($this->user->professor_detail) ? $this->user->professor_detail->college_name : null;
@@ -49,11 +49,12 @@ class UserGetNotesResource extends JsonResource
             $returnData['user']['achievements'] =  !empty($this->user->professor_detail) ? $this->user->professor_detail->achievements : null;
             $returnData['user']['research_of_expertise'] =  !empty($this->user->professor_detail)  ? $this->user->professor_detail->research_of_expertise : null;
             $returnData['user']['education_qualification'] = !empty($this->user->professor_detail)  ? $this->user->professor_detail->education_qualification : null;
-            $returnData['user']['rating'] = 0;
-            $returnData['user']['is_review'] = 0;
-            $returnData['user']['total_reviews'] = 0;
-            $returnData['user']['total_notes'] = 0;
-            $returnData['user']['total_queries'] = 0;
+            $returnData['user']['rating'] = $this->user->reviews()->count() > 0 ? (float) number_format($this->user->reviews()->avg('rating'),1) :0;
+            $returnData['user']['is_review'] = isReviewed($userDetail->uuid,$this->user->uuid);
+            $returnData['user']['total_reviews'] = $this->user->reviews()->count();
+            $returnData['user']['total_notes'] = $this->user->notes()->count();
+            $returnData['user']['total_queries'] = $this->user->professor_post_queries()->count();
+
         }
         $returnData['stream']['uuid'] = $this->stream->uuid;
         $returnData['stream']['title'] = $this->stream->title;

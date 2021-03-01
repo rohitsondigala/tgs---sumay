@@ -692,6 +692,41 @@ class ApiController extends Controller
         return response()->json($this->apiService->professorReplyQuery($request));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteNoteFile(Request  $request)
+    {
+        $validation = $this->apiService->deleteNoteFileValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->deleteNoteFile($request));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function purchasePackage(Request  $request)
+    {
+        $validation = $this->apiService->purchasePackageValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->purchasePackage($request));
+    }
+
+
 
 
 

@@ -40,8 +40,10 @@ class StudentGetProfileResource extends JsonResource
             $i = 0;
             foreach ($this->student_subjects as $subject) {
                 $i++;
-                $returnData['data']['subjects'][$i]['uuid'] = $subject->subject->uuid;
-                $returnData['data']['subjects'][$i]['title'] = $subject->subject->title;
+                if($subject->registration){
+                    $returnData['data']['subjects'][$i]['uuid'] = $subject->subject->uuid;
+                    $returnData['data']['subjects'][$i]['title'] = $subject->subject->title;
+                }
             }
         }else{
             $returnData['data']['subjects'] =[];

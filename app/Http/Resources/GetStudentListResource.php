@@ -34,10 +34,8 @@ class GetStudentListResource extends JsonResource
         $returnData['rating'] = 0;
         $returnData['is_review'] = 0;
         $returnData['total_reviews'] = 0;
-        $returnData['total_notes'] = 0;
-        $returnData['total_queries'] = 0;
-
-
+        $returnData['total_notes'] = $this->user->notes()->count();
+        $returnData['total_queries'] = $this->user->student_post_queries()->count();
 
         return $returnData;
     }

@@ -15,6 +15,7 @@ class UserGetNotesFilesResource extends JsonResource
     public function toArray($request)
     {
         $returnData = array();
+        $returnData['uuid'] = $this->uuid;
         $returnData['file_name'] = $this->file_name;
         $returnData['file_type'] = $this->file_type;
         $returnData['file_mime_type'] = $this->file_mime_type;

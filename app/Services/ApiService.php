@@ -903,7 +903,7 @@ class ApiService
 
         if ($userDetail->role->title == 'PROFESSOR') {
             $userDetailUpdate = professor_details()->where('user_uuid', $user_uuid)->update(
-                $request->only(['university_name', 'college_name', 'preferred_language', 'other_information', 'achievements', 'research_of_expertise'])
+                $request->only(['university_name', 'college_name', 'preferred_language', 'other_information', 'achievements', 'research_of_expertise','education_qualification'])
             );
         } else {
             $userDetailUpdate = student_details()->where('user_uuid', $user_uuid)->update(
@@ -913,12 +913,12 @@ class ApiService
 
         if ($userUpdate && $userDetailUpdate) {
             $userDetail = getUserDetail($user_uuid);
-            if(!empty($userDetail->image)){
-                $image = env('APP_URL').$userDetail->image;
-            }else{
+            if (!empty($userDetail->image)) {
+                $image = env('APP_URL') . $userDetail->image;
+            } else {
                 $image = null;
             }
-            return ['success' => true, 'message' => trans('api.user_updated'),'full_image_path'=>$image];
+            return ['success' => true, 'message' => trans('api.user_updated'), 'full_image_path' => $image];
         } else {
             return ['success' => false, 'message' => trans('api.fail_to_update')];
         }
@@ -955,17 +955,17 @@ class ApiService
         $current_password = $request->old_password;
         $new_password = $request->new_password;
         $confirm_password = $request->confirm_password;
-        if(Hash::check($current_password,$userDetail->password)){
-            if($current_password == $new_password){
-                return ['success'=>false,'message'=>trans('auth.old_new_same')];
-            }elseif($new_password == $confirm_password){
-                user()->where('uuid',$user_uuid)->update(['password'=>bcrypt($confirm_password)]);
-                return ['success'=>true,'message'=>trans('api.password_updated')];
-            }else{
-                return ['success'=>false,'message'=>trans('api.password_not_match')];
+        if (Hash::check($current_password, $userDetail->password)) {
+            if ($current_password == $new_password) {
+                return ['success' => false, 'message' => trans('auth.old_new_same')];
+            } elseif ($new_password == $confirm_password) {
+                user()->where('uuid', $user_uuid)->update(['password' => bcrypt($confirm_password)]);
+                return ['success' => true, 'message' => trans('api.password_updated')];
+            } else {
+                return ['success' => false, 'message' => trans('api.password_not_match')];
             }
-        }else{
-            return ['success'=>false,'message'=>trans('api.current_password_does_not_match')];
+        } else {
+            return ['success' => false, 'message' => trans('api.current_password_does_not_match')];
         }
     }
 
@@ -991,7 +991,7 @@ class ApiService
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
-        $allNotes = notes()->where('user_uuid',$userDetail->uuid)->ofOrderBy('DESC')->get();
+        $allNotes = notes()->where('user_uuid', $userDetail->uuid)->ofOrderBy('DESC')->get();
         if ($allNotes->isNotEmpty()) {
             $returnData = GetStudentProfessorNotesResource::collection($allNotes)->toArray($request);
             return ['success' => true, 'message' => trans('api.user_uploaded_notes'), 'data' => $returnData];
@@ -1019,14 +1019,14 @@ class ApiService
     public function deleteUserNotes($request)
     {
         $note_uuid = $request->note_uuid;
-        if(notes()->where('uuid',$note_uuid)->count()  > 0){
-            $noteDetail = notes()->where('uuid',$note_uuid)->first();
+        if (notes()->where('uuid', $note_uuid)->count() > 0) {
+            $noteDetail = notes()->where('uuid', $note_uuid)->first();
             if ($noteDetail->delete()) {
                 return ['success' => true, 'message' => trans('api.user_note_deleted')];
             } else {
                 return ['success' => false, 'message' => trans('api.fail')];
             }
-        }else{
+        } else {
             return ['success' => false, 'message' => trans('api.note_not_found')];
         }
 
@@ -1058,38 +1058,38 @@ class ApiService
     {
         $note_uuid = $request->note_uuid;
         $user_uuid = $request->user_uuid;
-        if(notes()->where('uuid',$note_uuid)->where('user_uuid',$user_uuid)->count()  > 0){
+        if (notes()->where('uuid', $note_uuid)->where('user_uuid', $user_uuid)->count() > 0) {
             $notesArray = $request->except('_token', '_method', 'image_files', 'pdf_files', 'audio_files');
-            $noteDetail = notes()->where('uuid',$note_uuid)->first();
+            $noteDetail = notes()->where('uuid', $note_uuid)->first();
             $notesArray['approve'] = 4;
             $updateNotes = $noteDetail->update($notesArray);
             $noteDetail->increment('edited_count');
             if ($updateNotes) {
                 $notes_uuid = $noteDetail->uuid;
-                if(!empty($noteDetail->image_files)){
-                    foreach ($noteDetail->image_files as $list){
-                        if(File::exists(public_path($list->file_path))){
-                            File::delete(public_path($list->file_path));
-                        }
-                    }
-                }
-                $noteDetail->image_files()->delete();
-                if(!empty($noteDetail->pdf_files)){
-                    foreach ($noteDetail->pdf_files as $list){
-                        if(File::exists(public_path($list->file_path))){
-                            File::delete(public_path($list->file_path));
-                        }
-                    }
-                }
-                $noteDetail->pdf_files()->delete();
-                if(!empty($noteDetail->audio_files)){
-                    foreach ($noteDetail->audio_files as $list){
-                        if(File::exists(public_path($list->file_path))){
-                            File::delete(public_path($list->file_path));
-                        }
-                    }
-                }
-                $noteDetail->audio_files()->delete();
+//                if(!empty($noteDetail->image_files)){
+//                    foreach ($noteDetail->image_files as $list){
+//                        if(File::exists(public_path($list->file_path))){
+//                            File::delete(public_path($list->file_path));
+//                        }
+//                    }
+//                }
+//                $noteDetail->image_files()->delete();
+//                if(!empty($noteDetail->pdf_files)){
+//                    foreach ($noteDetail->pdf_files as $list){
+//                        if(File::exists(public_path($list->file_path))){
+//                            File::delete(public_path($list->file_path));
+//                        }
+//                    }
+//                }
+//                $noteDetail->pdf_files()->delete();
+//                if(!empty($noteDetail->audio_files)){
+//                    foreach ($noteDetail->audio_files as $list){
+//                        if(File::exists(public_path($list->file_path))){
+//                            File::delete(public_path($list->file_path));
+//                        }
+//                    }
+//                }
+//                $noteDetail->audio_files()->delete();
 
                 $image_files = $request->image_files;
                 if (!empty($image_files)) {
@@ -1109,11 +1109,12 @@ class ApiService
             } else {
                 return ['success' => false, 'message' => trans('api.fail')];
             }
-        }else{
+        } else {
             return ['success' => false, 'message' => trans('api.note_not_found')];
         }
 
     }
+
     /**
      * @param $request
      * @return array
@@ -1179,11 +1180,11 @@ class ApiService
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
 
-        if(subjects()->where('uuid',$subject_uuid)->count() <= 0){
+        if (subjects()->where('uuid', $subject_uuid)->count() <= 0) {
             return ['success' => false, 'message' => trans('api.subject_not_found')];
         }
 
-        if (reviews()->create($request->except(['_token','_method']))) {
+        if (reviews()->create($request->except(['_token', '_method']))) {
             return ['success' => true, 'message' => trans('api.review_added')];
         } else {
             return ['success' => false, 'message' => trans('api.fail')];
@@ -1207,7 +1208,8 @@ class ApiService
      * @param $request
      * @return array
      */
-    function getSubmittedReviews($request){
+    function getSubmittedReviews($request)
+    {
         $from_user_uuid = $request->from_user_uuid;
         $fromUserDetail = getUserDetail($from_user_uuid);
 
@@ -1215,17 +1217,17 @@ class ApiService
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
 
-        if($fromUserDetail->role->title == "STUDENT"){
-            $reviews = reviews()->where('from_user_uuid', $from_user_uuid)->orderBy('id','DESC')->get();
-        }else{
-            $reviews = reviews()->where('to_user_uuid', $from_user_uuid)->orderBy('id','DESC')->get();
+        if ($fromUserDetail->role->title == "STUDENT") {
+            $reviews = reviews()->where('from_user_uuid', $from_user_uuid)->orderBy('id', 'DESC')->get();
+        } else {
+            $reviews = reviews()->where('to_user_uuid', $from_user_uuid)->orderBy('id', 'DESC')->get();
         }
         if ($reviews->isEmpty()) {
             return ['success' => false, 'message' => trans('api.no_review_found')];
         } else {
-            if($fromUserDetail->role->title == "STUDENT") {
+            if ($fromUserDetail->role->title == "STUDENT") {
                 $returnData = StudentGetReviewsResource::collection($reviews)->toArray($request);
-            }else{
+            } else {
                 $returnData = ProfessorGetReviewsResource::collection($reviews)->toArray($request);
             }
             return ['success' => true, 'message' => trans('api.reviews'), 'data' => $returnData];
@@ -1303,24 +1305,25 @@ class ApiService
      * @param $request
      * @return array
      */
-    function userGetQuery($request){
+    function userGetQuery($request)
+    {
         $user_uuid = $request->user_uuid;
         $userDetail = getUserDetail($user_uuid);
 
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
-        if($userDetail->role->title == 'STUDENT'){
-            $reviews = post_query()->where('from_user_uuid', $user_uuid)->orderBy('id','DESC')->get();
-        }else{
-            $reviews = post_query()->where('to_user_uuid', $user_uuid)->orderBy('id','DESC')->get();
+        if ($userDetail->role->title == 'STUDENT') {
+            $reviews = post_query()->where('from_user_uuid', $user_uuid)->orderBy('id', 'DESC')->get();
+        } else {
+            $reviews = post_query()->where('to_user_uuid', $user_uuid)->orderBy('id', 'DESC')->get();
         }
         if ($reviews->isEmpty()) {
             return ['success' => false, 'message' => trans('api.no_queries_found')];
         } else {
-            if($userDetail->role->title == 'STUDENT') {
+            if ($userDetail->role->title == 'STUDENT') {
                 $returnData = StudentGetQueryResource::collection($reviews)->toArray($request);
-            }else{
+            } else {
                 $returnData = ProfessorGetQueryResource::collection($reviews)->toArray($request);
             }
             return ['success' => true, 'message' => trans('api.queries'), 'data' => $returnData];
@@ -1350,11 +1353,11 @@ class ApiService
     function professorReplyQuery($request)
     {
         $post_query_uuid = $request->post_query_uuid;
-        if (post_query()->where('uuid',$post_query_uuid)->count() <= 0) {
+        if (post_query()->where('uuid', $post_query_uuid)->count() <= 0) {
             return ['success' => false, 'message' => trans('api.posted_query_not_found')];
-        }else{
-            $postDetail = post_query()->where('uuid',$post_query_uuid)->first();
-            if($postDetail->post_reply()->count() > 0){
+        } else {
+            $postDetail = post_query()->where('uuid', $post_query_uuid)->first();
+            if ($postDetail->post_reply()->count() > 0) {
                 return ['success' => false, 'message' => trans('api.already_replied')];
             }
         }
@@ -1380,4 +1383,81 @@ class ApiService
             return ['success' => false, 'message' => trans('api.fail')];
         }
     }
+
+    public function deleteNoteFileValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'note_file_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function deleteNoteFile($request)
+    {
+        $note_file_uuid = $request->note_file_uuid;
+        $noteDetail = notes_files()->where('uuid', $note_file_uuid)->first();
+
+        if (!$noteDetail) {
+            return ['success' => false, 'message' => trans('api.note_file_not_found')];
+        }
+
+        $noteFilePath = $noteDetail->file_path;
+        if ($noteDetail->delete()) {
+            if (File::exists(public_path($noteFilePath))) {
+                File::delete(public_path($noteFilePath));
+            }
+            return ['success' => true, 'message' => trans('api.note_file_deleted')];
+        } else {
+            return ['success' => false, 'message' => trans('api.fail')];
+        }
+    }
+
+    public function purchasePackageValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'package_uuid' => 'required|size:36',
+            'user_uuid' => 'required|size:36',
+            'subject_uuid' => 'required|size:36',
+            'payment_id' => 'required',
+            'duration_in_days' => 'required',
+            'price' => 'required',
+            'payment_status' => 'required',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function purchasePackage($request)
+    {
+        $payment_status = $request->payment_status;
+        if($payment_status == 'FAIL'){
+            return ['success' => false, 'message' => trans('api.payment_fail')];
+        }
+
+        $purchasedPackageDetail = purchased_packages()->where('user_uuid',$request->user_uuid)->where('subject_uuid',$request->subject_uuid)->first();
+
+        if(!$purchasedPackageDetail){
+            return ['success' => false, 'message' => trans('api.user_with_this_subject_not_found')];
+        }else{
+            if($purchasedPackageDetail->is_purchased == 1){
+                return ['success' => false, 'message' => trans('api.already_purchased')];
+            }
+        }
+
+        $performPurchase = storePurchasePackage($request,$purchasedPackageDetail);
+
+        if ($performPurchase) {
+                return ['success' => true, 'message' => trans('api.package_purchased')];
+        } else {
+                return ['success' => false, 'message' => trans('api.fail')];
+        }
+    }
+
 }

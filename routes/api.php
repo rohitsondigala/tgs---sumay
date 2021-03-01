@@ -52,5 +52,7 @@ Route::group([
     Route::post('/post-query',[ApiController::class,'postQuery'])->name('post-query');
     Route::post('/user-get-query',[ApiController::class,'userGetQuery'])->name('user-get-query');
     Route::post('/professor-reply-query',[ApiController::class,'professorReplyQuery'])->name('professor-reply-query');
+    Route::post('/delete-note-file',[ApiController::class,'deleteNoteFile'])->name('delete-note-file');
+    Route::post('/purchase-package',[ApiController::class,'purchasePackage'])->name('purchase-package');
 
 });

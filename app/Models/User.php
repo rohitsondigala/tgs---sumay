@@ -174,6 +174,37 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne('App\Models\ModeratorSubject','user_uuid','uuid');
     }
 
+
+    /**
+     * @return HasMany
+     */
+    public function reviews(){
+        return $this->hasMany('App\Models\Reviews','to_user_uuid','uuid');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function notes(){
+        return $this->hasMany('App\Models\Notes','user_uuid','uuid');
+    }
+
+
+
+    /**
+     * @return HasMany
+     */
+    public function professor_post_queries(){
+        return $this->hasMany('App\Models\PostQuery','to_user_uuid','uuid');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function student_post_queries(){
+        return $this->hasMany('App\Models\PostQuery','from_user_uuid','uuid');
+    }
+
     /**
      * @return HasMany
      */

@@ -2,6 +2,7 @@
 
 use App\Notifications\NotesUploadedNotification;
 use App\Notifications\SendEditNoteUpdateNotification;
+use Carbon\Carbon;
 
 function checkRoles()
 {
@@ -208,4 +209,62 @@ function uploadPostQueryReplyFiles($files, $post_reply_uuid,$file_type)
     return true;
 }
 
+function isReviewed($student_uuid,$professor_uuid){
+    if(reviews()->where('from_user_uuid',$student_uuid)->where('to_user_uuid',$professor_uuid)->count() > 0){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+
+function storePurchasePackage($request,$purchasedPackageDetail){
+    $user_uuid = $request->user_uuid;
+    $package_uuid = $request->package_uuid;
+    $subject_uuid = $request->subject_uuid;
+    $payment_id = $request->payment_id;
+    $duration_in_days = $request->duration_in_days;
+    $price = $request->price;
+
+    $packageArray = array(
+        'package_uuid' => $package_uuid,
+        'purchase_date'=> Carbon::now(),
+        'expiry_date' =>Carbon::now()->addDays($duration_in_days),
+        'duration_in_days' => $duration_in_days,
+        'is_purchased' => 1,
+        'price' => $price
+    );
+
+    if($purchasedPackageDetail){
+        if($purchasedPackageDetail->update($packageArray)){
+            $paymentArray  = array(
+                'purchase_package_uuid' => $purchasedPackageDetail->uuid,
+                'payment_id' => $payment_id,
+                'price' => $price,
+            );
+            purchased_packages_payments()->create($paymentArray);
+            return true;
+        }else{
+            return false;
+        }
+    }else{
+        $packageArray['stream_uuid'] = getStreamUUIDbySubjectUUID($subject_uuid);
+        $packageArray['package_uuid'] = $package_uuid;
+        $packageArray['user_uuid'] = $user_uuid;
+        $packageArray['subject_uuid'] = $subject_uuid;
+        $purchasedPackageDetail = purchased_packages()->create($packageArray);
+        if($purchasedPackageDetail){
+            $paymentArray  = array(
+                'purchase_package_uuid' => $purchasedPackageDetail->uuid,
+                'payment_id' => $payment_id,
+                'price' => $price,
+            );
+            purchased_packages_payments()->create($paymentArray);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+}
 

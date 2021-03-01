@@ -179,3 +179,11 @@ function post_query_reply(){
 function post_query_reply_files(){
     return app(App\Models\PostQueryReplyFiles::class);
 }
+
+/**
+ * @return Application|mixed
+ */
+function purchased_packages_payments()
+{
+    return app(App\Models\PurchasedPackagesPayments::class);
+}
