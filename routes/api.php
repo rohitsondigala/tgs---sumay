@@ -54,5 +54,6 @@ Route::group([
     Route::post('/professor-reply-query',[ApiController::class,'professorReplyQuery'])->name('professor-reply-query');
     Route::post('/delete-note-file',[ApiController::class,'deleteNoteFile'])->name('delete-note-file');
     Route::post('/purchase-package',[ApiController::class,'purchasePackage'])->name('purchase-package');
+    Route::post('/get-note-detail',[ApiController::class,'getNoteDetail'])->name('get-note-detail');
 
 });

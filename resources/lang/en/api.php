@@ -57,4 +57,6 @@ return [
     'package_purchased' => 'Packaged purchased successfully',
     'payment_fail' => 'Payment is fail',
     'already_purchased' => 'Package is already purchased',
+    'note_detail' => 'Note detail',
+    'no_note_found' => 'No note found with this data'
 ];

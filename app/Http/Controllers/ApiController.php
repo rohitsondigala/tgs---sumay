@@ -725,6 +725,21 @@ class ApiController extends Controller
         }
         return response()->json($this->apiService->purchasePackage($request));
     }
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getNoteDetail(Request $request){
+        $validation = $this->apiService->getNoteDetailValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->getNoteDetail($request));
+    }
 
 
 

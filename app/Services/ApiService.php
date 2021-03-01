@@ -16,6 +16,7 @@ use App\Http\Resources\StudentGetQueryResource;
 use App\Http\Resources\StudentGetReviewsResource;
 use App\Http\Resources\StudentPackageListResource;
 use App\Http\Resources\StudentPurchasedSubjectsResource;
+use App\Http\Resources\UserGetNoteDetailResource;
 use App\Http\Resources\UserGetNotesResource;
 use App\Mail\ForgotPasswordOtp;
 use App\Mail\ProfessorRegistraionOtp;
@@ -1384,6 +1385,10 @@ class ApiService
         }
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     public function deleteNoteFileValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
@@ -1416,6 +1421,10 @@ class ApiService
         }
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     public function purchasePackageValidationRules($request)
     {
         $validate = Validator::make($request->all(), [
@@ -1457,6 +1466,35 @@ class ApiService
                 return ['success' => true, 'message' => trans('api.package_purchased')];
         } else {
                 return ['success' => false, 'message' => trans('api.fail')];
+        }
+    }
+
+
+    /**
+     * @param $request
+     * @return array
+     */
+    public function getNoteDetailValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'note_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function getNoteDetail($request)
+    {
+        $note_uuid = $request->note_uuid;
+        $noteDetail = notes()->where('uuid',$note_uuid)->first();
+        if(!$noteDetail){
+            return ['success' => false, 'message' => trans('api.no_note_found')];
+        }else{
+            $returnData = new UserGetNoteDetailResource($noteDetail);
+            return ['success' => true, 'message' => trans('api.note_detail'), 'data' => $returnData];
         }
     }
 
