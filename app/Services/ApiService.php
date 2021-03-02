@@ -733,6 +733,8 @@ class ApiService
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
+        $is_student = $request->is_student;
+        $is_professor = $request->is_professor;
         $role_type = $request->role_type;
         $subject_uuid = $request->subject_uuid;
         $existingSubjects = getStudentSubjects($userDetail);
@@ -741,12 +743,19 @@ class ApiService
             ->where('user_uuid', '!=', $userDetail->uuid)
             ->whereIn('subject_uuid', $existingSubjects);
 
-        if(!empty($role_type)){
-            $allNotes->whereHas('user.role',function ($query) use ($role_type){
-                $query->where('title',$role_type);
-            });
+        if ($is_student != 1 || $is_professor != 1)
+        {
+            if ($is_student) {
+                $allNotes->whereHas('user.role', function ($query) {
+                    $query->where('title', 'STUDENT');
+                });
+            }
+            if ($is_professor) {
+                $allNotes->whereHas('user.role', function ($query) {
+                    $query->where('title', 'PROFESSOR');
+                });
+            }
         }
-
         if(!empty($subject_uuid)){
             $allNotes->where('subject_uuid',$subject_uuid);
         }
