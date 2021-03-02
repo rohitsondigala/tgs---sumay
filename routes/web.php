@@ -76,6 +76,9 @@ Route::name('admin.')
         Route::get('/search/{table}',[CustomController::class,'search'])->name('search');
         Route::get('/get-subject-list',[CustomController::class,'getSubjectList'])->name('subject-list');
         Route::get('/get-package-prices',[CustomController::class,'getPackageDetail'])->name('package-detail');
+        Route::resource('notes','App\Http\Controllers\AdminNotesController');
+        Route::resource('queries','App\Http\Controllers\AdminPostQueriesController');
+        Route::resource('reviews','App\Http\Controllers\AdminReviewsController');
 
     });
 

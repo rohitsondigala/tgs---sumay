@@ -1,10 +1,9 @@
-@if(!empty($streams) && !$streams->isEmpty())
-{{--    <div class="col-md-12 text-right">--}}
-{{--       Search : <input type="text" name="search" class="search-data" data-search-url="{{route('admin.search','streams')}}" data-route-url="{{$route}}"/>--}}
-{{--    </div>--}}
-{{--    <br>--}}
-<table  id="basic-data-table" class="table nowrap" style="width:100%">
+
+<table class="table nowrap" style="width:100%">
     <thead>
+    <tr>
+        <th colspan="4"><input type="text" class="form-control" placeholder="Search Words by stream"  wire:model="searchWords"></th>
+    </tr>
     <tr>
         <th>{{__('No')}}</th>
         <th>{{__('Title')}}</th>
@@ -13,8 +12,10 @@
     </tr>
     </thead>
 
-    <tbody class="search-results">
-    @forelse($streams as $list)
+    <tbody >
+    @if(!empty($streams) && !$streams->isEmpty())
+
+        @foreach($streams as $list)
         <tr>
             <td>{{$loop->iteration}}</td>
             <td>{{$list->title}}</td>
@@ -26,11 +27,11 @@
 {{--            {!! Form::model($streams,array('url'=>route($route.'.destroy',$list->uuid),'method'=>'DELETE','class'=>'delete-form-'.$list->uuid)) !!}--}}
 {{--            {!! Form::close() !!}--}}
         </tr>
-    @empty
-        @include('common.no-record-found')
-    @endforelse
+        @endforeach
+    @else
+        <tr>
+            <td colspan="4" class="text-center">No Record Found</td>
+        </tr>
+    @endif
     </tbody>
 </table>
-@else
-    @include('common.no-record-found')
-@endif

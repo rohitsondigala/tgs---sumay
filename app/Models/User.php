@@ -186,7 +186,7 @@ class User extends Authenticatable implements JWTSubject
      * @return HasMany
      */
     public function notes(){
-        return $this->hasMany('App\Models\Notes','user_uuid','uuid');
+        return $this->hasMany('App\Models\Notes','user_uuid','uuid')->orderBy('updated_at','DESC');
     }
 
 
@@ -224,4 +224,12 @@ class User extends Authenticatable implements JWTSubject
                 return null;
             }
         }
+    public function getImagePlaceholderAttribute()
+    {
+        if(!empty($this->image)){
+            return $this->image;
+        }else{
+            return null;
+        }
+    }
 }

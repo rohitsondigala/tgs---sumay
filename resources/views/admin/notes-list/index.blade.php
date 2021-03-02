@@ -6,11 +6,13 @@
 
         <div class="card card-default">
             <div class="card-header card-header-border-bottom d-flex justify-content-between">
-                <h2>{{$pageTitle}}</h2>
+                <h2>{{$pageTitle}} - {{$userDetail->name}}</h2>
+                <a href="{{route('admin.professor.show',[$userDetail->uuid, 'type'=>'ACTIVITIES'])}}" class="btn btn-primary btn-sm">Back</a>
+
             </div>
 
             <div class="card-body">
-                @livewire('admin.professor-list')
+                @livewire('admin.note-activity-list')
             </div>
         </div>
     </div>

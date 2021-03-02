@@ -69,6 +69,11 @@ return [
     //students Event Texts
     'admin|student|index' => 'Student List',
     'admin|professor|index' => 'Professor List',
+    'admin|professor|view' => 'View Professor Detail',
+    'admin|professor|activities' => 'Activities',
+
+    'admin|notes' => 'Notes',
+    'admin|notes|view' => 'Note Detail',
 
     'moderator|delete' => 'Item deleted successfully',
     'moderator|fail' => 'Fail to perform this action',

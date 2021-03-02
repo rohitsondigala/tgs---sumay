@@ -30,7 +30,7 @@
                         <span class="nav-text">{{__('Moderator')}}</span>
                     </a>
                 </li>
-                <li class="{{(in_array(\Route::current()->getName(),['admin.professor.index','admin.professor.create','admin.professor.edit'])) ? 'active' : ''}}">
+                <li class="{{(in_array(\Route::current()->getName(),['admin.professor.index','admin.professor.create','admin.professor.edit','admin.professor.show'])) ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.professor.index')}}" >
                         <i class="mdi mdi-account-check"></i>
                         <span class="nav-text">{{__('Professors')}}</span>

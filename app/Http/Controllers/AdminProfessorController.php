@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Services\CrudService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class AdminProfessorController extends Controller
@@ -58,12 +61,28 @@ class AdminProfessorController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $uuid
+     * @param Request $request
+     * @return Application|Factory|View|\Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($uuid,Request $request)
     {
-        //
+        $directory = $this->directory;
+        $route = $this->route;
+        $detail = user()->where('uuid',$uuid)->ofRole('PROFESSOR')->ofVerify()->orderBy('id','DESC')->first();
+        if(!$detail){
+            abort(404);
+        }
+        if($request->type == 'ACTIVITIES'){
+            $notes = notes()->ofApprove()->where('user_uuid',$uuid)->orderBy('updated_at','DESC')->take(10)->get();
+            $queries = post_query()->where('to_user_uuid',$uuid)->orderBy('updated_at','DESC')->take(10)->get();
+            $pageTitle = trans('strings.admin|professor|activities');
+            return view($directory.'.activities',compact('directory','route','detail','pageTitle','notes','queries'));
+        }else{
+            $pageTitle = trans('strings.admin|professor|view');
+            return view($directory.'.view',compact('directory','route','detail','pageTitle'));
+        }
+
     }
 
     /**
@@ -99,4 +118,6 @@ class AdminProfessorController extends Controller
     {
         //
     }
+
+
 }
