@@ -27,6 +27,7 @@ class UserGetNotesResource extends JsonResource
         $returnData['user']['uuid'] = $this->user->uuid;
         $returnData['user']['name'] = $this->user->name;
         $returnData['user']['role'] = $this->user->role->title;
+        $returnData['user']['city'] = !empty($this->user->city_detail) ? $this->user->city_detail->name : null;
         $returnData['user']['full_image_path'] = $this->user->full_image_path;
         if($this->user->role->title == 'STUDENT'){
             $returnData['user']['university_name'] =  !empty($this->user->student_detail) ? $this->user->student_detail->university_name : null;
