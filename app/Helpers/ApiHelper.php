@@ -3,6 +3,7 @@
 use App\Notifications\NotesUploadedNotification;
 use App\Notifications\SendEditNoteUpdateNotification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 function checkRoles()
 {
@@ -218,7 +219,8 @@ function isReviewed($student_uuid,$professor_uuid){
 }
 
 
-function storePurchasePackage($request,$purchasedPackageDetail){
+function storePurchasePackage($request,$purchasedPackageDetail)
+{
     $user_uuid = $request->user_uuid;
     $package_uuid = $request->package_uuid;
     $subject_uuid = $request->subject_uuid;
@@ -228,43 +230,81 @@ function storePurchasePackage($request,$purchasedPackageDetail){
 
     $packageArray = array(
         'package_uuid' => $package_uuid,
-        'purchase_date'=> Carbon::now(),
-        'expiry_date' =>Carbon::now()->addDays($duration_in_days),
+        'purchase_date' => Carbon::now(),
+        'expiry_date' => Carbon::now()->addDays($duration_in_days),
         'duration_in_days' => $duration_in_days,
         'is_purchased' => 1,
         'price' => $price
     );
 
-    if($purchasedPackageDetail){
-        if($purchasedPackageDetail->update($packageArray)){
-            $paymentArray  = array(
+    if ($purchasedPackageDetail) {
+        if ($purchasedPackageDetail->update($packageArray)) {
+            $paymentArray = array(
                 'purchase_package_uuid' => $purchasedPackageDetail->uuid,
                 'payment_id' => $payment_id,
                 'price' => $price,
             );
             purchased_packages_payments()->create($paymentArray);
             return true;
-        }else{
+        } else {
             return false;
         }
-    }else{
+    } else {
         $packageArray['stream_uuid'] = getStreamUUIDbySubjectUUID($subject_uuid);
         $packageArray['package_uuid'] = $package_uuid;
         $packageArray['user_uuid'] = $user_uuid;
         $packageArray['subject_uuid'] = $subject_uuid;
         $purchasedPackageDetail = purchased_packages()->create($packageArray);
-        if($purchasedPackageDetail){
-            $paymentArray  = array(
+        if ($purchasedPackageDetail) {
+            $paymentArray = array(
                 'purchase_package_uuid' => $purchasedPackageDetail->uuid,
                 'payment_id' => $payment_id,
                 'price' => $price,
             );
             purchased_packages_payments()->create($paymentArray);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-
 }
+
+
+    function delete_image_files($noteDetail){
+        if(!empty($noteDetail->image_files)){
+            foreach ($noteDetail->image_files as $list){
+                if(File::exists(public_path($list->file_path))){
+                    File::delete(public_path($list->file_path));
+                }
+            }
+        }
+        $noteDetail->image_files()->delete();
+        return true;
+    }
+
+    function delete_pdf_files($noteDetail){
+        if(!empty($noteDetail->pdf_files)){
+            foreach ($noteDetail->pdf_files as $list){
+                if(File::exists(public_path($list->file_path))){
+                    File::delete(public_path($list->file_path));
+                }
+            }
+        }
+        $noteDetail->pdf_files()->delete();
+        return true;
+    }
+
+    function delete_audio_files($noteDetail){
+        if(!empty($noteDetail->audio_files)){
+            foreach ($noteDetail->audio_files as $list){
+                if(File::exists(public_path($list->file_path))){
+                    File::delete(public_path($list->file_path));
+                }
+            }
+        }
+        $noteDetail->audio_files()->delete();
+        return true;
+    }
+
+
 

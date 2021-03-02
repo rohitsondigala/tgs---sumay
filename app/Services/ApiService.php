@@ -1067,44 +1067,25 @@ class ApiService
             $noteDetail->increment('edited_count');
             if ($updateNotes) {
                 $notes_uuid = $noteDetail->uuid;
-//                if(!empty($noteDetail->image_files)){
-//                    foreach ($noteDetail->image_files as $list){
-//                        if(File::exists(public_path($list->file_path))){
-//                            File::delete(public_path($list->file_path));
-//                        }
-//                    }
-//                }
-//                $noteDetail->image_files()->delete();
-//                if(!empty($noteDetail->pdf_files)){
-//                    foreach ($noteDetail->pdf_files as $list){
-//                        if(File::exists(public_path($list->file_path))){
-//                            File::delete(public_path($list->file_path));
-//                        }
-//                    }
-//                }
-//                $noteDetail->pdf_files()->delete();
-//                if(!empty($noteDetail->audio_files)){
-//                    foreach ($noteDetail->audio_files as $list){
-//                        if(File::exists(public_path($list->file_path))){
-//                            File::delete(public_path($list->file_path));
-//                        }
-//                    }
-//                }
-//                $noteDetail->audio_files()->delete();
 
                 $image_files = $request->image_files;
                 if (!empty($image_files)) {
                     uploadNotesFiles($image_files, $notes_uuid, 'IMAGE');
+                    delete_audio_files($noteDetail);
+                    delete_pdf_files($noteDetail);
                 }
                 $pdf_files = $request->pdf_files;
                 if (!empty($pdf_files)) {
                     uploadNotesFiles($pdf_files, $notes_uuid, 'PDF');
+                    delete_audio_files($noteDetail);
+                    delete_image_files($noteDetail);
                 }
                 $audio_files = $request->audio_files;
                 if (!empty($audio_files)) {
                     uploadNotesFiles($audio_files, $notes_uuid, 'AUDIO');
+                    delete_image_files($noteDetail);
+                    delete_pdf_files($noteDetail);
                 }
-
                 sendEditNotesUpdateNotification($noteDetail);
                 return ['success' => true, 'message' => trans('api.notes_edited')];
             } else {
