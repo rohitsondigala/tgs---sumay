@@ -28,6 +28,7 @@ class ProfessorGetProfileResource extends JsonResource
         $returnData['data']['other_information'] = $this->professor_detail->other_information;
         $returnData['data']['achievements'] = $this->professor_detail->achievements;
         $returnData['data']['research_of_expertise'] = $this->professor_detail->research_of_expertise;
+        $returnData['data']['education_qualification'] = $this->professor_detail->education_qualification;
         $returnData['data']['country']['id'] = $this->country_detail->id;
         $returnData['data']['country']['name'] = $this->country_detail->name;
         $returnData['data']['state']['id'] = $this->state_detail->id;
