@@ -732,8 +732,25 @@ class ApiService
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
+        $role_type = $request->role_type;
+        $subject_uuid = $request->subject_uuid;
         $existingSubjects = getStudentSubjects($userDetail);
-        $allNotes = notes()->ofApprove()->where('user_uuid', '!=', $userDetail->uuid)->whereIn('subject_uuid', $existingSubjects)->ofOrderBy('DESC')->get();
+        $allNotes = notes()
+            ->ofApprove()
+            ->where('user_uuid', '!=', $userDetail->uuid)
+            ->whereIn('subject_uuid', $existingSubjects);
+
+        if(!empty($role_type)){
+            $allNotes->whereHas('user.role',function ($query) use ($role_type){
+                $query->where('title',$role_type);
+            });
+        }
+
+        if(!empty($subject_uuid)){
+            $allNotes->where('subject_uuid',$subject_uuid);
+        }
+
+        $allNotes = $allNotes->ofOrderBy('DESC')->get();
         if ($allNotes->isNotEmpty()) {
             $returnData = UserGetNotesResource::collection($allNotes)->toArray($request);
             return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $returnData];
