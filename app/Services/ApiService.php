@@ -11,6 +11,7 @@ use App\Http\Resources\GetStudentProfessorNotesResource;
 use App\Http\Resources\ProfessorGetProfileResource;
 use App\Http\Resources\ProfessorGetQueryResource;
 use App\Http\Resources\ProfessorGetReviewsResource;
+use App\Http\Resources\ProfessorPurchasedSubjectsResource;
 use App\Http\Resources\StudentGetProfileResource;
 use App\Http\Resources\StudentGetQueryResource;
 use App\Http\Resources\StudentGetReviewsResource;
@@ -1137,11 +1138,20 @@ class ApiService
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
-        $packageList = purchased_packages()->where('user_uuid', $user_uuid)->where('is_purchased', 1)->get();
+        if($userDetail->role->title == 'PROFESSOR'){
+            $packageList = professor_subjects()->where('user_uuid',$user_uuid)->get();
+        }else{
+            $packageList = purchased_packages()->where('user_uuid', $user_uuid)->where('is_purchased', 1)->get();
+        }
+
         if ($packageList->isEmpty()) {
             return ['success' => false, 'message' => trans('api.user_with_not_packages')];
         } else {
-            $returnData = StudentPurchasedSubjectsResource::collection($packageList)->toArray($request);
+            if($userDetail->role->title == 'PROFESSOR') {
+                $returnData = ProfessorPurchasedSubjectsResource::collection($packageList)->toArray($request);
+            }else{
+                $returnData = StudentPurchasedSubjectsResource::collection($packageList)->toArray($request);
+            }
             return ['success' => true, 'message' => trans('api.student_purchased_subjects'), 'data' => $returnData];
         }
     }
