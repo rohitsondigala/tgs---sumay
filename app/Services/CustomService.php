@@ -37,7 +37,11 @@ class CustomService {
             }
         }else{
             $userArray = $request->except(['_token','_method','stream_uuid','subject_uuid','image']);
-            $filePath = uploadMedia($request->image,'profile');
+            if(!empty($request->image)) {
+                $filePath = uploadMedia($request->image, 'profile');
+            }else{
+                $filePath = null;
+            }
             $userArray['image'] = $filePath;
             $userArray['role_uuid'] = moderator_role_uuid();
             $submit = user()->create($userArray);
