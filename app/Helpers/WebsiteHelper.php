@@ -166,3 +166,7 @@ function getGeneratePackageDetail($request,$userDetail,$packageDetail){
         'is_purchased' =>1,
     ];
 }
+
+function getDateInFormat($date){
+    return Carbon::parse($date)->format('d M Y');
+}

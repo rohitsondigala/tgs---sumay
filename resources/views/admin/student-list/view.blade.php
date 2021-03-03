@@ -4,7 +4,7 @@
     <div class="col-12 mt-3">
         @include('common.globalAlerts')
         <div class="text-right">
-            <a href="{{route($route.'.index')}}"><i class="mdi mdi-chevron-double-left"></i> Return To Professors</a>
+            <a href="{{route($route.'.index')}}"><i class="mdi mdi-chevron-double-left"></i> Return To Students</a>
         </div>
         <br>
         <div class="row">
@@ -25,8 +25,8 @@
                 <a href="">
                     <div class="card card-mini mb-4">
                         <div class="card-body">
-                            <h2 class="mb-1">{{$detail->professor_post_queries()->count()}}</h2>
-                            <p>{{__('Queries Received')}}</p>
+                            <h2 class="mb-1">{{$detail->student_post_queries()->count()}}</h2>
+                            <p>{{__('Queries Posted')}}</p>
                         </div>
                     </div>
                 </a>
@@ -53,8 +53,8 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>{{__('Subjects')}}</td>
-                        <td>@if(!empty($detail->professor_subjects))
-                                @foreach($detail->professor_subjects as $subjectList)
+                        <td>@if(!empty($detail->student_subjects))
+                                @foreach($detail->student_subjects as $subjectList)
                                     <b>{{$subjectList->subject->title}}</b><br>
                                 @endforeach
                             @else
@@ -112,31 +112,20 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>{{__('University Name')}}</td>
-                        <td>{{!empty($detail->professor_detail) ? $detail->professor_detail->university_name : 'NA'}}</td>
+                        <td>{{!empty($detail->student_detail) ? $detail->student_detail->university_name : 'NA'}}</td>
                     </tr>
                     <tr>
                         <td>{{__('College Name')}}</td>
-                        <td>{{!empty($detail->professor_detail) ? $detail->professor_detail->college_name : 'NA'}}</td>
+                        <td>{{!empty($detail->student_detail) ? $detail->student_detail->college_name : 'NA'}}</td>
                     </tr>
-                    <tr>
-                        <td>{{__('Educational Qualification')}}</td>
-                        <td>{{!empty($detail->professor_detail) ? $detail->professor_detail->education_qualification : 'NA'}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{__('Research Of Expertise')}}</td>
-                        <td>{{!empty($detail->professor_detail) ? $detail->professor_detail->research_of_expertise : 'NA'}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{__('Achivements')}}</td>
-                        <td>{{!empty($detail->professor_detail) ? $detail->professor_detail->achievements : 'NA'}}</td>
-                    </tr>
+
                     <tr>
                         <td>{{__('Preferred Language')}}</td>
-                        <td>{{!empty($detail->professor_detail) ? $detail->professor_detail->preferred_language : 'NA'}}</td>
+                        <td>{{!empty($detail->student_detail) ? $detail->student_detail->preferred_language : 'NA'}}</td>
                     </tr>
                     <tr>
                         <td>{{__('Other Information')}}</td>
-                        <td>{{!empty($detail->professor_detail) ? $detail->professor_detail->other_information : 'NA'}}</td>
+                        <td>{{!empty($detail->student_detail) ? $detail->student_detail->other_information : 'NA'}}</td>
                     </tr>
                 </table>
             </div>

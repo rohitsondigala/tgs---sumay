@@ -75,6 +75,9 @@ return [
     'admin|notes' => 'Notes',
     'admin|notes|view' => 'Note Detail',
 
+    'admin|queries' => 'Queries',
+    'admin|query|view' => 'Posted Query Detail',
+
     'moderator|delete' => 'Item deleted successfully',
     'moderator|fail' => 'Fail to perform this action',
 

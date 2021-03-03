@@ -14,19 +14,24 @@ class NoteActivityList extends Component
      * @var string
      */
     public $directory = 'admin.notes-list';
+    public $user_uuid;
 
     protected $listeners = [
         'load-more' => 'loadMore'
     ];
+
+    public function mount($user_uuid){
+        $this->user_uuid = $user_uuid;
+    }
 
     public function loadMore()
     {
         $this->perPage = $this->perPage + 2;
     }
 
-    public function render(Request $request)
+    public function render()
     {
-        $user_uuid = $request->user_uuid;
+        $user_uuid = $this->user_uuid;
         $detail = user()->where('uuid',$user_uuid)->first();
 
         $notes = notes()->ofApprove()->where('user_uuid',$user_uuid)->orderBy('updated_at','DESC')->paginate($this->perPage);

@@ -37,7 +37,7 @@ class AdminModeratorRequest extends FormRequest
         if($this->method() == 'POST'){
             $rules['image'] = 'required|mimes:jpg,jpeg,png|max:1024';
             $rules['email'] = 'required|email|unique:users';
-            $rules['mobile'] = 'required|numeric|unique:users';
+            $rules['mobile'] = 'sometimes|numeric|unique:users';
         }
         return $rules;
     }

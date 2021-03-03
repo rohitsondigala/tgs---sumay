@@ -92,12 +92,27 @@ class AdminStudentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param   $uuid ;
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($uuid,Request $request)
     {
-        //
+        $directory = $this->directory;
+        $route = $this->route;
+        $detail = user()->where('uuid',$uuid)->ofVerify()->orderBy('id','DESC')->first();
+        if(!$detail){
+            abort(404);
+        }
+        if($request->type == 'ACTIVITIES'){
+            $notes = notes()->ofApprove()->where('user_uuid',$uuid)->orderBy('updated_at','DESC')->take(10)->get();
+            $queries = post_query()->where('from_user_uuid',$uuid)->orderBy('updated_at','DESC')->take(10)->get();
+            $pageTitle = trans('strings.admin|professor|activities');
+            return view($directory.'.activities',compact('directory','route','detail','pageTitle','notes','queries'));
+        }else{
+            $pageTitle = trans('strings.admin|professor|view');
+            return view($directory.'.view',compact('directory','route','detail','pageTitle'));
+        }
     }
 
     /**

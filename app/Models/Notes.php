@@ -25,6 +25,9 @@ class Notes extends Model
     public function user(){
         return $this->belongsTo('App\Models\User','user_uuid','uuid');
     }
+    public function approve_user(){
+        return $this->belongsTo('App\Models\User','approved_by','uuid');
+    }
     public function subject()
     {
         return $this->belongsTo('App\Models\Subjects', 'subject_uuid', 'uuid');

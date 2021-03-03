@@ -42,7 +42,7 @@
                 @endif
             </td>
             <td>
-                <a href="{{route($route.'.show',$list->uuid)}}">Activities </a>
+                <a href="{{route($route.'.show',[$list->uuid, 'type'=>'ACTIVITIES'])}}">Activities </a>
                 <span>|</span>
                 <a href="{{route($route.'.show',$list->uuid)}}">View </a>
             </td>

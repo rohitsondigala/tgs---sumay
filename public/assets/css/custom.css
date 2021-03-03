@@ -171,3 +171,6 @@ body{margin-top:20px;}
     left: 0;
     right: -55.8px;
 }
+.user-list-table table tr td:first-child{
+    width: 20%;
+}

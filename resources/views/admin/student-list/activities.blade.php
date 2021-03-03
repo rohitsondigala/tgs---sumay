@@ -6,7 +6,7 @@
         @include('common.globalAlerts')
 
         <div class="text-right">
-            <a href="{{route($route.'.index')}}"><i class="mdi mdi-chevron-double-left"></i> Return To Professors</a>
+            <a href="{{route($route.'.index')}}"><i class="mdi mdi-chevron-double-left"></i> Return To Students</a>
         </div>
         <br><div class="row">
 
@@ -26,8 +26,8 @@
                 <a href="">
                     <div class="card card-mini mb-4">
                         <div class="card-body">
-                            <h2 class="mb-1">{{$detail->professor_post_queries()->count()}}</h2>
-                            <p>{{__('Queries Received')}}</p>
+                            <h2 class="mb-1">{{$detail->student_post_queries()->count()}}</h2>
+                            <p>{{__('Queries Posted')}}</p>
                         </div>
                     </div>
                 </a>
@@ -65,23 +65,6 @@
                                     @foreach($notes as $list)
                                         <li class="event"
                                             data-date="{{\Carbon\Carbon::parse($list->created_at)->format('d M Y')}}">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="row">
-                                                        <div class="col-md-12 text-right">
-
-                                                            <a href="{{route('admin.moderator.edit',$list->approve_user->uuid)}}">
-                                                                {{__('Approved By')}} : {{$list->approve_user->name}}
-                                                            </a>
-                                                            <br>
-                                                            <small>
-                                                                Date : {{getDateInFormat($list->updated_at)}}
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr>
                                             <h3>{{$list->title}}</h3>
                                             <p>{{$list->subject->title}}</p>
                                             <p>{{\Illuminate\Support\Str::limit($list->description,50)}}</p>
@@ -97,7 +80,7 @@
                         @endif
                     </div>
                     <div class="col-md-6">
-                        <h5>{{__('Received Queries')}}</h5>
+                        <h5>{{__('Posted Queries')}}</h5>
                         <hr>
                         @if(!empty($queries) && $queries->IsNotEmpty())
                             <div id="content">
@@ -105,27 +88,9 @@
                                     @foreach($queries as $list)
                                         <li class="event"
                                             data-date="{{\Carbon\Carbon::parse($list->created_at)->format('d M Y')}}">
-                                            <div class="row">
-
-                                                <div class="col-md-12">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="text-left text-uppercase text-primary"> {{$list->from_user->name}}</div>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            @if(!empty($list->post_reply))
-                                                                <div class=" text-success">{{__('REPLIED')}}</div>
-                                                            @else
-                                                                <div class=" text-danger">{{__('PENDING REPLY')}}</div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr>
                                             <h3>{{$list->title}}</h3>
                                             <p>{{\Illuminate\Support\Str::limit($list->description,50)}}</p>
-                                            <a href="{{route("admin.queries.show",$list->uuid)}}">View Detail</a>
+                                            <a href="">View Detail</a>
                                         </li>
                                     @endforeach
                                 </ul>
