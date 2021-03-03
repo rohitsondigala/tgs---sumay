@@ -1469,9 +1469,7 @@ class ApiService
 
         $purchasedPackageDetail = purchased_packages()->where('user_uuid',$request->user_uuid)->where('subject_uuid',$request->subject_uuid)->first();
 
-        if(!$purchasedPackageDetail){
-            return ['success' => false, 'message' => trans('api.user_with_this_subject_not_found')];
-        }else{
+        if($purchasedPackageDetail){
             if($purchasedPackageDetail->is_purchased == 1){
                 return ['success' => false, 'message' => trans('api.already_purchased')];
             }
