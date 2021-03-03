@@ -612,7 +612,7 @@ class ApiService
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
-        $packageList = purchased_packages()->with('package', 'stream', 'subject')->where('user_uuid', $user_uuid)->where('is_purchased', 1)->get();
+        $packageList = purchased_packages()->with('package', 'stream', 'subject')->where('user_uuid', $user_uuid)->where('is_purchased', 1)->orderby('id','DESC')->get();
         if ($packageList->isEmpty()) {
             return ['success' => false, 'message' => trans('api.user_with_not_packages')];
         } else {
@@ -646,7 +646,7 @@ class ApiService
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
         $existingSubjects = getStudentSubjectsPurchased($userDetail);
-        $allPackageList = packages()->with('stream', 'subject')->where('stream_uuid', $userDetail->stream_uuid)->whereNotIn('subject_uuid', $existingSubjects)->get();
+        $allPackageList = packages()->with('stream', 'subject')->where('stream_uuid', $userDetail->stream_uuid)->whereNotIn('subject_uuid', $existingSubjects)->orderby('id','DESC')->get();
 
         if ($allPackageList->isEmpty()) {
             return ['success' => false, 'message' => trans('api.user_with_not_packages')];
