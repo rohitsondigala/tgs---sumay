@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomController;
 use App\Http\Controllers\ModeratorDashboardController;
 use App\Http\Controllers\ModeratorNotesController;
 use App\Http\Controllers\ModeratorProfileController;
+use App\Http\Controllers\ModeratorQueriesController;
 use App\Http\Controllers\UserAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -95,8 +96,12 @@ Route::name('moderator.')
         Route::post('/profile',[ModeratorProfileController::class,'postProfile'])->name('profile');
         Route::resource('daily-posts','App\Http\Controllers\ModeratorDailyPostController');
         Route::resource('notes','App\Http\Controllers\ModeratorNotesController');
+        Route::resource('queries','App\Http\Controllers\ModeratorQueriesController');
         Route::get('/read/{id}',[ModeratorDashboardController::class,'readNotification'])->name('read');
         Route::post('/approve_post',[ModeratorNotesController::class,'approvePost'])->name('notes.approve-post');
         Route::post('/reject_post',[ModeratorNotesController::class,'rejectPost'])->name('notes.reject-post');
+
+        Route::post('/queries/approve_post',[ModeratorQueriesController::class,'approvePost'])->name('queries.approve-post');
+        Route::post('/queries/reject_post',[ModeratorQueriesController::class,'rejectPost'])->name('queries.reject-post');
 
     });

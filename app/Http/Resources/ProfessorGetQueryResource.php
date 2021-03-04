@@ -21,6 +21,7 @@ class ProfessorGetQueryResource extends JsonResource
         $returnData['title'] = $this->title;
         $returnData['date'] = Carbon::parse($this->created_at)->format('d M Y');
         $returnData['description'] = $this->description;
+        $returnData['approve'] = $this->approve;
         $returnData['user']['uuid'] = $this->from_user->uuid;
         $returnData['user']['name'] = $this->from_user->name;
         $returnData['user']['role'] = $this->from_user->role->title;

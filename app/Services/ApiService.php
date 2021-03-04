@@ -737,6 +737,7 @@ class ApiService
         $is_professor = $request->is_professor;
         $role_type = $request->role_type;
         $subject_uuid = $request->subject_uuid;
+        $search = $request->search;
         $existingSubjects = getStudentSubjects($userDetail);
         $allNotes = notes()
             ->ofApprove()
@@ -758,6 +759,9 @@ class ApiService
         }
         if(!empty($subject_uuid)){
             $allNotes->where('subject_uuid',$subject_uuid);
+        }
+        if(!empty($search)){
+            $allNotes->where('title','like','%'.$search.'%');
         }
 
         $allNotes = $allNotes->ofOrderBy('DESC')->get();
@@ -1019,7 +1023,18 @@ class ApiService
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
-        $allNotes = notes()->where('user_uuid', $userDetail->uuid)->ofOrderBy('DESC')->get();
+        $subject_uuid = $request->subject_uuid;
+        $search = $request->search;
+        $allNotes = notes()->where('user_uuid', $userDetail->uuid);
+
+        if(!empty($subject_uuid)){
+            $allNotes->where('subject_uuid',$subject_uuid);
+        }
+        if(!empty($search)){
+            $allNotes->where('title','like','%'.$search.'%');
+        }
+
+        $allNotes = $allNotes->ofOrderBy('DESC')->get();
         if ($allNotes->isNotEmpty()) {
             $returnData = GetStudentProfessorNotesResource::collection($allNotes)->toArray($request);
             return ['success' => true, 'message' => trans('api.user_uploaded_notes'), 'data' => $returnData];
@@ -1334,7 +1349,7 @@ class ApiService
         if ($userDetail->role->title == 'STUDENT') {
             $reviews = post_query()->where('from_user_uuid', $user_uuid)->orderBy('id', 'DESC')->get();
         } else {
-            $reviews = post_query()->where('to_user_uuid', $user_uuid)->orderBy('id', 'DESC')->get();
+            $reviews = post_query()->ofApprove()->where('to_user_uuid', $user_uuid)->orderBy('id', 'DESC')->get();
         }
         if ($reviews->isEmpty()) {
             return ['success' => false, 'message' => trans('api.no_queries_found')];
@@ -1463,6 +1478,7 @@ class ApiService
     function purchasePackage($request)
     {
         $payment_status = $request->payment_status;
+
         if($payment_status == 'FAIL'){
             return ['success' => false, 'message' => trans('api.payment_fail')];
         }

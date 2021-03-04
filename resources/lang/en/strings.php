@@ -88,8 +88,11 @@ return [
     'moderator|daily_post|created' => 'New daily post created successfully',
     'moderator|daily_post|edited' => 'Daily post edited successfully',
 
-    'moderator|notes|index' => 'Uploaded Notes',
+    'moderator|notes|index' => 'Student/Professor Notes',
     'moderator|notes|view' => 'View Note',
+
+    'moderator|queries|index' => 'Student Queries',
+    'moderator|queries|view' => 'View Note',
     'admin|generate-package|index' => 'Generate Package',
 
 ]

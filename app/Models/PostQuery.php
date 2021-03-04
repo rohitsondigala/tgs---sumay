@@ -50,4 +50,8 @@ class PostQuery extends Model
     public function pdf_files(){
         return $this->hasMany('App\Models\PostQueryFiles','post_query_uuid','uuid')->where('file_type','PDF');
     }
+
+    public function scopeOfApprove($q){
+        return $q->where('approve',1);
+    }
 }

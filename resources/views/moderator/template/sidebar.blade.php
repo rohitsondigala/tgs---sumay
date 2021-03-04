@@ -17,10 +17,16 @@
                         <span class="nav-text">{{__('Dashboard')}}</span>
                     </a>
                 </li>
+                <li class="{{(\Route::current()->getName() == 'moderator.queries.index') ? 'active' : ''}}">
+                    <a class="sidenav-item-link" href="{{route('moderator.queries.index')}}" >
+                        <i class="mdi mdi-note-multiple"></i>
+                        <span class="nav-text">{{__('Queries')}}</span>
+                    </a>
+                </li>
                 <li class="{{(\Route::current()->getName() == 'moderator.notes.index') ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('moderator.notes.index')}}" >
                         <i class="mdi mdi-note-multiple"></i>
-                        <span class="nav-text">{{__('Uploaded Posts')}}</span>
+                        <span class="nav-text">{{__('Posts')}}</span>
                     </a>
                 </li>
                 <li class="{{(\Route::current()->getName() == 'moderator.daily-posts.index') ? 'active' : ''}}">

@@ -21,6 +21,7 @@ class GetStudentProfessorNotesResource extends JsonResource
         $returnData['title'] = $this->title;
         $returnData['date'] = Carbon::parse($this->created_at)->format('d M Y');
         $returnData['description'] = $this->description;
+        $returnData['approve'] = $this->approve;
         $returnData['subject']['uuid'] = $this->subject->uuid;
         $returnData['subject']['title'] = $this->subject->title;
         $returnData['image_files'] = UserGetNotesFilesResource::collection($this->image_files)->toArray($request);
