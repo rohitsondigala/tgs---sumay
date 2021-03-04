@@ -60,10 +60,11 @@
                                 <tr>
                                     <th>User</th>
                                     <th>Name</th>
+                                    <th>Title</th>
                                     <th class="d-none d-lg-table-cell">Date</th>
-                                    <th class="d-none d-lg-table-cell">Image Files</th>
-                                    <th class="d-none d-lg-table-cell">Audio Files</th>
-                                    <th class="d-none d-lg-table-cell">PDF Files</th>
+{{--                                    <th class="d-none d-lg-table-cell">Image Files</th>--}}
+{{--                                    <th class="d-none d-lg-table-cell">Audio Files</th>--}}
+{{--                                    <th class="d-none d-lg-table-cell">PDF Files</th>--}}
                                     <th>Status</th>
                                 </tr>
                                 </thead>
@@ -74,10 +75,11 @@
                                     <td>
                                         <a class="text-dark" href="">{{$note->user->name}}</a>
                                     </td>
+                                    <td>{{$note->title}}</td>
                                     <td class="d-none d-lg-table-cell">{{getDateInFormat($note->created_at)}}</td>
-                                    <td class="d-none d-lg-table-cell text-center">{{$note->image_files()->count()}}</td>
-                                    <td class="d-none d-lg-table-cell text-center">{{$note->audio_files()->count()}}</td>
-                                    <td class="d-none d-lg-table-cell text-center">{{$note->pdf_files()->count()}}</td>
+{{--                                    <td class="d-none d-lg-table-cell text-center">{{$note->image_files()->count()}}</td>--}}
+{{--                                    <td class="d-none d-lg-table-cell text-center">{{$note->audio_files()->count()}}</td>--}}
+{{--                                    <td class="d-none d-lg-table-cell text-center">{{$note->pdf_files()->count()}}</td>--}}
                                     <td>
                                         {!! getVerifyBadge($note->approve) !!}
                                     </td>
