@@ -30,4 +30,12 @@ class AdminService{
     function getStudentAllSelectedSubjectDropdown(){
         return purchased_packages()->with('subject')->groupby('subject_uuid')->get()->pluck('subject.title','subject.uuid')->prepend('All','all');
     }
+
+    function getLatestUsers($userRole){
+        return user()->ofRole($userRole)->ofVerify()->orderBy('id','DESC')->take(5)->get();
+    }
+
+    function getLatestNotes(){
+        return notes()->orderBy('id','DESC')->take(5)->get();
+    }
 }

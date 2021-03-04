@@ -14,6 +14,9 @@ class AdminDashboardController extends Controller
     }
     public function dashboard(){
         $getCounts = $this->adminService->getDashboardCounts();
-        return view('admin.dashboard',compact('getCounts'));
+        $latestStudents = $this->adminService->getLatestUsers('STUDENT');
+        $latestProfessors = $this->adminService->getLatestUsers('PROFESSOR');
+        $latestNotes = $this->adminService->getLatestNotes();
+        return view('admin.dashboard',compact('getCounts','latestStudents','latestProfessors','latestNotes'));
     }
 }

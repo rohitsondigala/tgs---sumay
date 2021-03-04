@@ -229,7 +229,7 @@ class User extends Authenticatable implements JWTSubject
         if(!empty($this->image)){
             return $this->image;
         }else{
-            return null;
+            return '/assets/img/default-user.png';
         }
     }
 }
