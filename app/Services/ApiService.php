@@ -582,7 +582,19 @@ class ApiService
 
         if ($moderatorDailyPost->isNotEmpty()) {
             $returnData = GetModeratorPostsResource::collection($moderatorDailyPost)->toArray($request);
-            return ['success' => true, 'message' => trans('api.moderator_posts'), 'data' => $returnData];
+            if($userDetail->role->title == 'STUDENT'){
+                $total_queries= $userDetail->student_post_queries()->count();
+            }else{
+                $total_queries = $userDetail->professor_post_queries()->count();
+            }
+            $total_notes = $userDetail->notes()->count();
+            return [
+                'success' => true,
+                'message' => trans('api.moderator_posts'),
+                'data' => $returnData,
+                'total_queries' =>$total_queries,
+                'total_notes' =>$total_notes,
+            ];
         } else {
             return ['success' => false, 'message' => trans('api.no_post_found')];
         }
@@ -1347,17 +1359,23 @@ class ApiService
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
         if ($userDetail->role->title == 'STUDENT') {
-            $reviews = post_query()->where('from_user_uuid', $user_uuid)->orderBy('id', 'DESC')->get();
+            $userQueries = post_query()->where('from_user_uuid', $user_uuid);
         } else {
-            $reviews = post_query()->ofApprove()->where('to_user_uuid', $user_uuid)->orderBy('id', 'DESC')->get();
+            $userQueries = post_query()->ofApprove()->where('to_user_uuid', $user_uuid)->orderBy('id', 'DESC')->get();
         }
-        if ($reviews->isEmpty()) {
+
+        if(!empty($request->search)){
+            $userQueries->where('title','like','%'.$request->search.'%');
+        }
+
+        $userQueries = $userQueries->orderBy('id', 'DESC')->get();
+        if ($userQueries->isEmpty()) {
             return ['success' => false, 'message' => trans('api.no_queries_found')];
         } else {
             if ($userDetail->role->title == 'STUDENT') {
-                $returnData = StudentGetQueryResource::collection($reviews)->toArray($request);
+                $returnData = StudentGetQueryResource::collection($userQueries)->toArray($request);
             } else {
-                $returnData = ProfessorGetQueryResource::collection($reviews)->toArray($request);
+                $returnData = ProfessorGetQueryResource::collection($userQueries)->toArray($request);
             }
             return ['success' => true, 'message' => trans('api.queries'), 'data' => $returnData];
         }
