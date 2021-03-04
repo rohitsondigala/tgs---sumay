@@ -1361,7 +1361,7 @@ class ApiService
         if ($userDetail->role->title == 'STUDENT') {
             $userQueries = post_query()->where('from_user_uuid', $user_uuid);
         } else {
-            $userQueries = post_query()->ofApprove()->where('to_user_uuid', $user_uuid)->orderBy('id', 'DESC')->get();
+            $userQueries = post_query()->ofApprove()->where('to_user_uuid', $user_uuid);
         }
 
         if(!empty($request->search)){
