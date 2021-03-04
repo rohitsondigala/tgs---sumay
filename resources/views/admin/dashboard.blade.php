@@ -62,9 +62,6 @@
                                     <th>Name</th>
                                     <th>Title</th>
                                     <th class="d-none d-lg-table-cell">Date</th>
-{{--                                    <th class="d-none d-lg-table-cell">Image Files</th>--}}
-{{--                                    <th class="d-none d-lg-table-cell">Audio Files</th>--}}
-{{--                                    <th class="d-none d-lg-table-cell">PDF Files</th>--}}
                                     <th>Status</th>
                                 </tr>
                                 </thead>
@@ -73,14 +70,15 @@
                                 <tr>
                                     <td>{{$note->user->role->title}}</td>
                                     <td>
-                                        <a class="text-dark" href="">{{$note->user->name}}</a>
+                                        @if($note->user->role->title == 'STUDENT')
+                                        <a class="text-dark" href="{{route('admin.student.show',$note->user->uuid)}}">{{$note->user->name}}</a>
+                                        @else
+                                            <a class="text-dark" href="{{route('admin.professor.show',$note->user->uuid)}}">{{$note->user->name}}</a>
+                                        @endif
                                     </td>
                                     <td>{{$note->title}}</td>
                                     <td class="d-none d-lg-table-cell">{{getDateInFormat($note->created_at)}}</td>
-{{--                                    <td class="d-none d-lg-table-cell text-center">{{$note->image_files()->count()}}</td>--}}
-{{--                                    <td class="d-none d-lg-table-cell text-center">{{$note->audio_files()->count()}}</td>--}}
-{{--                                    <td class="d-none d-lg-table-cell text-center">{{$note->pdf_files()->count()}}</td>--}}
-                                    <td>
+                                      <td>
                                         {!! getVerifyBadge($note->approve) !!}
                                     </td>
                                 </tr>
@@ -110,12 +108,12 @@
                                         <td>
                                             <div class="media">
                                                 <div class="media-image mr-3 rounded-circle">
-                                                    <a href=""><img class="rounded-circle w-45"
+                                                    <a href="{{route('admin.student.show',$list->uuid)}}"><img class="rounded-circle w-45"
                                                                     src="{{$list->image_placeholder}}"
                                                                     alt="{{$list->name}}"></a>
                                                 </div>
                                                 <div class="media-body align-self-center">
-                                                    <a href="profile.html"><h6
+                                                    <a href="{{route('admin.student.show',$list->uuid)}}"><h6
                                                             class="mt-0 text-dark font-weight-medium">{{$list->name}}</h6>
                                                     </a>
                                                     <small>{{$list->email}}</small>
@@ -149,12 +147,12 @@
                                         <td>
                                             <div class="media">
                                                 <div class="media-image mr-3 rounded-circle">
-                                                    <a href=""><img class="rounded-circle w-45"
+                                                    <a href="{{route('admin.professor.show',$list->uuid)}}"><img class="rounded-circle w-45"
                                                                     src="{{$list->image_placeholder}}"
                                                                     alt="{{$list->name}}"></a>
                                                 </div>
                                                 <div class="media-body align-self-center">
-                                                    <a href="profile.html"><h6
+                                                    <a href="{{route('admin.professor.show',$list->uuid)}}"><h6
                                                             class="mt-0 text-dark font-weight-medium">{{$list->name}}</h6>
                                                     </a>
                                                     <small>{{$list->email}}</small>
