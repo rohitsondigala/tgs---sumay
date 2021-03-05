@@ -36,7 +36,9 @@
             <td>
                 @if(!empty($list->student_subjects))
                     @foreach($list->student_subjects as $subjectList)
-                        {{$loop->iteration}} - {{!empty($subjectList->subject) ? $subjectList->subject->title : ''}} - {{$subjectList->is_purchased}} <br>
+                        {{$loop->iteration}} - {{!empty($subjectList->subject) ? $subjectList->subject->title : ''}}
+{{--                        - {{$subjectList->is_purchased}} --}}
+                        <br>
                     @endforeach
                 @else
                 @endif

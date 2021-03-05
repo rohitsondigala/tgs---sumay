@@ -96,10 +96,25 @@ class AdminGeneratePackageController extends Controller
             $isExists  = purchased_packages()->where('user_uuid',$user_uuid)->where('subject_uuid',$packageDetail->subject_uuid)->first();
             if(!empty($isExists)){
                 $submitArray = $isExists->update($purchaseArray);
+                $paymentArray = array(
+                    'purchase_package_uuid' => $isExists->uuid,
+                    'payment_id' => null,
+                    'price' => 0,
+                );
+                purchased_packages_payments()->create($paymentArray);
+
             }else{
                 $purchaseArray['registration'] = 0;
                 $submitArray =purchased_packages()->create($purchaseArray);
+                $paymentArray = array(
+                    'purchase_package_uuid' => $submitArray->uuid,
+                    'payment_id' => null,
+                    'price' => 0,
+                );
+                purchased_packages_payments()->create($paymentArray);
+
             }
+
 
             if ($submitArray) {
                 $route = route($this->route.'.index');
