@@ -113,10 +113,14 @@
                                                             <div class="text-left text-uppercase text-primary"> {{$list->from_user->name}}</div>
                                                         </div>
                                                         <div class="col-md-12">
-                                                            @if(!empty($list->post_reply))
-                                                                <div class=" text-success">{{__('REPLIED')}}</div>
+                                                            @if($list->approve)
+                                                                @if(!empty($list->post_reply))
+                                                                    <div class=" text-success">{{__('REPLIED')}}</div>
+                                                                @else
+                                                                    <div class=" text-danger">{{__('PENDING REPLY')}}</div>
+                                                                @endif
                                                             @else
-                                                                <div class=" text-danger">{{__('PENDING REPLY')}}</div>
+                                                                <div class=" text-danger">{{__('REJECTED')}}</div>
                                                             @endif
                                                         </div>
                                                     </div>
