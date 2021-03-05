@@ -853,6 +853,9 @@ class ApiService
         $existingSubjects = getStudentSubjects($userDetail);
 
         $studentList = professor_subjects()
+            ->whereHas('user',function ($query){
+                $query->where('verify',1);
+            })
             ->where('user_uuid', '!=', $userDetail->uuid)
             ->whereIn('subject_uuid', $existingSubjects)
             ->orderBy('user_uuid')
