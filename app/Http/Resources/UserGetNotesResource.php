@@ -64,7 +64,7 @@ class UserGetNotesResource extends JsonResource
         $returnData['image_files'] = UserGetNotesFilesResource::collection($this->image_files)->toArray($request);
         $returnData['pdf_files'] = UserGetNotesFilesResource::collection($this->pdf_files)->toArray($request);
         $returnData['audio_files'] = UserGetNotesFilesResource::collection($this->audio_files)->toArray($request);
-        if($this->user->role->title == 'STUDENT') {
+        if($userDetail->user->role->title == 'STUDENT') {
             if (in_array($this->subject->uuid, $existingSubjects)) {
                 $returnData['subject']['is_purchased'] = 1;
             } else {
