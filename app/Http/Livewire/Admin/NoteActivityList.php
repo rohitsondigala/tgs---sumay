@@ -34,7 +34,7 @@ class NoteActivityList extends Component
         $user_uuid = $this->user_uuid;
         $detail = user()->where('uuid',$user_uuid)->first();
 
-        $notes = notes()->ofApprove()->where('user_uuid',$user_uuid)->orderBy('updated_at','DESC')->paginate($this->perPage);
+        $notes = notes()->ofApprove()->where('stream_uuid',$detail->stream_uuid)->where('user_uuid',$user_uuid)->orderBy('updated_at','DESC')->paginate($this->perPage);
         $route = $this->route;
         return view($this->directory.'.list',compact('notes','detail','route'));
     }

@@ -40,7 +40,7 @@ class PostQueryActivityList extends Component
         }else{
             $queries->where('from_user_uuid',$user_uuid);
         }
-        $queries = $queries->paginate($this->perPage);
+        $queries = $queries->where('stream_uuid',$detail->stream_uuid)->paginate($this->perPage);
         $route = $this->route;
         return view($this->directory.'.list',compact('queries','detail','route'));
     }

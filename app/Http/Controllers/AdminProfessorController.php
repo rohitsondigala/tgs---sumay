@@ -74,7 +74,7 @@ class AdminProfessorController extends Controller
             abort(404);
         }
         if($request->type == 'ACTIVITIES'){
-            $notes = notes()->ofApprove()->where('user_uuid',$uuid)->orderBy('updated_at','DESC')->take(10)->get();
+            $notes = notes()->ofApprove()->where('stream_uuid',$detail->stream_uuid)->where('user_uuid',$uuid)->orderBy('updated_at','DESC')->take(10)->get();
             $queries = post_query()->where('to_user_uuid',$uuid)->orderBy('updated_at','DESC')->take(10)->get();
             $pageTitle = trans('strings.admin|professor|activities');
             return view($directory.'.activities',compact('directory','route','detail','pageTitle','notes','queries'));
