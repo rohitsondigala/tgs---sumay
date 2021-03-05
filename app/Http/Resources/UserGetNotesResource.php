@@ -71,7 +71,7 @@ class UserGetNotesResource extends JsonResource
                 $returnData['subject']['is_purchased'] = 0;
             }
         }else{
-            $returnData['subject']['is_purchased'] = 0;
+            $returnData['subject']['is_purchased'] = 1;
 
         }
         return $returnData;
