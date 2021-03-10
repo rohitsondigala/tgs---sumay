@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GetProfessorListResource extends JsonResource
@@ -46,6 +47,12 @@ class GetProfessorListResource extends JsonResource
             $returnData['subject']['is_purchased'] = 1;
         }else{
             $returnData['subject']['is_purchased'] = 0;
+        }
+        $days  = Carbon::parse($this->user->created_at)->diffInDays(Carbon::now());
+        if($days <= 5){
+            $returnData['is_new'] = 1;
+        }else{
+            $returnData['is_new'] = 0;
         }
 
         return $returnData;      }

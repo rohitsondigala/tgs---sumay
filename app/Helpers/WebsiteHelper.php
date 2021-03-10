@@ -60,6 +60,12 @@ function user_role(){
     }
 }
 
+function user_status(){
+    if(auth()->check()){
+        return auth()->user()->status;
+    }
+}
+
 function generateLog($subject){
     $log = [];
 

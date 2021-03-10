@@ -19,6 +19,9 @@ class AuthService
         $loginDetails = ['email' => $email, 'password' => $password];
         if (user()->where('email', $email)->count() > 0) {
             $userDetail = user()->where('email', $email)->first();
+            if($userDetail->status == 0){
+                return ['success'=>false,'message'=>'Your account is disabled, please contact on theguruchela@gmail.com'];
+            }
             if (Auth::attempt($loginDetails)) {
                 if (Hash::check($request->password, $userDetail->password)) {
                     return ['success' => true, 'message' => trans('auth.login')];

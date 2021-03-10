@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GetStudentListResource extends JsonResource
@@ -36,7 +37,12 @@ class GetStudentListResource extends JsonResource
         $returnData['total_reviews'] = 0;
         $returnData['total_notes'] = $this->user->notes()->count();
         $returnData['total_queries'] = $this->user->student_post_queries()->count();
-
+        $days  = Carbon::parse($this->user->created_at)->diffInDays(Carbon::now());
+        if($days <= 5){
+            $returnData['is_new'] = 1;
+        }else{
+            $returnData['is_new'] = 0;
+        }
         return $returnData;
     }
 }

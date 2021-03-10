@@ -245,6 +245,10 @@ class ApiController extends Controller
         try {
             if(user()->where('email',$email)->count() > 0){
                 $userDetail = user()->where('email',$email)->first();
+                if(!$userDetail->status){
+                    return response()->json(['success' => false, 'message' => trans('api.account_deactivated')]);
+
+                }
                 if(!in_array($userDetail->role->title,checkRoles())){
                     return response()->json(['success' => false, 'message' => trans('api.do_not_have_access')]);
                 }

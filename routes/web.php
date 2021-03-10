@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminModeratorController;
+use App\Http\Controllers\AdminProfessorController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\AdminStudentController;
 use App\Http\Controllers\CustomController;
 use App\Http\Controllers\ModeratorDashboardController;
 use App\Http\Controllers\ModeratorNotesController;
@@ -70,8 +73,11 @@ Route::name('admin.')
         Route::resource('streams','App\Http\Controllers\AdminStreamsController');
         Route::resource('subjects','App\Http\Controllers\AdminSubjectsController');
         Route::resource('moderator','App\Http\Controllers\AdminModeratorController');
+        Route::post('/delete-moderator/{uuid}',[AdminModeratorController::class,'deleteModerator'])->name('moderator.delete-moderator');
         Route::resource('student','App\Http\Controllers\AdminStudentController');
+        Route::post('/delete-student/{uuid}',[AdminStudentController::class,'deleteStudent'])->name('student.delete-student');
         Route::resource('professor','App\Http\Controllers\AdminProfessorController');
+        Route::post('/delete-professor/{uuid}',[AdminProfessorController::class,'deleteProfessor'])->name('professor.delete-professor');
         Route::resource('packages','App\Http\Controllers\AdminPackageController');
         Route::resource('generate-package','App\Http\Controllers\AdminGeneratePackageController');
         Route::get('/search/{table}',[CustomController::class,'search'])->name('search');

@@ -11,7 +11,8 @@
             </div>
 
             <div class="card-body">
-                @include($directory.'.list')
+                @livewire('admin.moderator-list')
+{{--                @include($directory.'.list')--}}
             </div>
         </div>
     </div>

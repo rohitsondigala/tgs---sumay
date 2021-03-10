@@ -576,9 +576,13 @@ class ApiService
             return ['success' => false, 'message' => trans('api.user_with_not_moderator_posts')];
         }
 
-        $moderatorDailyPost = moderator_daily_posts()->with('moderator_subject.subject')->whereHas('moderator_subject', function ($query) use ($subjectList) {
+        $moderatorDailyPost = moderator_daily_posts()->with('moderator_subject.subject')
+            ->whereHas('moderator_subject', function ($query) use ($subjectList) {
             $query->whereIn('subject_uuid', $subjectList);
-        })->orderBy('id', 'DESC')->get();
+            })
+            ->whereHas('user', function ($query) {
+                $query->ofStatus();
+            })->orderBy('id', 'DESC')->get();
 
         if ($moderatorDailyPost->isNotEmpty()) {
             $returnData = GetModeratorPostsResource::collection($moderatorDailyPost)->toArray($request);
@@ -776,7 +780,9 @@ class ApiService
             $allNotes->where('title','like','%'.$search.'%');
         }
 
-        $allNotes = $allNotes->ofOrderBy('DESC')->get();
+        $allNotes = $allNotes->whereHas('user',function ($query) {
+            $query->ofVerify();
+        })->ofOrderBy('DESC')->get();
         if ($allNotes->isNotEmpty()) {
             $returnData = UserGetNotesResource::collection($allNotes)->toArray($request);
             return ['success' => true, 'message' => trans('api.all_package_list'), 'data' => $returnData];
@@ -813,7 +819,7 @@ class ApiService
         $existingSubjects = getStudentSubjects($userDetail);
         $studentList = purchased_packages()
             ->whereHas('user',function ($query){
-                $query->where('verify',1);
+                $query->ofVerify();
             })
             ->where('user_uuid', '!=', $userDetail->uuid)
             ->whereIn('subject_uuid', $existingSubjects)
@@ -857,7 +863,7 @@ class ApiService
 
         $studentList = professor_subjects()
             ->whereHas('user',function ($query){
-                $query->where('verify',1);
+                $query->ofVerify();
             })
             ->where('user_uuid', '!=', $userDetail->uuid)
             ->whereIn('subject_uuid', $existingSubjects)

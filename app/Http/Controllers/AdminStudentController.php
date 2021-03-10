@@ -148,4 +148,18 @@ class AdminStudentController extends Controller
     {
         //
     }
+
+    public function deleteStudent($uuid){
+        $route = $this->route;
+        $userDetail = user()->where('uuid',$uuid)->first();
+        if(!$userDetail){
+            abort(404);
+        }
+        if( user()->where('uuid',$uuid)->update(['status'=>0])){
+            return redirect(route($route.'.index'))->with(['message'=>'Professor deleted successfully','class'=>'alert-success']);
+        }else{
+            return redirect()->back()->with(['message'=>'Please try after some time','class'=>'alert-danger']);
+        }
+
+    }
 }

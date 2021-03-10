@@ -164,8 +164,22 @@ class User extends Authenticatable implements JWTSubject
      * @return mixed
      */
     public function scopeOfVerify($query){
-        return $query->where('verify',1);
+        return $query->where('verify',1)->where('status',1);
     }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeOfStatus($query){
+        return $query->where('status',1);
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+
 
     /**
      * @return HasOne
@@ -188,6 +202,9 @@ class User extends Authenticatable implements JWTSubject
     public function notes(){
         return $this->hasMany('App\Models\Notes','user_uuid','uuid')->orderBy('updated_at','DESC');
     }
+    public function notes_approve_count(){
+        return $this->hasMany('App\Models\Notes','user_uuid','uuid')->where('approve',1);
+    }
 
 
 
@@ -203,6 +220,26 @@ class User extends Authenticatable implements JWTSubject
      */
     public function student_post_queries(){
         return $this->hasMany('App\Models\PostQuery','from_user_uuid','uuid');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function student_post_approve_queries(){
+        return $this->hasMany('App\Models\PostQuery','from_user_uuid','uuid')->where('approve',1);
+    }
+    /**
+     * @return HasMany
+     */
+    public function moderator_approved_notes(){
+        return $this->hasMany('App\Models\Notes','approved_by','uuid')->where('approve',1);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function moderator_approved_queries(){
+        return $this->hasMany('App\Models\PostQuery','approved_by','uuid')->where('approve',1);
     }
 
     /**
