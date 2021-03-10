@@ -68,7 +68,7 @@ class ProfessorList extends Component
             if($rating){
                 $professors->withCount(['reviews as average_rating' => function ($query) use ($subjectUuid) {
                     $query->select(DB::raw('coalesce(avg(rating),0)'))->where('subject_uuid',$subjectUuid);
-                }])->whereBetween('average_rating',$rating,$rating+1)->orderByDesc('average_rating');
+                }])->having('average_rating','>=',$rating)->having('average_rating','<',$upRating )->orderByDesc('average_rating');
             }else{
                 $professors->withCount(['reviews as average_rating' => function ($query) use ($subjectUuid) {
                     $query->select(DB::raw('coalesce(avg(rating),0)'))->where('subject_uuid',$subjectUuid);
