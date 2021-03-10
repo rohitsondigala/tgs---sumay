@@ -47,6 +47,7 @@ class ProfessorList extends Component
         $subjectList = $adminService->getStudentAllSelectedSubjectDropdown();
         $subjectUuid =$this->subjectUuid;
         $rating =$this->rating;
+        $upRating = $this->rating + 1;
 
         $professors = user()->with('professor_subjects')->ofRole('PROFESSOR')
             ->where(function ($query) use ($searchWords) {
@@ -67,7 +68,7 @@ class ProfessorList extends Component
             if($rating){
                 $professors->withCount(['reviews as average_rating' => function ($query) use ($subjectUuid) {
                     $query->select(DB::raw('coalesce(avg(rating),0)'))->where('subject_uuid',$subjectUuid);
-                }])->having('average_rating','<',$rating)->orderByDesc('average_rating');
+                }])->whereBetween('average_rating',$rating,$rating+1)->orderByDesc('average_rating');
             }else{
                 $professors->withCount(['reviews as average_rating' => function ($query) use ($subjectUuid) {
                     $query->select(DB::raw('coalesce(avg(rating),0)'))->where('subject_uuid',$subjectUuid);
@@ -76,7 +77,7 @@ class ProfessorList extends Component
         } elseif($rating) {
             $professors->withCount(['reviews as average_rating' => function ($query) {
                 $query->select(DB::raw('coalesce(avg(rating),0)'));
-            }])->having('average_rating','<',$rating)->orderByDesc('average_rating');
+            }])->having('average_rating','>=',$rating)->having('average_rating','<',$upRating )->orderByDesc('average_rating');
         }else{
             $professors->withCount(['reviews as average_rating' => function ($query){
                 $query->select(DB::raw('coalesce(avg(rating),0)'));
