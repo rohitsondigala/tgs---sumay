@@ -49,7 +49,7 @@
             <div class="card-header card-header-border-bottom d-flex justify-content-between">
                 <h2>{{$pageTitle}} - {{$detail->name}}</h2>
                 <div class="text-right">
-                    <a href="" class="btn btn-outline-info">View Reviews</a>
+                    <a href="{{route($route.'.reviews',$detail->uuid)}}" class="btn btn-outline-info">View Reviews</a>
                 </div>
             </div>
 

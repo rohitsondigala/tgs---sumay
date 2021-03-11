@@ -187,3 +187,10 @@ function purchased_packages_payments()
 {
     return app(App\Models\PurchasedPackagesPayments::class);
 }
+/**
+ * @return Application|mixed
+ */
+function purchased_packages_payment_histories()
+{
+    return app(App\Models\PurchasedPackagesPaymentHistory::class);
+}

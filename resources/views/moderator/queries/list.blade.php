@@ -18,8 +18,8 @@
             <th>{{__('Student Name')}}</th>
             <th>{{__('Professor Name')}}</th>
             <th>{{__('Title')}}</th>
-            <th>{{__('Approve?')}}</th>
             <th>{{__('Action')}}</th>
+            <th>{{__('Approve?')}}</th>
         </tr>
         </thead>
 
@@ -31,6 +31,9 @@
                 <td>{{$query->from_user->name}}</td>
                 <td>{{$query->to_user->name}}</td>
                 <td><a class="text-primary" href="{{route($route.'.show',$query->uuid)}}">{{$query->title}}</a></td>
+                <td>
+                    <a class="text-info" href="{{route($route.'.show',$query->uuid)}}"> View Detail </a>
+                </td>
                 <td>
                     {!! getVerifyBadge($query->approve) !!}
                     @if($query->approve == 0 || $query->approve ==4)
@@ -48,8 +51,7 @@
                     @endif
 
                 </td>
-                <td>
-                    <a class="text-info" href="{{route($route.'.show',$query->uuid)}}"> View Detail </a>
+
             </tr>
         @empty
             <tr>

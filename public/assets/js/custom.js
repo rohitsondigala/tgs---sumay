@@ -301,7 +301,7 @@ $(function() {
             $("#subject").empty();
         }
     });
-    $('#packageList').change(function(){
+    $(document).on('change','#packageListStream',function(){
         var package_uuid = $(this).val();
         if(package_uuid){
             $.ajax({
@@ -316,6 +316,29 @@ $(function() {
 
                     }else{
                         $("#packagePrice").empty();
+                    }
+                }
+            });
+        }else{
+            $("#subject").empty();
+        }
+    });
+
+    $('#studentListPackage').change(function(){
+        var user_uuid = $(this).val();
+        if(user_uuid){
+            $.ajax({
+                type:"GET",
+                url:"/admin/get-package-by-stream?uuid="+user_uuid,
+                success:function(res){
+                    if(res){
+                        $("#packageListStream").empty();
+                        $.each(res,function(key,value){
+                            $("#packageListStream").append('<option value="'+key+'">'+value+'</option>');
+                        });
+
+                    }else{
+                        $("#packageListStream").empty();
                     }
                 }
             });

@@ -73,4 +73,10 @@ class CustomController extends Controller
             ];
         return response()->json($returnArray);
     }
+
+    public function getPackageByStudentStream(Request $request){
+        $stream_uuid = user()->where('uuid',$request->uuid)->value('stream_uuid');
+        $packages = packages()->where('stream_uuid',$stream_uuid)->orderBy('id', 'DESC')->pluck('title', 'uuid')->prepend('Select Package', '');
+        return response()->json($packages);
+    }
 }

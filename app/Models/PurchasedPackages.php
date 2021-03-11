@@ -45,5 +45,9 @@ class PurchasedPackages extends Model
     {
         return $this->hasOne('App\Models\Packages', 'uuid','package_uuid');
     }
+    public function payment()
+    {
+        return $this->hasOne('App\Models\PurchasedPackagesPayments', 'purchase_package_uuid','uuid');
+    }
 
 }

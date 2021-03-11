@@ -256,6 +256,7 @@ class ApiController extends Controller
                 if (!$token) {
                     return response()->json(['success' => false, 'message' => 'invalid_credentials'], 200);
                 }
+                user()->where('email',$email)->update(['access_token'=>$request->access_token,'logged_in'=>1]);
                 $data = user()->with('role', 'country_detail', 'state_detail', 'city_detail','professor_subjects.subject')->where('email', $email)->first()->toArray();
                 $data['token'] = $token;
                 $data['image'] = $this->base_url . $data['image'];

@@ -133,4 +133,15 @@ class AdminProfessorController extends Controller
         }
 
     }
+
+
+    public function getReviews($uuid){
+        $reviews = reviews()->where('to_user_uuid',$uuid)->get();
+        $avgRating = reviews()->where('to_user_uuid',$uuid)->avg('rating');
+        $pageTitle = trans('strings.admin|professor|reviews');
+        $directory = $this->directory;
+
+        return view($directory.'.reviews',compact('reviews','pageTitle','avgRating'));
+    }
+
 }

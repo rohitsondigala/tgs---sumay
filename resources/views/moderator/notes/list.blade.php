@@ -18,8 +18,8 @@
             <th>{{__('User Type')}}</th>
             <th>{{__('Uploaded By')}}</th>
             <th>{{__('Title')}}</th>
-            <th>{{__('Approve?')}}</th>
             <th>{{__('Action')}}</th>
+            <th>{{__('Approve?')}}</th>
         </tr>
         </thead>
 
@@ -32,6 +32,9 @@
                 </td>
                 <td>{{$note->user->name}}</td>
                 <td><a class="text-primary" href="{{route($route.'.show',$note->uuid)}}">{{$note->title}}</a></td>
+                <td>
+                    <a class="text-info" href="{{route($route.'.show',$note->uuid)}}"> View Detail </a>
+                </td>
                 <td>
                     {!! getVerifyBadge($note->approve) !!}
                     @if($note->approve == 0 || $note->approve ==4)
@@ -49,8 +52,7 @@
                     @endif
 
                 </td>
-                <td>
-                    <a class="text-info" href="{{route($route.'.show',$note->uuid)}}"> View Detail </a>
+
             </tr>
         @empty
             <tr>

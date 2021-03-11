@@ -21,14 +21,14 @@
 
                             <div class="form-group col-md-12 mb-4">
                                 <label> {{__('Student')}}</label>
-                                {!! Form::select('user_uuid',$students,null,['class'=>'form-control select2','id'=>'studentList']) !!}
+                                {!! Form::select('user_uuid',$students,null,['class'=>'form-control select2','id'=>'studentListPackage']) !!}
                                 @if($errors->has('user_uuid'))
                                     <span class="text text-danger">{{$errors->first('user_uuid')}}</span>
                                 @endif
                             </div>
                             <div class="form-group col-md-12 mb-4">
                                 <label> {{__('Package')}}</label>
-                                {!! Form::select('package_uuid',$packages,null,['class'=>'form-control select2','id'=>'packageList']) !!}
+                                {!! Form::select('package_uuid',[],null,['class'=>'form-control select2','id'=>'packageListStream']) !!}
                                 @if($errors->has('package_uuid'))
                                     <span class="text text-danger">{{$errors->first('package_uuid')}}</span>
                                 @endif

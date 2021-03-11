@@ -176,3 +176,20 @@ function getGeneratePackageDetail($request,$userDetail,$packageDetail){
 function getDateInFormat($date){
     return Carbon::parse($date)->format('d M Y');
 }
+
+function getRatingStarHtmlAdmin($rating){
+    $html = '';
+    for ($i=1;$i<=5;$i++){
+        if($i<=$rating){
+            $html .= '<button type="button" class="btn btn-warning btn-sm ml-1" aria-label="Left Align">
+                                <span class="mdi mdi-star" aria-hidden="true"></span>
+                            </button>';
+        }else{
+            $html .= '<button type="button" class="m btn btn-default btn-grey btn-sm ml-1" aria-label="Left Align">
+                                <span class="mdi mdi-star" aria-hidden="true"></span>
+                            </button>';
+        }
+
+    }
+    return $html;
+}

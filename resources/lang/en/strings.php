@@ -68,9 +68,11 @@ return [
 
     //students Event Texts
     'admin|student|index' => 'Student List',
+    'admin|student|reviews' => 'Reviews',
     'admin|professor|index' => 'Professor List',
     'admin|professor|view' => 'View Professor Detail',
     'admin|professor|activities' => 'Activities',
+    'admin|professor|reviews' => 'Reviews',
 
     'admin|notes' => 'Notes',
     'admin|notes|view' => 'Note Detail',

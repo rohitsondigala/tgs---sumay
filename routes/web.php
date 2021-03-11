@@ -76,13 +76,16 @@ Route::name('admin.')
         Route::post('/delete-moderator/{uuid}',[AdminModeratorController::class,'deleteModerator'])->name('moderator.delete-moderator');
         Route::resource('student','App\Http\Controllers\AdminStudentController');
         Route::post('/delete-student/{uuid}',[AdminStudentController::class,'deleteStudent'])->name('student.delete-student');
+        Route::get('/student/reviews/{uuid}',[AdminStudentController::class,'getReviews'])->name('student.reviews');
         Route::resource('professor','App\Http\Controllers\AdminProfessorController');
         Route::post('/delete-professor/{uuid}',[AdminProfessorController::class,'deleteProfessor'])->name('professor.delete-professor');
+        Route::get('/professor/reviews/{uuid}',[AdminProfessorController::class,'getReviews'])->name('professor.reviews');
         Route::resource('packages','App\Http\Controllers\AdminPackageController');
         Route::resource('generate-package','App\Http\Controllers\AdminGeneratePackageController');
         Route::get('/search/{table}',[CustomController::class,'search'])->name('search');
         Route::get('/get-subject-list',[CustomController::class,'getSubjectList'])->name('subject-list');
         Route::get('/get-package-prices',[CustomController::class,'getPackageDetail'])->name('package-detail');
+        Route::get('/get-package-by-stream',[CustomController::class,'getPackageByStudentStream'])->name('package-detail');
         Route::resource('notes','App\Http\Controllers\AdminNotesController');
         Route::resource('queries','App\Http\Controllers\AdminPostQueriesController');
         Route::resource('reviews','App\Http\Controllers\AdminReviewsController');

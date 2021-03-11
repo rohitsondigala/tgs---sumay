@@ -162,4 +162,13 @@ class AdminStudentController extends Controller
         }
 
     }
+
+    public function getReviews($uuid){
+        $reviews = reviews()->where('from_user_uuid',$uuid)->get();
+        $avgRating = reviews()->where('from_user_uuid',$uuid)->avg('rating');
+        $pageTitle = trans('strings.admin|student|reviews');
+        $directory = $this->directory;
+
+        return view($directory.'.reviews',compact('reviews','pageTitle','avgRating'));
+    }
 }
