@@ -86,7 +86,7 @@ class ProfessorList extends Component
 
         $professors->ofVerify();
 
-        $professors = $professors->paginate($this->perPage);
+        $professors = $professors->orderBy('id','DESC')->paginate($this->perPage);
 
 
 
