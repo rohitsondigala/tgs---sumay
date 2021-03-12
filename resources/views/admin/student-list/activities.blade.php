@@ -14,7 +14,7 @@
                 <a href="">
                     <div class="card card-mini mb-4">
                         <div class="card-body">
-                            <h2 class="mb-1">{{$detail->notes()->count()}}</h2>
+                            <h2 class="mb-1">{{$detail->notes()->ofApprove()->count()}}</h2>
                             <p>{{__('Uploaded Notes')}}</p>
 
                         </div>

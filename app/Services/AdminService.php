@@ -5,7 +5,7 @@ namespace App\Services;
 class AdminService{
 
     function getDashboardCounts(){
-        $notes = notes()->count();
+        $notes = notes()->ofApprove()->count();
         $moderators = user()->ofRole('MODERATOR')->count();
         $professors = user()->ofRole('PROFESSOR')->where('verify',1)->count();
         $students = user()->ofRole('STUDENT')->where('verify',1)->count();
