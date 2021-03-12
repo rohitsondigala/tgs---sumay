@@ -33,7 +33,7 @@ class ApiController extends Controller
     {
         $this->apiService = new ApiService();
         $this->base_url = env('APP_URL');
-        $this->middleware('api_access', ['except' => ['login', 'checkEmail', 'checkMobile', 'streams', 'subjects', 'postStudentRegister', 'verifyEmail','resendOtp','forgotPassword','verifyForgotPassword','verifyChangePassword','postProfessorRegister','countries','states','cities']]);
+        $this->middleware('api_access', ['except' => ['login', 'checkEmail', 'checkMobile', 'streams', 'subjects', 'postStudentRegister', 'verifyEmail','resendOtp','forgotPassword','verifyForgotPassword','verifyChangePassword','postProfessorRegister','countries','states','cities','logout']]);
     }
 
     /**
@@ -245,9 +245,9 @@ class ApiController extends Controller
         try {
             if(user()->where('email',$email)->count() > 0){
                 $userDetail = user()->where('email',$email)->first();
+
                 if(!$userDetail->status){
                     return response()->json(['success' => false, 'message' => trans('api.account_deactivated')]);
-
                 }
                 if(!in_array($userDetail->role->title,checkRoles())){
                     return response()->json(['success' => false, 'message' => trans('api.do_not_have_access')]);
@@ -256,7 +256,7 @@ class ApiController extends Controller
                 if (!$token) {
                     return response()->json(['success' => false, 'message' => 'invalid_credentials'], 200);
                 }
-                user()->where('email',$email)->update(['access_token'=>$request->access_token,'logged_in'=>1]);
+                user()->where('email',$email)->update(['access_token'=>$request->access_token]);
                 $data = user()->with('role', 'country_detail', 'state_detail', 'city_detail','professor_subjects.subject')->where('email', $email)->first()->toArray();
                 $data['token'] = $token;
                 $data['image'] = $this->base_url . $data['image'];
@@ -267,6 +267,29 @@ class ApiController extends Controller
       } catch (JWTException $e) {
             return response()->json(['success' => false, 'message' => 'could_not_create_token'], 200);
         }
+    }
+
+    public function logout(Request $request){
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required',
+        ]);
+        $errors = json_decode($validate->errors());
+
+        foreach ($errors as $list) {
+            if ($validate->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $list[0],
+
+                ], 200);
+            }
+        }
+
+        $user_uuid = $request->user_uuid;
+        user()->where('uuid',$user_uuid)->update(['access_token'=>null,'logged_in'=>0]);
+        auth()->logout();
+        return response()->json(['success' => true, 'message' => 'Logout Successful'], 200);
+
     }
 
     /**
