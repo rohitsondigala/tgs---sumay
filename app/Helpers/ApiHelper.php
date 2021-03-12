@@ -307,4 +307,42 @@ function storePurchasePackage($request,$purchasedPackageDetail)
     }
 
 
+     function pushNotification($device_token,$msg){
+            /* FCM Notification */
+            $api_access_key =env('FIREBASE_KEY');
+            $registrationIds = $device_token;
+
+            $msg = array
+            (
+                'body' => $msg,
+                'title' => 'Guardian'
+            );
+
+            $fields = array
+            (
+                'to' => $registrationIds,
+                'notification' => $msg,
+                'data' => null
+            );
+
+            $headers = array
+            (
+                'Authorization: key=' . $api_access_key,
+                'Content-Type: application/json'
+            );
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+            $result = curl_exec($ch);
+            curl_close($ch);
+
+     /* End FCM Notification */
+    }
+
+
 

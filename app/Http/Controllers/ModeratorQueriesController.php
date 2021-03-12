@@ -70,7 +70,7 @@ class ModeratorQueriesController extends Controller
             $queries->where('title','like','%'.$title.'%');
         }
 
-        $queries = $queries->orderBy('updated_at','DESC')->get();
+        $queries = $queries->orderBy('updated_at','DESC')->simplePaginate(10);
 
         $pageTitle = trans('strings.moderator|queries|index');
         $directory = $this->directory;

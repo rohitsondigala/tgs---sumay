@@ -61,3 +61,8 @@
         @endforelse
         </tbody>
     </table>
+
+
+<div class="text-center">
+    {{$notes->links()}}
+</div>

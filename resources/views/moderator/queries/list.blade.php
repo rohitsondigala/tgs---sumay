@@ -60,3 +60,6 @@
         @endforelse
         </tbody>
     </table>
+<div class="text-center">
+    {{$queries->links()}}
+</div>

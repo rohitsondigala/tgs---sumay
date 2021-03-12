@@ -67,7 +67,7 @@ class ModeratorNotesController extends Controller
             $notes->where('title','like','%'.$title.'%');
         }
 
-        $notes = $notes->orderBy('updated_at','DESC')->get();
+        $notes = $notes->orderBy('updated_at','DESC')->simplePaginate(10);
 
         $pageTitle = trans('strings.moderator|notes|index');
         $directory = $this->directory;
