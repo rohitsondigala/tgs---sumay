@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('/login',[ApiController::class,'login'])->name('login');
+Route::post('/logout',[ApiController::class,'logout'])->name('logout');
 Route::post('/check-email',[ApiController::class,'checkEmail'])->name('check-email');
 Route::post('/check-mobile',[ApiController::class,'checkMobile'])->name('check-mobile');
 Route::post('/streams',[ApiController::class,'streams'])->name('streams');
