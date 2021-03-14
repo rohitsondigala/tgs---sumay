@@ -7,8 +7,8 @@ class AdminService{
     function getDashboardCounts(){
         $notes = notes()->ofApprove()->count();
         $moderators = user()->ofRole('MODERATOR')->count();
-        $professors = user()->ofRole('PROFESSOR')->where('verify',1)->count();
-        $students = user()->ofRole('STUDENT')->where('verify',1)->count();
+        $professors = user()->ofRole('PROFESSOR')->ofVerify()->count();
+        $students = user()->ofRole('STUDENT')->ofVerify()->count();
         return [
             'notes' => $notes,
             'moderators' => $moderators,

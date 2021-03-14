@@ -87,7 +87,7 @@ class ApiService
             'university_name' => 'required',
             'college_name' => 'required',
             'preferred_language' => 'required',
-            'other_information' => 'required',
+            'other_information' => 'sometimes',
             'stream_uuid' => 'required',
             'subjects' => 'required',
             'access_token' => 'required'
@@ -569,6 +569,11 @@ class ApiService
         $userDetail = getUserDetail($request->user_uuid);
         if (!$userDetail) {
             return ['success' => false, 'message' => trans('api.user_not_found')];
+        }
+
+        if(!$userDetail->status)
+        {
+            return ['success' => false, 'message' => trans('api.Logout'),'data'=>['status'=>$userDetail->status]];
         }
 
         $subjectList = getSubjectListUUID($userDetail);
