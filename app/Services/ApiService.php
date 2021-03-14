@@ -573,7 +573,7 @@ class ApiService
 
         if(!$userDetail->status)
         {
-            return ['success' => false, 'message' => trans('api.Logout'),'data'=>['status'=>$userDetail->status]];
+            return ['success' => false, 'message' => trans('api.logout'),'data'=>['status'=>$userDetail->status]];
         }
 
         $subjectList = getSubjectListUUID($userDetail);
