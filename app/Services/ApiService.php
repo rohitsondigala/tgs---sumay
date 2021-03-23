@@ -1603,5 +1603,4 @@ class ApiService
             return ['success' => true, 'message' => trans('api.notifications'), 'data' => $returnData];
         }
     }
-
 }
