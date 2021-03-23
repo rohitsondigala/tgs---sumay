@@ -56,5 +56,6 @@ Route::group([
     Route::post('/delete-note-file',[ApiController::class,'deleteNoteFile'])->name('delete-note-file');
     Route::post('/purchase-package',[ApiController::class,'purchasePackage'])->name('purchase-package');
     Route::post('/get-note-detail',[ApiController::class,'getNoteDetail'])->name('get-note-detail');
+    Route::post('/get-notification',[ApiController::class,'getNotification'])->name('get-notification');
 
 });

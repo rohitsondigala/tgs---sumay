@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\SendGeneralNotification;
 use App\Services\CrudService;
 use App\Services\ModeratorService;
 use Illuminate\Contracts\Foundation\Application;
@@ -9,6 +10,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use \Illuminate\Support\Facades\Notification;
 
 class ModeratorNotesController extends Controller
 {
@@ -149,7 +151,8 @@ class ModeratorNotesController extends Controller
         $uuid = $request->uuid;
         if(notes()->where('uuid',$uuid)->count() > 0){
             if(notes()->where('uuid',$uuid)->update(['approve'=>1,'approved_by'=>user_uuid()])){
-                //TODO :: Push notification here for approve post
+                $noteDetail = notes()->where('uuid',$uuid)->first();
+                sendPushNotification($noteDetail->user_uuid,'note','notification|post|title','notification|post|approved');
                 return redirect()->back()->with(['message'=>'Post approved successfully','class'=>'alert-success']);
             }else{
                 return redirect()->back()->with(['message'=>'Post not approved, please try after some time','class'=>'alert-danger']);
@@ -162,7 +165,8 @@ class ModeratorNotesController extends Controller
         $uuid = $request->uuid;
         if(notes()->where('uuid',$uuid)->count() > 0){
             if(notes()->where('uuid',$uuid)->update(['approve'=>2,'approved_by'=>user_uuid()])){
-                //TODO :: Push notification here for approve post
+                $noteDetail = notes()->where('uuid',$uuid)->first();
+                sendPushNotification($noteDetail->user_uuid,'note','notification|post|title','notification|post|rejected');
                 return redirect()->back()->with(['message'=>'Post rejected successfully','class'=>'alert-success']);
             }else{
                 return redirect()->back()->with(['message'=>'Post not rejected, please try after some time','class'=>'alert-danger']);

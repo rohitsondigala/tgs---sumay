@@ -61,5 +61,6 @@ return [
     'no_note_found' => 'No note found with this data',
     'account_deactivated' => 'Account is deactivated',
     'already_logged_in' => 'Already logged in from the other device',
-    'logout' => 'Logout'
+    'logout' => 'Logout',
+    'notifications' => 'Notifications'
 ];

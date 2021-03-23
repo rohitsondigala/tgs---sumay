@@ -80,6 +80,10 @@ return [
     'admin|queries' => 'Queries',
     'admin|query|view' => 'Posted Query Detail',
 
+    'admin|notification|index' => 'Notifications',
+    'admin|notification|create' => 'Send New Notification',
+    'admin|notification|created' => 'New package created successfully',
+
     'moderator|delete' => 'Item deleted successfully',
     'moderator|fail' => 'Fail to perform this action',
 
@@ -97,5 +101,20 @@ return [
     'moderator|queries|view' => 'View Note',
     'admin|generate-package|index' => 'Generate Package',
 
-]
+
+    'notification|post|title' => 'Your Content Status At TGC',
+    'notification|post|approved' => 'Dear TGC User, Your Posted Content Has Been Approved',
+    'notification|post|rejected' => 'Dear TGC User, Your Posted Content Has Been Rejected',
+
+    'notification|query|title' => 'Your Question/Query Status At TGC',
+    'notification|query|approved' => 'Dear TGC User, Your Posted Question/ Query has been Approved And Forwarded To The Professor Of Your Choice',
+    'notification|query|rejected' => 'Dear TGC User, Your Posted Question/ Query has been rejected',
+
+    'notification|query|received' => 'You Received New Question/ Query',
+    'notification|query|received|description' => 'Dear TGC User, You Have Received A New Question/ Query From Student. Kindly Take An Opportunity To Help Them',
+
+    'notification|query|answered' => 'You Received An Answer Of Your Question/ Query',
+    'notification|query|answered|description' => 'Dear TGC User, You Have Received An Answer From The Professor Of Your Choice'
+
+    ]
 ?>

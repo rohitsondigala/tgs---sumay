@@ -152,7 +152,9 @@ class ModeratorQueriesController extends Controller
         $uuid = $request->uuid;
         if(post_query()->where('uuid',$uuid)->count() > 0){
             if(post_query()->where('uuid',$uuid)->update(['approve'=>1,'approved_by'=>user_uuid()])){
-                //TODO :: Push notification here for approve post
+                $noteDetail = post_query()->where('uuid',$uuid)->first();
+                sendPushNotification($noteDetail->from_user_uuid,'post','notification|query|title','notification|query|approved');
+                sendPushNotification($noteDetail->to_user_uuid,'post','notification|query|received','notification|query|received|description');
                 return redirect()->back()->with(['message'=>'Query approved successfully','class'=>'alert-success']);
             }else{
                 return redirect()->back()->with(['message'=>'Query not approved, please try after some time','class'=>'alert-danger']);
@@ -165,7 +167,8 @@ class ModeratorQueriesController extends Controller
         $uuid = $request->uuid;
         if(post_query()->where('uuid',$uuid)->count() > 0){
             if(post_query()->where('uuid',$uuid)->update(['approve'=>2,'approved_by'=>user_uuid()])){
-                //TODO :: Push notification here for approve post
+                $noteDetail = post_query()->where('uuid',$uuid)->first();
+                sendPushNotification($noteDetail->from_user_uuid,'post','notification|query|title','notification|query|rejected');
                 return redirect()->back()->with(['message'=>'Query rejected successfully','class'=>'alert-success']);
             }else{
                 return redirect()->back()->with(['message'=>'Query not rejected, please try after some time','class'=>'alert-danger']);

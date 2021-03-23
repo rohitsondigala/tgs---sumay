@@ -218,3 +218,6 @@ body{margin-top:20px;}
 .review-block-description{
     font-size:13px;
 }
+.sidebar .sidenav-item-link .nav-text{
+    font-size: 13px;
+}

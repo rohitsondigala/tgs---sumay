@@ -769,6 +769,22 @@ class ApiController extends Controller
         return response()->json($this->apiService->getNoteDetail($request));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getNotification(Request $request){
+        $validation = $this->apiService->getNotificationValidationRules($request);
+        if (!$validation['success']) {
+            return response()->json([
+                'success' => $validation['success'],
+                'message' => $validation['message'],
+
+            ], 200);
+        }
+        return response()->json($this->apiService->getNotification($request));
+    }
+
 
 
 

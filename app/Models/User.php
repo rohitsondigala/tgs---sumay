@@ -159,6 +159,12 @@ class User extends Authenticatable implements JWTSubject
         });
     }
 
+    public function scopeOfNotRole($query, $title){
+        return $query->whereHas('role',function ($query) use ($title){
+            $query->where('title','!=',$title);
+        });
+    }
+
     /**
      * @param $query
      * @return mixed
@@ -268,5 +274,10 @@ class User extends Authenticatable implements JWTSubject
         }else{
             return '/assets/img/default-user.png';
         }
+    }
+
+    public function routeNotificationForFcm($notification)
+    {
+        return $this->access_token;
     }
 }

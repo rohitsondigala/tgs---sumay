@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Http\Resources\AllPackageListResource;
 use App\Http\Resources\GetModeratorPostsResource;
+use App\Http\Resources\GetNotificationResource;
 use App\Http\Resources\GetProfessorListResource;
 use App\Http\Resources\GetStudentListResource;
 use App\Http\Resources\GetStudentProfessorNotesResource;
@@ -1446,6 +1447,7 @@ class ApiService
                 uploadPostQueryReplyFiles($audio_files, $notes_uuid, 'AUDIO');
             }
 //            sendNewNewNoteUploadNotification($createNotes);
+            sendPushNotification($postQueryReply->post_query->from_user_uuid,'post','notification|query|answered','notification|query|answered|description');
             return ['success' => true, 'message' => trans('api.replied')];
         } else {
             return ['success' => false, 'message' => trans('api.fail')];
@@ -1561,6 +1563,35 @@ class ApiService
         }else{
             $returnData = new UserGetNoteDetailResource($noteDetail);
             return ['success' => true, 'message' => trans('api.note_detail'), 'data' => $returnData];
+        }
+    }
+
+
+    /**
+     * @param $request
+     * @return array
+     */
+    public function getNotificationValidationRules($request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_uuid' => 'required|size:36',
+        ]);
+        return $this->validationResponse($validate);
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    function getNotification($request)
+    {
+        $user_uuid = $request->user_uuid;
+        $notifications = push_notifications()->where('user_uuid',$user_uuid)->get();
+        if(!$notifications){
+            return ['success' => false, 'message' => trans('api.no_note_found')];
+        }else{
+            $returnData = GetNotificationResource::collection($notifications)->toArray($request);
+            return ['success' => true, 'message' => trans('api.notifications'), 'data' => $returnData];
         }
     }
 

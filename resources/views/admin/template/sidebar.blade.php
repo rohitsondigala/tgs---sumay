@@ -18,11 +18,16 @@
                         <span class="nav-text">{{__('Dashboard')}}</span>
                     </a>
                 </li>
-
+                <li class="{{(\Route::current()->getName() == 'admin.notifications.index') ? 'active' : ''}}">
+                    <a class="sidenav-item-link" href="{{route('admin.notifications.index')}}" >
+                        <i class="mdi mdi-bell-outline"></i>
+                        <span class="nav-text">{{__('Send Notification')}}</span>
+                    </a>
+                </li>
                 <li class="{{(\Route::current()->getName() == 'admin.generate-package.index') ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('admin.generate-package.index')}}" >
-                        <i class="mdi mdi-view-dashboard-outline"></i>
-                        <span class="nav-text">{{__('Student Free Package')}}</span>
+                        <i class="mdi mdi-currency-inr"></i>
+                        <span class="nav-text">{{__('Free Package')}}</span>
                     </a>
                 </li>
                 <li class="{{(in_array(\Route::current()->getName(),['admin.packages.index','admin.packages.create','admin.packages.edit'])) ? 'active' : ''}}">

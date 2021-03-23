@@ -89,6 +89,7 @@ Route::name('admin.')
         Route::resource('notes','App\Http\Controllers\AdminNotesController');
         Route::resource('queries','App\Http\Controllers\AdminPostQueriesController');
         Route::resource('reviews','App\Http\Controllers\AdminReviewsController');
+        Route::resource('notifications','App\Http\Controllers\AdminNotificationController');
 
     });
 

@@ -297,7 +297,7 @@ $(function() {
                     }
                 }
             });
-        }else{
+            }else{
             $("#subject").empty();
         }
     });

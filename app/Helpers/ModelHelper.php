@@ -194,3 +194,11 @@ function purchased_packages_payment_histories()
 {
     return app(App\Models\PurchasedPackagesPaymentHistory::class);
 }
+
+/**
+ * @return Application|mixed
+ */
+function push_notifications()
+{
+    return app(App\Models\PushNotification::class);
+}

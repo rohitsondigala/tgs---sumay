@@ -1,7 +1,9 @@
 <?php
 
+use App\Notifications\SendGeneralNotification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Request;
 
@@ -192,4 +194,19 @@ function getRatingStarHtmlAdmin($rating){
 
     }
     return $html;
+}
+
+
+function sendPushNotification($user_uuid,$type,$title=null,$description=null,$image=null){
+    $user = user()->where('uuid',$user_uuid)->first();
+    $notificationArray = [
+        'type' => $type,
+        'title' => trans('strings.'.$title),
+        'description' => trans('strings.'.$description),
+        'image' => $image,
+        'user_uuid' => $user->uuid,
+    ];
+    $pushArray = push_notifications()->create($notificationArray);
+    Notification::send($user, new SendGeneralNotification($pushArray));
+    return true;
 }
