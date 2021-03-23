@@ -1592,9 +1592,9 @@ class ApiService
             return ['success' => false, 'message' => trans('api.user_not_found')];
         }
         if ($userDetail->role->title == "STUDENT") {
-            $notifications = push_notifications()->orWhere('student',1)->orWhere('user_uuid', $user_uuid)->get();
+            $notifications = push_notifications()->orWhere('student',1)->orWhere('user_uuid', $user_uuid)->orderBy('id','DESC')->get();
         }else{
-            $notifications = push_notifications()->orWhere('professor',1)->orWhere('user_uuid', $user_uuid)->get();
+            $notifications = push_notifications()->orWhere('professor',1)->orWhere('user_uuid', $user_uuid)->orderBy('id','DESC')->get();
         }
         if(!$notifications){
             return ['success' => false, 'message' => trans('api.no_note_found')];
