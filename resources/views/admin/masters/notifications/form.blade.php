@@ -2,11 +2,11 @@
 @extends('admin.template.main')
 @section('content')
     <div class="col-md-8 mt-3 offset-2">
+        @include('common.globalAlerts')
         <div class="card card-default">
             <div class="card-header card-header-border-bottom d-flex justify-content-between">
                 <h2>{{$pageTitle}}</h2>
             </div>
-
             <div class="card-body">
                 @if($notification->uuid)
                     {!! Form::model($notification,array('url'=>route($route.'.update',$notification->uuid),'method'=>'PUT','files' => true,'enctype'=>'multipart/form-data')) !!}
@@ -37,11 +37,6 @@
                                 </li>
 
                         </ul>
-
-                        @if($errors->has('student'))
-                            <span class="text text-danger">{{$errors->first('student')}}</span>
-                        @endif
-
                     </div>
                     <div class="form-group col-md-12 mb-4">
 

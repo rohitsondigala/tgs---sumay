@@ -76,31 +76,31 @@ class AdminNotificationController extends Controller
     public function store(AdminPushNotificationRequest $request)
     {
 
-        if(!$request->has('student') || !$request->has('professor')){
-            return redirect()->back()->with(['message'=>'Please select student or professor','class'=>'alert-danger']);
-        }
+        if($request->has('student') || $request->has('professor')) {
+            $route = route($this->route . '.index');
+            $parameters = $request->except('_method', '_token', 'image', 'role');
+            $filePath = uploadMedia($request->image, 'packages');
+            $parameters['image'] = $filePath;
+            $parameters['type'] = 'general';
 
-        $route = route($this->route.'.index');
-        $parameters = $request->except('_method','_token','image','role');
-        $filePath = uploadMedia($request->image,'packages');
-        $parameters['image'] = $filePath;
-        $parameters['type'] = 'general';
+            $store = $this->crudService->storeData($parameters, push_notifications(), 'notification');
+            $model = $store['model'];
 
-        $store = $this->crudService->storeData($parameters,push_notifications(),'notification');
-        $model  = $store['model'];
-
-        if($model->student && $model->professor){
-            $user = user()->ofNotRole('MODERATOR')->ofNotRole('ADMIN')->ofVerify()->get();
-        }elseif($model->professor){
-            $user = user()->ofRole('PROFESSOR')->ofVerify()->get();
-        }elsE{
-            $user = user()->ofRole('STUDENT')->ofVerify()->get();
-        }
-        Notification::send($user, new SendGeneralNotification($store['model']));
-        if($store['success']){
-            return redirect($route)->with(['message'=>$store['message'],'class'=>'alert-success']);
+            if ($model->student && $model->professor) {
+                $user = user()->ofNotRole('MODERATOR')->ofNotRole('ADMIN')->ofVerify()->get();
+            } elseif ($model->professor) {
+                $user = user()->ofRole('PROFESSOR')->ofVerify()->get();
+            } else {
+                $user = user()->ofRole('STUDENT')->ofVerify()->get();
+            }
+            Notification::send($user, new SendGeneralNotification($store['model']));
+            if ($store['success']) {
+                return redirect($route)->with(['message' => $store['message'], 'class' => 'alert-success']);
+            } else {
+                return redirect()->back()->with(['message' => $store['message'], 'class' => 'alert-danger']);
+            }
         }else{
-            return redirect()->back()->with(['message'=>$store['message'],'class'=>'alert-danger']);
+                        return redirect()->back()->with(['message'=>'Please select student or professor','class'=>'alert-danger']);
         }
     }
 
