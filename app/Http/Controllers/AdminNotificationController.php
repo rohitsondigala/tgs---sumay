@@ -75,6 +75,11 @@ class AdminNotificationController extends Controller
      */
     public function store(AdminPushNotificationRequest $request)
     {
+
+        if(!$request->has('student') || !$request->has('professor')){
+            return redirect()->back()->with(['message'=>'Please select student or professor','class'=>'alert-danger']);
+        }
+
         $route = route($this->route.'.index');
         $parameters = $request->except('_method','_token','image','role');
         $filePath = uploadMedia($request->image,'packages');
@@ -83,6 +88,7 @@ class AdminNotificationController extends Controller
 
         $store = $this->crudService->storeData($parameters,push_notifications(),'notification');
         $model  = $store['model'];
+
         if($model->student && $model->professor){
             $user = user()->ofNotRole('MODERATOR')->ofNotRole('ADMIN')->ofVerify()->get();
         }elseif($model->professor){

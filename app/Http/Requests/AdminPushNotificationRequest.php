@@ -25,7 +25,7 @@ class AdminPushNotificationRequest extends FormRequest
     {
 
         return [
-            'student' =>'required',
+            'student' =>'sometimes',
             'professor' =>'sometimes',
             'title' => 'required',
             'description' =>'required',
