@@ -19,7 +19,7 @@ class GetNotificationResource extends JsonResource
         $returnData['uuid'] = $this->uuid;
         $returnData['date'] = getDateInFormat($this->created_at);
         $returnData['title'] = $this->title;
-        $returnData['description'] = $this->description;
+        $returnData['message'] = $this->message;
         $returnData['type'] = $this->type;
         return $returnData;
     }
