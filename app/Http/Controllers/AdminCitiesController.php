@@ -153,5 +153,7 @@ class AdminCitiesController extends Controller
         }
     }
 
+    public function test(){
 
+    }
 }
