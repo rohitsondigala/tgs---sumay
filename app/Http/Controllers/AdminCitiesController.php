@@ -152,4 +152,8 @@ class AdminCitiesController extends Controller
             return redirect()->back()->with(['class'=>'alert-danger','message'=>trans('strings.admin|fail')]);
         }
     }
+
+    public function test(){
+
+    }
 }
