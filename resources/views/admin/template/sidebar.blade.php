@@ -71,13 +71,13 @@
                 </li>
 
 
-                <li class="has-sub">
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                       data-target="#dashboard"
-                       aria-expanded="false" aria-controls="dashboard">
-                        <i class="mdi mdi-cogs"></i>
-                        <span class="nav-text">{{__('Settings')}}</span> <b class="caret"></b>
-                    </a>
+{{--                <li class="has-sub">--}}
+{{--                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"--}}
+{{--                       data-target="#dashboard"--}}
+{{--                       aria-expanded="false" aria-controls="dashboard">--}}
+{{--                        <i class="mdi mdi-cogs"></i>--}}
+{{--                        <span class="nav-text">{{__('Settings')}}</span> <b class="caret"></b>--}}
+{{--                    </a>--}}
 {{--                    <ul class="collapse " id="dashboard"--}}
 {{--                        data-parent="#sidebar-menu">--}}
 {{--                        <div class="sub-menu">--}}
@@ -103,7 +103,7 @@
 {{--                            </li>--}}
 {{--                        </div>--}}
 {{--                    </ul>--}}
-                </li>
+{{--                </li>--}}
 
 
             </ul>
