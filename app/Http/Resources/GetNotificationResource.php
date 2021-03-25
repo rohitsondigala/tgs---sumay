@@ -21,6 +21,7 @@ class GetNotificationResource extends JsonResource
         $returnData['title'] = $this->title;
         $returnData['description'] = $this->description;
         $returnData['type'] = $this->type;
+        $returnData['full_image_path'] = $this->full_image_path;
         return $returnData;
     }
 }
