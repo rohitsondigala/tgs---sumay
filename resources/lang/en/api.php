@@ -62,5 +62,6 @@ return [
     'account_deactivated' => 'Account is deactivated',
     'already_logged_in' => 'Already logged in from the other device',
     'logout' => 'Logout',
-    'notifications' => 'Notifications'
+    'notifications' => 'Notifications',
+    'no_notification_found' => 'No notification found'
 ];

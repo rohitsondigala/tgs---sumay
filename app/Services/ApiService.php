@@ -1597,7 +1597,7 @@ class ApiService
             $notifications = push_notifications()->orWhere('professor',1)->orWhere('user_uuid', $user_uuid)->orderBy('id','DESC')->get();
         }
         if(!$notifications){
-            return ['success' => false, 'message' => trans('api.no_note_found')];
+            return ['success' => false, 'message' => trans('api.no_notification_found')];
         }else{
             $returnData = GetNotificationResource::collection($notifications)->toArray($request);
             return ['success' => true, 'message' => trans('api.notifications'), 'data' => $returnData];
