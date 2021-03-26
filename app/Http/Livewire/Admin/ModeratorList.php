@@ -44,10 +44,10 @@ class ModeratorList extends Component
         $users->where(function ($query) use ($searchWords) {
             $query->orWhere('name', 'like', '%' . $searchWords . '%');
             $query->orWhere('email', 'like', '%' . $searchWords . '%');
-            $query->orWhereHas('student_subjects.subject', function ($query) use ($searchWords) {
+            $query->orWhereHas('moderator.subject', function ($query) use ($searchWords) {
                 $query->where('title', 'like', '%' . $searchWords . '%');
             });
-            $query->orWhereHas('stream', function ($query) use ($searchWords) {
+            $query->orWhereHas('moderator.stream', function ($query) use ($searchWords) {
                 $query->where('title', 'like', '%' . $searchWords . '%');
             });
         });

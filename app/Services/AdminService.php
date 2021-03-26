@@ -28,7 +28,7 @@ class AdminService{
     }
 
     function getStudentAllSelectedSubjectDropdown(){
-        return purchased_packages()->with('subject')->groupby('subject_uuid')->get()->pluck('subject.title','subject.uuid')->prepend('All','all');
+        return purchased_packages()->with('subject')->groupby('subject_uuid')->get()->pluck('subject.title','subject.uuid')->prepend('All Subjects','all');
     }
 
     function getLatestUsers($userRole){

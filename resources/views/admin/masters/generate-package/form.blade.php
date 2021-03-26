@@ -28,14 +28,14 @@
                             </div>
                             <div class="form-group col-md-12 mb-4">
                                 <label> {{__('Package')}}</label>
-                                {!! Form::select('package_uuid',[],null,['class'=>'form-control select2','id'=>'packageListStream']) !!}
+                                {!! Form::select('package_uuid',[''=>'Package'],null,['class'=>'form-control select2','id'=>'packageListStream']) !!}
                                 @if($errors->has('package_uuid'))
                                     <span class="text text-danger">{{$errors->first('package_uuid')}}</span>
                                 @endif
                             </div>
                             <div class="form-group col-md-12 mb-4">
                                 <label> {{__('Duration')}}</label>
-                                {!! Form::select('duration_month',[''=>'Select Duration'],null,['class'=>'form-control select2','id'=>'packagePrice']) !!}
+                                {!! Form::select('duration_month',[''=>'Duration'],null,['class'=>'form-control select2','id'=>'packagePrice']) !!}
                                 @if($errors->has('duration_month'))
                                     <span class="text text-danger">{{$errors->first('duration_month')}}</span>
                                 @endif

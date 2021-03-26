@@ -6,7 +6,7 @@
         <tr>
             {!! Form::open(['url'=>route($route.".index"),'method'=>'get','id'=>'filter-form']) !!}
             <th>&nbsp;</th>
-            <th>{!! Form::select('user_type',['all'=> 'All','PROFESSOR'=>'PROFESSOR','STUDENT'=>'STUDENT'],$user_type,['class'=>'form-control select2 filterChange','id'=>'userTypeList']) !!}</th>
+            <th>{!! Form::select('user_type',['all'=> 'USER TYPE','PROFESSOR'=>'PROFESSOR','STUDENT'=>'STUDENT'],$user_type,['class'=>'form-control select2 filterChange','id'=>'userTypeList']) !!}</th>
             <th>{!! Form::select('user_uuid',$notesUserList,$user_uuid,['class'=>'form-control select2 filterChange','id'=>'userList']) !!}</th>
             <th>{!! Form::text('title',$title,['class'=>'form-control']) !!}</th>
             <th>{!! Form::select('status',['all'=> 'All','0'=>'Pending','1'=>'Approved','2'=>'Rejected'],$status,['class'=>'form-control select2 filterChange']) !!}</th>

@@ -50,9 +50,9 @@ return [
     'admin|subject|edited' => 'Subject edited successfully',
 
 
-    'admin|moderator|index' => 'Moderators',
-    'admin|moderator|create' => 'Create New Moderator',
-    'admin|moderator|edit' => 'Edit Moderator',
+    'admin|moderator|index' => 'Editor',
+    'admin|moderator|create' => 'Create New Editor',
+    'admin|moderator|edit' => 'Edit information of Editor',
 
     'admin|moderator|created' => 'New moderator created successfully',
     'admin|moderator|edited' => 'Moderator edited successfully',
@@ -82,12 +82,12 @@ return [
 
     'admin|notification|index' => 'Notifications',
     'admin|notification|create' => 'Send New Notification',
-    'admin|notification|created' => 'New package created successfully',
+    'admin|notification|created' => 'Notification sent successfully',
 
     'moderator|delete' => 'Item deleted successfully',
     'moderator|fail' => 'Fail to perform this action',
 
-    'moderator|daily_post|index' => 'Daily Posts',
+    'moderator|daily_post|index' => 'My Today’s Post',
     'moderator|daily_post|create' => 'Create New Daily Post',
     'moderator|daily_post|edit' => 'Edit Daily Post',
 

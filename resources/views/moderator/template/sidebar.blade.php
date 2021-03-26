@@ -19,20 +19,20 @@
                 </li>
                 <li class="{{(\Route::current()->getName() == 'moderator.queries.index') ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('moderator.queries.index')}}" >
-                        <i class="mdi mdi-note-multiple"></i>
-                        <span class="nav-text">{{__('Queries')}}</span>
+                        <i class="mdi mdi-account-question"></i>
+                        <span class="nav-text">{{__('Students Queries')}}</span>
                     </a>
                 </li>
                 <li class="{{(\Route::current()->getName() == 'moderator.notes.index') ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('moderator.notes.index')}}" >
-                        <i class="mdi mdi-note-multiple"></i>
-                        <span class="nav-text">{{__('Posts')}}</span>
+                        <i class="mdi mdi-file-document-box-multiple"></i>
+                        <span class="nav-text">{{__('P/S Content')}}</span>
                     </a>
                 </li>
                 <li class="{{(\Route::current()->getName() == 'moderator.daily-posts.index') ? 'active' : ''}}">
                     <a class="sidenav-item-link" href="{{route('moderator.daily-posts.index')}}" >
                         <i class="mdi mdi-plus-box-outline"></i>
-                        <span class="nav-text">{{__('Daily Post')}}</span>
+                        <span class="nav-text">{{__('My Today’s Post')}}</span>
                     </a>
                 </li>
 

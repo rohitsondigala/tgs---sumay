@@ -46,12 +46,13 @@ class SendGeneralNotification extends Notification
 
     public function toFcm(){
         $message = new FcmMessage();
-        $message->content([
+        $notification = [
             'title'        => $this->data->title,
             'body'         => $this->data->description,
             'image'         => $this->data->full_image_path, // Optional
             'type' => $this->data->type
-        ])->priority(FcmMessage::PRIORITY_HIGH); // Optional - Default is 'normal'.
+        ];
+        $message->content($notification)->data($notification)->priority(FcmMessage::PRIORITY_HIGH); // Optional - Default is 'normal'.
 
         return $message;
     }
