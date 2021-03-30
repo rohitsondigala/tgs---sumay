@@ -19,7 +19,7 @@
                     <a href="{{route('admin.moderator.index')}}">
                         <div class="card-body">
                             <h2 class="mb-1">{{$getCounts['moderators']}}</h2>
-                            <p>{{__('Moderators')}}</p>
+                            <p>{{__('Editor')}}</p>
                         </div>
                     </a>
                 </div>

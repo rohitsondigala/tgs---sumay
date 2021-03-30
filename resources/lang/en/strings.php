@@ -54,8 +54,8 @@ return [
     'admin|moderator|create' => 'Create New Editor',
     'admin|moderator|edit' => 'Edit information of Editor',
 
-    'admin|moderator|created' => 'New moderator created successfully',
-    'admin|moderator|edited' => 'Moderator edited successfully',
+    'admin|moderator|created' => 'New editor created successfully',
+    'admin|moderator|edited' => 'Information changed successfully for editor',
 
     //Subject Event Texts
     'admin|package|index' => 'Packages',
