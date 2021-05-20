@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ModeratorChangePasswordRequest;
 use App\Services\AuthService;
-use App\Services\AdminService;
+use App\Services\ModeratorService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -21,16 +21,16 @@ class ModeratorDashboardController extends Controller
     /**
      * @var AuthService
      */
-    protected $authService,$adminService;
+    protected $authService,$moderatorService;
 
     /**
      * UserAuthController constructor.
      * @param AuthService $authService
      */
-    function __construct(AuthService $authService,AdminService $adminService)
+    function __construct(AuthService $authService,ModeratorService $moderatorService)
     {
         $this->authService = $authService;
-        $this->adminService = $adminService;
+        $this->moderatorService = $moderatorService;
     }
 
     /**
@@ -42,10 +42,10 @@ class ModeratorDashboardController extends Controller
             return redirect('/moderator/change-password');
         }
         $pageTitle = 'Dashboard';
-        $getCounts = $this->adminService->getDashboardCounts();
-        $latestStudents = $this->adminService->getLatestUsers('STUDENT');
-        $latestProfessors = $this->adminService->getLatestUsers('PROFESSOR');
-        $latestNotes = $this->adminService->getLatestNotes();
+        $getCounts = $this->moderatorService->getDashboardCounts();
+        $latestStudents = $this->moderatorService->getLatestUsers('STUDENT');
+        $latestProfessors = $this->moderatorService->getLatestUsers('PROFESSOR');
+        $latestNotes = $this->moderatorService->getLatestNotes();
         return view('moderator.dashboard',compact('pageTitle','getCounts','latestNotes','latestProfessors','latestStudents'));
     }
 
