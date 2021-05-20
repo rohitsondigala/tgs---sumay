@@ -1,5 +1,5 @@
 @section('PAGE_TITLE','Dashboard')
-@extends('admin.template.main')
+@extends('moderator.template.main')
 @section('content')
     <div class="col-12 mt-3">
         <div class="row">
