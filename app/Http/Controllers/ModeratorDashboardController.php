@@ -40,7 +40,11 @@ class ModeratorDashboardController extends Controller
             return redirect('/moderator/change-password');
         }
         $pageTitle = 'Dashboard';
-        return view('moderator.dashboard',compact('pageTitle'));
+        $getCounts = $this->adminService->getDashboardCounts();
+        $latestStudents = $this->adminService->getLatestUsers('STUDENT');
+        $latestProfessors = $this->adminService->getLatestUsers('PROFESSOR');
+        $latestNotes = $this->adminService->getLatestNotes();
+        return view('moderator.dashboard',compact('pageTitle','getCounts','latestNotes','latestProfessors','latestStudents'));
     }
 
     /**

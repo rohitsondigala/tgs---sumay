@@ -71,39 +71,39 @@
                 </li>
 
 
-{{--                <li class="has-sub">--}}
-{{--                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"--}}
-{{--                       data-target="#dashboard"--}}
-{{--                       aria-expanded="false" aria-controls="dashboard">--}}
-{{--                        <i class="mdi mdi-cogs"></i>--}}
-{{--                        <span class="nav-text">{{__('Settings')}}</span> <b class="caret"></b>--}}
-{{--                    </a>--}}
-{{--                    <ul class="collapse " id="dashboard"--}}
-{{--                        data-parent="#sidebar-menu">--}}
-{{--                        <div class="sub-menu">--}}
-{{--                            <li class="{{(\Route::current()->getName() == 'admin.country.index') ? 'active' : ''}}">--}}
-{{--                                <a class="sidenav-item-link" href="{{route('admin.country.index')}}">--}}
-{{--                                    <span class="nav-text">{{__('Countries')}}</span>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <a class="sidenav-item-link" href="{{route('admin.state.index')}}">--}}
-{{--                                    <span class="nav-text">{{__('States')}}</span>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <a class="sidenav-item-link" href="{{route('admin.city.index')}}">--}}
-{{--                                    <span class="nav-text">{{__('Cities')}}</span>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <a class="sidenav-item-link" href="{{route('admin.roles.index')}}">--}}
-{{--                                    <span class="nav-text">{{__('User Types')}}</span>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-{{--                        </div>--}}
-{{--                    </ul>--}}
-{{--                </li>--}}
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                       data-target="#dashboard"
+                       aria-expanded="false" aria-controls="dashboard">
+                        <i class="mdi mdi-cogs"></i>
+                        <span class="nav-text">{{__('Settings')}}</span> <b class="caret"></b>
+                    </a>
+                    <ul class="collapse " id="dashboard"
+                        data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li class="{{(\Route::current()->getName() == 'admin.country.index') ? 'active' : ''}}">
+                                <a class="sidenav-item-link" href="{{route('admin.country.index')}}">
+                                    <span class="nav-text">{{__('Countries')}}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{route('admin.state.index')}}">
+                                    <span class="nav-text">{{__('States')}}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{route('admin.city.index')}}">
+                                    <span class="nav-text">{{__('Cities')}}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{route('admin.roles.index')}}">
+                                    <span class="nav-text">{{__('User Types')}}</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
 
 
             </ul>
