@@ -33,7 +33,7 @@ class ModeratorService {
         $moderator_stream_uuid = auth()->user()->moderator->stream->uuid;
 
         $notes = notes()->where('subject_uuid',$moderator_subject_uuid)->ofApprove()->count();
-        $moderators = post_query()->where('subject_uuid',$moderator_subject_uuid)->count();
+        $moderators = post_query()->where('subject_uuid',$moderator_subject_uuid)->ofApprove()->count();
         $professors = user()->where('stream_uuid',$moderator_stream_uuid)->ofRole('PROFESSOR')->ofVerify()->count();
         $students = user()->where('stream_uuid',$moderator_stream_uuid)->ofRole('STUDENT')->ofVerify()->count();
         return [
