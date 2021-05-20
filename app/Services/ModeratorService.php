@@ -30,11 +30,12 @@ class ModeratorService {
 
     function getDashboardCounts(){
         $moderator_subject_uuid = auth()->user()->moderator->subject_uuid;
+        $moderator_stream_uuid = auth()->user()->moderator->stream->uuid;
 
         $notes = notes()->where('subject_uuid',$moderator_subject_uuid)->ofApprove()->count();
         $moderators = post_query()->where('subject_uuid',$moderator_subject_uuid)->count();
-        $professors = user()->where('subject_uuid',$moderator_subject_uuid)->ofRole('PROFESSOR')->ofVerify()->count();
-        $students = user()->where('subject_uuid',$moderator_subject_uuid)->ofRole('STUDENT')->ofVerify()->count();
+        $professors = user()->where('stream_uuid',$moderator_stream_uuid)->ofRole('PROFESSOR')->ofVerify()->count();
+        $students = user()->where('stream_uuid',$moderator_stream_uuid)->ofRole('STUDENT')->ofVerify()->count();
         return [
             'notes' => $notes,
             'queries' => $moderators,
