@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ModeratorChangePasswordRequest;
 use App\Services\AuthService;
+use App\Services\AdminService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -20,15 +21,16 @@ class ModeratorDashboardController extends Controller
     /**
      * @var AuthService
      */
-    protected $authService;
+    protected $authService,$adminService;
 
     /**
      * UserAuthController constructor.
      * @param AuthService $authService
      */
-    function __construct(AuthService $authService)
+    function __construct(AuthService $authService,AdminService $adminService)
     {
         $this->authService = $authService;
+        $this->adminService = $adminService;
     }
 
     /**
