@@ -18,7 +18,7 @@
                 <div class="card card-mini  mb-4">
                     <a href="{{route('admin.moderator.index')}}">
                         <div class="card-body">
-                            <h2 class="mb-1">{{$getCounts['moderators']}}</h2>
+                            <h2 class="mb-1">{{$getCounts['queries']}}</h2>
                             <p>{{__('Queries')}}</p>
                         </div>
                     </a>
